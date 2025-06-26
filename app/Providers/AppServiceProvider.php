@@ -1,0 +1,38 @@
+<?php
+
+namespace App\Providers;
+
+use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Notification;
+
+class AppServiceProvider extends ServiceProvider
+{
+    /**
+     * Register any application services.
+     */
+    public function register(): void
+    {
+        //
+    }
+
+    /**
+     * Bootstrap any application services.
+     */
+    public function boot(): void
+    {
+        // Kirim notifikasi global ke semua view (bisa diakses dengan $global_notifications)
+        View::composer('*', function ($view) {
+            $user = Auth::user();
+            $notifications = collect();
+            if ($user) {
+                $notifications = Notification::where('user_id', $user->id)
+                    ->orderByDesc('created_at')
+                    ->take(10)
+                    ->get();
+            }
+            $view->with('global_notifications', $notifications);
+        });
+    }
+}
