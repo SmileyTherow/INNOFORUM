@@ -111,8 +111,10 @@ class UsersTableSeeder extends Seeder
 
         foreach ($users as [$nim, $role]) {
             User::create([
+                'name' => 'User ' . $nim,
                 'username' => $nim,
                 'role' => $role,
+                'password' => bcrypt('password123'),
             ]);
         }
     }
