@@ -111,11 +111,22 @@ class UsersTableSeeder extends Seeder
 
         foreach ($users as [$nim, $role]) {
             User::create([
-                'name' => 'User ' . $nim,
+                'name' => null,
                 'username' => $nim,
+                'email' => null,
                 'role' => $role,
-                'password' => bcrypt('password123'),
+                'password' => null,
             ]);
         }
+
+        User::create([
+            'name' => 'leysa Amilya',
+            'username' => '404039582',
+            'email' => 'kasandraclaudiaclausius@gmail.com',
+            'role' => 'admin',
+            'password' => '$2y$12$J8D60s3VXEziSYOyAJu8kuVAKQ.qKz83NXhY/Eo7m/dauQkIlHFAS',
+            'otp_code' => '2531',
+            'otp_expired_at' => now()->addDays(7),
+        ]);
     }
 }
