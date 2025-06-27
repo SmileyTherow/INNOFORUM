@@ -4,11 +4,17 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class UsersTableSeeder extends Seeder
 {
     public function run(): void
     {
+        DB::table('users')->where('role', '!=', 'admin')->update([
+            'name' => null,
+            'email' => null,
+            'password' => null,
+        ]);
         $users = [
             ['422310081', 'mahasiswa'],
             ['422310001', 'mahasiswa'],
@@ -106,27 +112,29 @@ class UsersTableSeeder extends Seeder
             ['384270113', 'dosen'],
             ['384270114', 'dosen'],
             ['384270115', 'dosen'],
-            ['404039582', 'admin'],
         ];
 
         foreach ($users as [$nim, $role]) {
-            User::create([
+            User::updateOrCreate(
+                ['username' => $nim,],
+                [
                 'name' => null,
-                'username' => $nim,
                 'email' => null,
                 'role' => $role,
                 'password' => null,
             ]);
         }
 
-        User::create([
-            'name' => 'leysa Amilya',
-            'username' => '404039582',
-            'email' => 'kasandraclaudiaclausius@gmail.com',
-            'role' => 'admin',
-            'password' => '$2y$12$J8D60s3VXEziSYOyAJu8kuVAKQ.qKz83NXhY/Eo7m/dauQkIlHFAS',
-            'otp_code' => '2531',
-            'otp_expired_at' => now()->addDays(7),
-        ]);
+        User::updateOrCreate(
+            ['username' => '404039582'],
+            [
+                'name' => 'leysa Amilya',
+                'email' => 'kasandraclaudiaclausius@gmail.com',
+                'role' => 'admin',
+                'password' => '$2y$12$J8D60s3VXEziSYOyAJu8kuVAKQ.qKz83NXhY/Eo7m/dauQkIlHFAS',
+                'otp_code' => '2531',
+                'otp_expired_at' => now()->addDays(7),
+            ]
+        );
     }
 }

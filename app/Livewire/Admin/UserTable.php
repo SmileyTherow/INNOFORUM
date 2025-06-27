@@ -21,7 +21,7 @@ class UserTable extends Component
     public function render()
     {
         $users = User::query()
-            ->where('role', '!=', 'admin') 
+            ->where('role', '!=', 'admin')
             ->where(function ($query) {
                 $query->where('name', 'like', '%'.$this->search.'%')
                     ->orWhere('email', 'like', '%'.$this->search.'%')
