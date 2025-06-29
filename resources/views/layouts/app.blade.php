@@ -136,6 +136,9 @@
                         </div>
                     </div>
                 </div>
+                <a href="{{ route('logout.animasi') }}" class="ml-2 px-4 py-2 bg-red-600 text-white rounded-lg font-semibold hover:bg-red-700 transition flex items-center">
+                    <span class="material-icons align-middle text-base mr-1">logout</span> Logout
+                </a>
                 @endauth
                 @auth
                 <div class="relative group">
