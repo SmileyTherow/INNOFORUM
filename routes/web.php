@@ -193,3 +193,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
 Route::get('/admin/comments', [CommentController::class, 'index'])->name('admin.comments.index');
 Route::resource('admin/threads', AdminThreadController::class)->names('admin.threads');
 Route::post('admin/threads/notify', [AdminThreadController::class, 'notify'])->name('admin.threads.notify');
+
+Route::get('/logout-animasi', function() {
+    return view('logout-animasi');
+})->name('logout.animasi');
