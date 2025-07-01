@@ -132,7 +132,7 @@ class AdminUserController extends Controller
         \App\Models\Notification::create([
             'user_id' => $user->id,
             'type' => 'admin_message',
-            'data' => json_encode(['message' => $request->message]),
+            'data' => (['message' => $request->message]),
             'is_read' => false,
         ]);
 
