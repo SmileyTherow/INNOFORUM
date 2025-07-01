@@ -31,21 +31,21 @@
     @forelse($notifications as $notif)
         <div class="mb-4 p-4 rounded-lg shadow bg-white flex justify-between items-center {{ !$notif->is_read ? 'border-l-4 border-blue-600' : '' }}">
             <div>
-                <div>
-                    @if($notif->type === 'announcement' && isset($notif->data['title']))
-                        <span class="material-icons text-yellow-600 align-middle mr-1">campaign</span>
-                        <b>Pengumuman:</b> {{ $notif->data['title'] }}
-                        @if(isset($notif->data['content']))
-                            <div class="text-xs text-gray-700 mt-1">{{ $notif->data['content'] }}</div>
-                        @endif
-                    @elseif(isset($notif->data['message']))
-                        {{ $notif->data['message'] }}
-                    @elseif(is_array($notif->data))
-                        {{ json_encode($notif->data) }}
-                    @else
-                        {{ $notif->data }}
+                @if($notif->type === 'announcement' && isset($notif->data['title']))
+                    <span class="material-icons text-yellow-600 align-middle mr-1">campaign</span>
+                    <b>Pengumuman:</b> {{ $notif->data['title'] }}
+                    @if(isset($notif->data['content']))
+                        <div class="text-xs text-gray-700 mt-1">{{ $notif->data['content'] }}</div>
                     @endif
-                </div>
+                @elseif(isset($notif->data['message']))
+                    {{ $notif->data['message'] }}
+                @elseif(isset($notif->data['title']))
+                    {{ $notif->data['title'] }}
+                @elseif(is_string($notif->data))
+                    {{ $notif->data }}
+                @else
+                    {{ '' }}
+                @endif
                 <div class="text-xs text-gray-500">{{ $notif->created_at->diffForHumans() }}</div>
             </div>
             <div class="flex gap-2">
