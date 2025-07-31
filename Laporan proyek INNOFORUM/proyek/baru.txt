@@ -1,0 +1,66 @@
+Checklist Routing:
+✔️ Login/registrasi user & admin
+✔️ CRUD pertanyaan/thread (/questions)
+✔️ Search thread (/questions/search)
+✔️ CRUD komentar (/comments)
+✔️ Profil user (/profile/{id})
+✔️ Admin area & manajemen user
+
+
+Langkah Selanjutnya:
+1. Testing Semua Fitur CRUD & Search
+	Pastikan:
+	Buat, edit, hapus thread bisa jalan.
+	Komentar (buat, edit, hapus) bisa jalan.
+	Search thread berjalan (bisa cari judul/isi thread).
+	Profil user bisa tampil & diedit.
+	Hak akses (edit/hapus) hanya untuk pemilik.
+	Cek admin area (jika kamu punya akses admin).
+
+2. Tampilan: Poles UI/UX
+	Pastikan semua halaman tampil rapi (pakai Bootstrap sudah cukup).
+	Notifikasi sukses/error tampil jelas.
+	Navigasi antar halaman mudah diakses.
+
+3. Fitur Tambahan (Opsional/Lanjutan)
+	Validasi tampilan:
+	Kalau input kosong/error, pesan tampil jelas.
+	Konfirmasi hapus:
+	Sudah pakai onsubmit="return confirm(...)" di form hapus.
+	Edit komentar:
+	Sudah siap di controller dan route (/comments/{id}/edit).
+	View profil user lain:
+	Sudah bisa lewat /profile/{id}.
+
+4. Testing User Experience
+	Coba login sebagai mahasiswa, dosen, admin.
+	Coba fitur dari awal sampai akhir.
+	Cek error jika akses halaman yang bukan milik sendiri.
+
+5. Backup dan Dokumentasi
+	Backup database & kode project.
+	Bikin README/catatan singkat fitur & cara pakai (untuk dosen/tim).
+
+6. Deploy ke Hosting (Jika Perlu)
+	Upload ke server kampus/hosting jika sudah fix.
+	Kalau Mau Lanjut:
+	Kalau ada error, upload error-nya di sini.
+	Kalau ingin fitur tambahan (upload gambar/file, pin thread, dsb) tinggal bilang.
+	Kalau mau contoh UI atau ingin file Blade untuk fitur lain, sebutkan saja.
+
+Saran:
+Sekarang, fokus testing semua alur. Kalau ada yang kurang, sampaikan detail error atau halaman mana yang mau dibagusin.
+Saya siap bantu sampai benar-benar beres! 🚀
+
+Mau lanjut ke testing, atau ada fitur yang mau ditambah?
+
+
+
+Penjelasan singkat:
+
+Route sudah lengkap, search, profil, edit komentar, dsb.
+Metode search di QuestionController.
+Form search di index Blade.
+UserController sudah bisa show/edit profil.
+CommentController sudah ada edit & update komentar.
+Show Thread Blade sudah ada tombol edit/hapus komentar.

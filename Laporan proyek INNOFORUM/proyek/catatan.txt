@@ -1,0 +1,4 @@
+saya mau anda buatkan file pdf untuk isi penjelasaan dari setiap file dalam bentuk kalimat dan tidak usah ada kodingannya, kasih nama jug adiatasnya misalnya 
+DashboardController.php
+penjelasaaanya 
+gitu bro oke, jadikan dalam satu file pdf saja 

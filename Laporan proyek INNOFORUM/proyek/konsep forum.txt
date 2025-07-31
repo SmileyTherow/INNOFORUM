@@ -1,0 +1,89 @@
+1. Fitur Utama Forum Kampus
+	a. Thread/Topik Diskusi (Questions)
+		Mahasiswa atau dosen dapat membuat thread/topik diskusi baru.
+		Setiap thread memiliki judul, isi/topik, [opsional: kategori], waktu pembuatan, dan identitas pembuat.
+	b. Komentar/Balasan (Comments)
+		User lain dapat membalas thread dengan komentar.
+		Setiap komentar terhubung ke thread dan user yang memberikan komentar.
+	c. Kategori/Tag (Opsional)
+		Digunakan untuk memfilter/mengorganisir topik (misal: "Tugas", "Pengumuman", "Kuliah X").
+		Bisa dibuat sederhana dulu, kategori/tag dapat ditambahkan kemudian.
+	d. Hak Akses
+		Hanya user terdaftar (mahasiswa/dosen) yang bisa membuat atau membalas thread.
+		User hanya dapat mengedit/menghapus thread atau komentar milik sendiri.
+		(Tahap selanjutnya) Admin dapat melakukan moderasi pada semua post.
+	e. Profil User Sederhana
+		Setiap user memiliki profil dasar: NIM/NIGM, nama, prodi, dan role.
+
+2. Struktur Tabel
+	a. users
+		id, username (NIM/NIGM), role (mahasiswa/dosen/admin), name, email, password, prodi, created_at, updated_at, otp_code
+	b. questions (thread/topik)
+		id, user_id, title, content, created_at, updated_at
+	c. comments (komentar/balasan)
+		id, question_id, user_id, content, created_at, updated_at
+
+
+	Konsep Forum Berdasarkan Database
+	A. Model Forum Diskusi Sederhana (Thread & Komentar):
+		Thread disimpan di tabel questions
+		Komentar/balasan disimpan di tabel comments
+		Tidak perlu tabel answers jika tidak ada fitur QnA (jawaban utama)
+	B. Model QnA (Seperti StackOverflow):
+		Tabel questions untuk pertanyaan utama
+		Tabel answers untuk jawaban utama (harus ada question_id & user_id)
+		Tabel comments untuk komentar pada pertanyaan/jawaban
+
+
+3. Fitur CRUD
+	a. Thread (questions)
+		Create: Membuat thread baru (judul, isi, [opsional: kategori])
+		Read: Melihat daftar thread dan detail tiap thread
+		Update: Mengedit thread milik sendiri
+		Delete: Menghapus thread milik sendiri
+	b. Komentar (comments)
+		Create: Membalas thread
+		Read: Melihat semua komentar pada thread
+		Update: Mengedit komentar milik sendiri
+		Delete: Menghapus komentar milik sendiri
+
+
+4. Relasi Eloquent (Laravel)
+	User hasMany Questions → Question belongsTo User
+	User hasMany Comments → Comment belongsTo User
+	Question hasMany Comments → Comment belongsTo Question
+
+
+5. Alur Penggunaan
+	Mahasiswa/dosen login
+	Melihat daftar thread (questions)
+	Membuat thread baru (questions)
+	Membuka thread, melihat dan menambah komentar (comments)
+	Mengedit/menghapus thread atau komentar milik sendiri
+
+
+6. Rekomendasi Fitur Tambahan
+	Search: Mencari thread/komentar
+	Notifikasi: (Tahap lanjut) Mendapat notifikasi jika thread dibalas
+	Pinned thread: (Opsional) Thread penting bisa di-pin oleh admin
+	Attachment: (Opsional) Lampiran file pada thread/komentar
+	Kategori/Tag: (Opsional) Untuk memudahkan filter
+	Pagination: Untuk forum dengan thread/komentar banyak
+
+
+7. Tampilan
+	Home: Daftar thread
+	Detail thread: Isi thread & daftar komentar
+	Form: Membuat thread/komentar
+	Profil user (sederhana)
+
+
+Kesimpulan
+Fokus awal pengembangan cukup pada tabel users, questions, dan comments, serta CRUD untuk thread dan komentar.
+Fitur lainnya bisa dikembangkan bertahap sesuai kebutuhan.
+
+
+Rekomendasi Praktis
+Karena menggunakan model forum diskusi, cukup gunakan tabel questions untuk thread/topik dan comments untuk balasan/komentar.
+(Opsional) Abaikan atau sesuaikan tabel answers jika memang tidak membutuhkan fitur QnA.
+Fokuskan pengembangan pada CRUD questions dan comments terlebih dahulu.

@@ -1,0 +1,31 @@
+1. Backend User: Sudah Ada Apa Saja?
+Sudah Dibuat di Backend:
+Validasi NIM/NIGM:
+
+Form pengecekan NIM/NIGM sebelum login/register.
+Hanya user yang sudah ada di database (pre-registered) yang bisa lanjut.
+Register:
+
+Setelah validasi NIM/NIGM, user bisa melengkapi data (nama, email, password, prodi, avatar).
+Data user diupdate, dan siap dipakai untuk login.
+Login:
+
+Setelah berhasil register, user bisa login pakai email & password.
+Ada juga login admin.
+Session & Auth:
+
+Setelah login, session disimpan.
+Route forum/dashboard hanya bisa diakses jika sudah login (protected dengan middleware auth).
+Role User:
+
+Ada role (mahasiswa, dosen, admin).
+Role membedakan akses halaman atau fitur.
+User Profile:
+
+Ada rute dan controller untuk edit profil sendiri, lihat profil publik user lain, ranking user.
+Apa yang Belum Dibuat?
+CRUD user (misal: admin mengelola user dari backend/admin panel).
+Notifikasi.
+Fitur lupa password/reset password.
+Verifikasi email.
+Fitur tambahan lain (custom user settings, dsb).

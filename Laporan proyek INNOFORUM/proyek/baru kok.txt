@@ -1,0 +1,165 @@
+Roadmap Fitur Advanced Forum
+Sorting/Filtering Thread  ✅  (sudah)
+Hashtag System  ✅  (sudah, sidebar & filter hashtag sudah jalan)
+Like System  ✅  (sudah, user hanya bisa like sekali)
+Reporting/Flagging  ➡️  (kita lanjut ke sini)
+Statistik Forum & Top Users
+Profile & Ranking User
+
+
+
+
+
+
+
+
+
+
+
+
+
+1. Statistik Forum & Top Users
+A. Statistik Forum
+Fungsi:
+
+Memberikan gambaran umum tentang aktivitas forum kepada semua user (atau hanya admin).
+Biasanya ditampilkan di sidebar, dashboard, atau halaman utama.
+Data yang biasanya ditampilkan:
+
+Total jumlah thread/pertanyaan.
+Total komentar/jawaban.
+Total user terdaftar.
+Total like yang diberikan.
+(Opsional) Jumlah thread hari ini/bulan ini.
+Contoh Tampilan:
+
+Code
+Statistik Forum
+---------------
+Total Thread:    120
+Total Komentar:  320
+Total User:      55
+Total Like:      200
+B. Top Users
+Fungsi:
+
+Memotivasi user untuk aktif (kompetisi sehat, jadi yang “top”).
+Bisa jadi tolak ukur reputasi user di forum.
+Top user biasanya diurutkan berdasarkan:
+
+Jumlah thread yang dibuat.
+Jumlah komentar/jawaban yang diberikan.
+Jumlah like yang didapat dari thread/jawabannya.
+Contoh Tampilan:
+
+Code
+Top Penanya
+-----------
+1. Budi (15 thread)
+2. Siti (12 thread)
+3. Andi (9 thread)
+
+Top User Berdasarkan Like
+-------------------------
+1. Siti (30 like)
+2. Budi (25 like)
+3. Tono (10 like)
+2. Profile & Ranking User
+A. Profile User
+Fungsi:
+
+Halaman khusus untuk setiap user.
+Menampilkan identitas user (nama, email, role, prodi/mata kuliah, avatar/foto, dsb).
+Menampilkan statistik user itu sendiri (jumlah thread, komentar, total like yang didapat).
+Menampilkan daftar thread atau komentar yang pernah dibuat user tersebut.
+Contoh Tampilan:
+
+Code
+Profil Siti
+-----------
+Nama: Siti Aminah
+Email: siti@example.com
+Role: Mahasiswa
+Prodi: Teknik Informatika
+
+Statistik Siti
+--------------
+Thread Dibuat: 12
+Komentar:     25
+Total Like:   30
+
+Daftar Thread Siti:
+- Bagaimana cara deploy Laravel?
+- Apa itu REST API?
+...
+B. Ranking User
+Fungsi:
+
+Menampilkan peringkat user seluruh forum berdasarkan kriteria tertentu (misal: jumlah like, jumlah thread, dsb).
+Contoh Tampilan:
+
+Code
+Peringkat User Berdasarkan Like
+-------------------------------
+1. Siti (30 like)
+2. Budi (25 like)
+3. Tono (10 like)
+
+Peringkat User Berdasarkan Thread
+---------------------------------
+1. Budi (15 thread)
+2. Siti (12 thread)
+3. Andi (9 thread)
+Kesimpulan
+Statistik Forum & Top Users → Untuk semua user melihat perkembangan dan siapa yang paling aktif/berkontribusi di forum.
+Profile & Ranking User → Untuk menampilkan detail dan prestasi tiap user serta ranking user secara umum (bisa jadi fitur motivasi dan penghargaan).
+Fitur-fitur ini membuat forum lebih hidup, kompetitif, dan user merasa diapresiasi.
+Kalau kamu punya ide tambahan (misal: badge, level, dsb), bisa dikembangkan lebih lanjut!
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Kita akan kerjakan secara bertahap, mulai dari statistik forum & top users (dashboard/summary sidebar), lalu lanjut ke fitur profil dan ranking user.
+Berikut gambaran langkah yang akan kita lakukan:
+
+Langkah 1: Statistik Forum & Top Users
+A. Ambil Data Statistik Forum
+Hitung jumlah total thread, komentar, user, like, report, dan hashtag.
+B. Ambil Data Top Users
+Top user berdasarkan jumlah thread (penanya terbanyak).
+(Opsional) Top user berdasarkan like terbanyak.
+C. Tampilkan di Sidebar atau Dashboard
+Buat komponen Blade untuk menampilkan statistik dan top users.
+Langkah 2: Profile & Ranking User
+A. Profil User
+Halaman profil: info user, statistik pribadi, daftar thread/komentar miliknya.
+B. Ranking User
+Algoritma untuk ranking user (berdasarkan like, jumlah thread, dsb).
+Tampilkan ranking pada profil atau halaman khusus.
+Step Selanjutnya
+Kita mulai dari statistik forum & top users.
+Langkah pertama: update controller dan tampilkan statistik/top users di sidebar dashboard/forum.
+
+Saya akan buatkan contoh controller dan potongan Blade sidebar.
+Apakah kamu ingin statistik/top user ini tampil di sidebar halaman forum (index), atau di halaman dashboard khusus (misal /dashboard)?
+Kalau di sidebar, cukup di file resources/views/questions/index.blade.php.
+Kalau dashboard khusus, nanti kita buat route & view baru.
+
+Silakan konfirmasi, atau kalau ingin langsung keduanya, saya buatkan dua-duanya!

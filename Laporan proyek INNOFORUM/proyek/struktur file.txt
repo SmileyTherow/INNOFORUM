@@ -1,0 +1,453 @@
+app/
+├── Http/
+│   ├── Controllers/
+│   │   ├── Admin/
+│   │   │   ├── AdminAnnouncementController.php (Mengelola pengumuman yang ditampilkan di halaman admin. Termasuk fitur tambah, edit, dan hapus pengumuman.)
+│   │   │   ├── AdminCategoryController.php (Mengelola kategori diskusi atau pertanyaan di forum. Admin dapat menambahkan, mengubah, dan menghapus kategori.)
+│   │   │   ├── AdminCommentController.php (Mengatur komentar yang dibuat oleh pengguna, termasuk moderasi atau penghapusan komentar yang melanggar.)
+│   │   │   ├── AdminDashboardController.php (Menampilkan statistik dan ringkasan aktivitas forum kepada admin sebagai tampilan awal panel kontrol.)
+│   │   │   ├── AdminReportController.php (Menangani laporan dari user terkait pertanyaan atau komentar. Admin dapat melihat dan memperbarui status laporan.)
+│   │   │   ├── AdminStatsController.php (Menyediakan data statistik untuk forum seperti jumlah user, pertanyaan, komentar, dan lainnya)
+│   │   │   ├── AdminThreadController.php (Mengelola thread atau pertanyaan yang dibuat user. Termasuk validasi konten dan penghapusan.)
+│   │   │   ├── AdminUserController.php (Memungkinkan admin untuk melihat dan mengelola akun pengguna yang terdaftar di platform.)
+│   │   │   └── DashboardController.php (Dashboard khusus untuk admin yang menampilkan panel kontrol dan ringkasan aktivitas sistem.)
+│   │   ├── Auth/
+│   │   │   ├── AuthenticatedSessionController.php (Mengatur sesi login pengguna, termasuk autentikasi saat login.)
+│   │   │   ├── ConfirmablePasswordController.php (Memastikan pengguna mengonfirmasi password mereka sebelum melakukan tindakan sensitif.)
+│   │   │   ├── OtpController.php (Mengatur proses verifikasi OTP (One-Time Password) untuk autentikasi ganda pengguna.)
+│   │   │   ├── PasswordController.php (Mengelola penggantian dan pembaruan password oleh pengguna.)
+│   │   │   ├── PasswordResetLinkController.php (Mengatur pengiriman link reset password ke email pengguna.)
+│   │   │   └── VerifyEmailController.php (Mengelola proses verifikasi email pengguna setelah registrasi.)
+│   │   ├── AuthController.php (Mengatur proses login, logout, dan registrasi umum pengguna.)
+│   │   ├── CommentController.php (Mengelola komentar yang ditambahkan oleh user terhadap pertanyaan yang ada.)
+│   │   ├── ContactController.php (Menangani formulir kontak dari pengguna yang ingin menghubungi admin atau pengelola situs.)
+│   │   ├── Controller.php (Kelas dasar dari semua controller yang menyediakan fungsi umum yang dapat digunakan oleh controller lainnya.)
+│   │   ├── DashboardController.php (Menampilkan halaman dashboard untuk pengguna biasa setelah login.)
+│   │   ├── NotificationController.php (Mengelola notifikasi yang diterima oleh user, seperti status laporan atau balasan komentar.)
+│   │   ├── ProfileController.php (Menangani tampilan dan pengelolaan profil user oleh user sendiri.)
+│   │   ├── QuestionController.php (Mengatur proses pembuatan, pengeditan, dan penghapusan pertanyaan oleh user.)
+│   │   ├── ReportController.php (Digunakan user untuk melaporkan pertanyaan atau komentar. Admin dapat memproses laporan ini dan memberi notifikasi.)
+│   │   └── UserController.php (Menangani pengelolaan akun pengguna seperti update profil, hapus foto, dan menampilkan profil publik.)
+│
+│   ├── Middleware/
+│   │   ├── AdminMiddleware.php (Middleware ini digunakan untuk membatasi akses hanya kepada pengguna yang memiliki peran sebagai admin.)
+│   │   ├── Authenticate.php (Middleware bawaan Laravel yang memastikan pengguna telah diautentikasi sebelum mengakses route tertentu.)
+│   │   ├── ForceNimSession.php (Middleware ini memaksa pengguna untuk memiliki sesi NIM yang valid sebelum melanjutkan ke halaman berikutnya.)
+│   │   ├── MahasiswaDosenMiddleware.php (Digunakan untuk memverifikasi bahwa pengguna adalah mahasiswa atau dosen sebelum mengakses fitur tertentu.)
+│   │   ├── RedirectIfAuthenticated.php (Digunakan untuk mengarahkan pengguna yang sudah login agar tidak bisa mengakses halaman login atau register.)
+│   │   ├── RoleMiddleware.php (Middleware untuk membatasi akses berdasarkan peran pengguna seperti admin, mahasiswa, atau dosen.)
+│   │   └── VerifyCsrfToken.php (Middleware untuk melindungi aplikasi dari serangan CSRF (Cross-Site Request Forgery).)
+│
+│   ├── Requests/
+│   │   ├── Auth/
+│   │   │   │      └── LoginRequest.php (Request ini digunakan untuk memvalidasi input login yang diberikan oleh pengguna.)
+│   │   │   └── ProfileUpdateRequest.php (Request ini digunakan untuk memvalidasi data saat pengguna melakukan pembaruan profil mereka.)
+│
+│   ├── Kernel.php (File utama yang mendaftarkan semua middleware global, grup middleware, dan middleware individu yang digunakan dalam aplikasi.)
+│
+│   ├── Livewire/
+│   │   ├── Admin/
+│   │   │   │      └── UserTable.php (Komponen Livewire yang menampilkan tabel data pengguna untuk panel admin, dengan fitur pencarian dan paginasi.)
+│
+│   ├── Mail/
+│   ├── PasswordConfirmationMail.php (Kelas email untuk mengirimkan konfirmasi password kepada pengguna melalui email.)
+│   ├── TestEmail.php (Digunakan untuk mengirimkan email pengujian sederhana untuk memastikan sistem email berfungsi.)
+│   └── UserOtpMail.php (Kelas email yang bertugas mengirimkan kode OTP verifikasi ke email pengguna.)
+│
+│   ├── Models/
+│   │   ├── Announcement.php (Model untuk menyimpan dan mengelola data pengumuman dalam sistem.)
+│   │   ├── Answer.php (Model ini merepresentasikan jawaban yang diberikan oleh pengguna terhadap pertanyaan yang ada.)
+│   │   ├── Category.php (Model yang mengatur kategori dari setiap pertanyaan untuk keperluan pengelompokan topik.)
+│   │   ├── Comment.php (odel yang digunakan untuk menyimpan komentar pengguna terhadap pertanyaan atau diskusi.)
+│   │   ├── Discussion.php (Model ini mengelola entitas diskusi yang bisa memiliki banyak komentar dan hashtag.)
+│   │   ├── Hashtag.php (odel untuk mengelola hashtag yang digunakan dalam pertanyaan atau diskusi untuk klasifikasi dan pencarian.)
+│   │   ├── Notification.php (Model untuk menyimpan notifikasi pengguna seperti balasan, komentar, atau laporan.)
+│   │   ├── Profile.php (Model profil tambahan yang menyimpan informasi seperti angkatan, bio, dan prodi pengguna.)
+│   │   ├── Question.php (Model utama untuk menyimpan pertanyaan yang dibuat oleh pengguna, lengkap dengan relasi komentar, jawaban, dan hashtag.)
+│   │   ├── Report.php (Model untuk menyimpan laporan terhadap pertanyaan atau komentar yang dianggap tidak pantas.)
+│   │   ├── User.php (Model utama pengguna yang mengelola informasi pengguna termasuk peran, relasi pertanyaan, komentar, OTP, dan lainnya.)
+│   │   └── UserProfile.php (Model tambahan untuk menyimpan profil pengguna secara terpisah dari model User utama.)
+│
+│   ├── Notifications/
+│   │   └── SendOtpNotification.php (Berisi logika untuk mengirim notifikasi OTP ke pengguna, biasanya melalui email atau SMS.)
+│
+│   ├── Providers/
+│   │   └── AppServiceProvider.php (Digunakan untuk mendaftarkan service container binding dan konfigurasi awal aplikasi.)
+│
+├── View/
+│   ├── Components/
+│   │       ├── AppLayout.php (Komponen layout utama yang digunakan saat pengguna sudah login.)
+│   │       └── GuestLayout.php (Komponen layout yang digunakan untuk halaman-halaman tamu (belum login).)
+│   └── emails/
+│   │       └── user_otp.blade.php (Template email untuk mengirimkan OTP kepada pengguna.)
+│   
+bootstrap/
+├── cache/
+│   │   ├── .gitignore (File ini menjaga agar folder cache tetap ada dalam repository meskipun kosong.)
+│   │   ├── packages.php (Berisi cache package service provider yang digunakan oleh aplikasi.)
+│   │   ├── services.php (Berisi cache dari konfigurasi layanan (service bindings) yang digunakan Laravel.)
+│   ├── app.php (File yang digunakan untuk bootstrap dan menginisialisasi aplikasi Laravel.)
+│   └── providers.php (Biasanya menyimpan daftar provider yang digunakan aplikasi saat booting.)
+
+config/
+├── app.php ( File konfigurasi utama aplikasi Laravel. Berisi pengaturan nama aplikasi, timezone, locale, dan daftar provider yang digunakan.)
+├── auth.php (Mengatur konfigurasi autentikasi seperti guards, providers, dan pengaturan reset password.)
+├── cache.php (Berisi konfigurasi untuk penyimpanan cache di Laravel. Mendukung berbagai driver seperti file, database, redis, dan lain-lain.)
+├── database.php (Konfigurasi koneksi ke database. Mendukung berbagai jenis database seperti MySQL, SQLite, PostgreSQL, dan SQL Server.)
+├── filesystems.php (Mengatur konfigurasi filesystem atau penyimpanan file.)
+├── logging.php (Mengatur channel dan format logging aplikasi. Bisa menyimpan log ke file, Slack, atau layanan lain.)
+├── mail.php (Konfigurasi untuk pengiriman email, seperti SMTP, Mailgun, SES, dan lainnya.)
+├── queue.php (Mengatur sistem antrian (queue) Laravel, yang digunakan untuk menjalankan tugas-tugas secara asynchronous.)
+├── services.php (Tempat menyimpan konfigurasi kredensial untuk layanan pihak ketiga seperti Mailgun, SES, dan lainnya.)
+└── session.php (Mengatur bagaimana session disimpan dalam aplikasi, seperti menggunakan file, database, redis, dan lainnya.)
+
+database/
+├── factories/
+│   └── UserFactory.php (Digunakan untuk menghasilkan data user palsu (dummy) dalam pengujian atau seeding database. Berisi definisi nilai-nilai default untuk model User.)
+│
+├── migrations/
+│   ├── 0001_01_01_000000_create_users_table.php (Membuat tabel users yang menyimpan informasi pengguna seperti username, role, nama, email, password, prodi, avatar, dan token pengguna.)
+│   ├── 0001_01_01_000001_create_cache_table.php (Membuat tabel cache untuk menyimpan key-value data sementara, biasanya digunakan untuk caching aplikasi.)
+│   ├── 0001_01_01_000002_create_jobs_table.php (Membuat tiga tabel: jobs untuk menyimpan antrean job yang sedang dijalankan, job_batches untuk manajemen batch pekerjaan, dan failed_jobs untuk mencatat pekerjaan yang gagal.)
+│   ├── 2024_06_01_000001_create_notifications_table.php (Membuat tabel notifications untuk menyimpan notifikasi pengguna berdasarkan user_id dan tipe notifikasinya.)
+│   ├── 2025_05_07_011520_create_answers_table.php (Membuat tabel answers untuk menyimpan jawaban atas pertanyaan yang ada.)
+│   ├── 2025_05_07_011733_create_questions_table.php (Membuat tabel questions untuk menyimpan pertanyaan dengan relasi ke kategori dan pengguna yang membuatnya.)
+│   ├── 2025_05_07_112149_add_otp_code_to_users_table.php (Menambahkan kolom otp_code ke tabel users untuk menyimpan kode OTP yang dikirimkan ke pengguna.)
+│   ├── 2025_05_08_051302_create_data_nim_table.php (Membuat tabel data_nim untuk menyimpan nomor induk pengguna beserta perannya.)
+│   ├── 2025_05_12_000001_create_comments_table.php (Membuat tabel comments untuk menyimpan komentar terhadap pertanyaan, berelasi dengan tabel users dan questions.)
+│   ├── 2025_05_12_000002_create_admin_actions_table.php (Mencatat aksi yang dilakukan oleh admin terhadap entitas komentar atau pertanyaan.)
+│   ├── 2025_05_23_092154_create_hashtag_question_table.php (Membuat tabel pivot untuk relasi many-to-many antara hashtags dan questions.)
+│   ├── 2025_05_24_111033_create_hashtags_table.php (Membuat tabel hashtags yang menyimpan tag unik yang digunakan untuk mengelompokkan pertanyaan.)
+│   ├── 2025_05_25_000004_create_question_like_table.php (Membuat tabel question_likes yang menyimpan informasi pengguna yang menyukai pertanyaan tertentu.)
+│   ├── 2025_05_25_010000_create_reports_table.php (Membuat tabel reports yang menyimpan laporan terhadap pertanyaan atau komentar oleh pengguna.)
+│   ├── 2025_05_26_120000_add_admin_message_to_reports_table.php (Menambahkan kolom admin_message untuk mencatat pesan atau catatan admin terhadap laporan pengguna.)
+│   ├── 2025_06_01_000001_create_comment_likes_table.php (Membuat tabel comment_likes yang mencatat siapa saja yang menyukai komentar tertentu.)
+│   ├── 2025_06_01_103119_add_photo_to_users_table.php (Menambahkan kolom photo untuk menyimpan foto profil pengguna.)
+│   ├── 2025_06_01_120300_add_images_to_questions_table.php (Menambahkan kolom images ke tabel questions untuk menyimpan gambar yang dilampirkan dalam pertanyaan.)
+│   ├── 2025_06_01_140000_add_image_to_comments_table.php (Menambahkan kolom image untuk menyimpan gambar di dalam komentar.)
+│   ├── 2025_06_05_000000_add_otp_expired_at_to_users_table.php (Menambahkan kolom otp_expired_at ke tabel users untuk menyimpan waktu kedaluwarsa OTP.)
+│   ├── 2025_06_05_000002_add_email_verified_at_to_users_table.php (Menambahkan kolom email_verified_at ke tabel users untuk menandai kapan email diverifikasi.)
+│   ├── 2025_06_07_045445_add_deleted_at_to_users_table.php (Menambahkan dukungan soft delete pada tabel users dengan kolom deleted_at.)
+│   ├── 2025_06_08_031450_create_user_profiles_table.php (Membuat tabel user_profiles untuk menyimpan detail profil pengguna seperti angkatan dan bio.)
+│   ├── 2025_06_10_062522_create_categories_table.php (Membuat tabel categories untuk mengelompokkan pertanyaan berdasarkan nama dan deskripsi.)
+│   ├── 2025_06_10_063226_create_announcements_table.php (Membuat tabel announcements untuk menyimpan pengumuman yang akan ditampilkan ke pengguna.)
+│   ├── 2025_06_11_135137_add_description_to_categories_table.php (Menambahkan kolom description pada tabel categories untuk memberikan penjelasan kategori.)
+│   └── 2025_06_12_111623_add_category_id_to_questions_table.php (Menambahkan kolom category_id ke tabel questions untuk menghubungkan pertanyaan dengan kategori.)
+│
+├── schema/
+│
+├── seeders/
+│   ├── data/
+│   │   ├── users.csv
+│   ├── DatabaseSeeder.php (Seeder utama untuk menjalankan seeder lainnya (memanggil UsersTableSeeder).
+│   ├── DataNimSeeder.php (Seeder untuk mengisi tabel `data_nim` dengan daftar NIM/NIGM dan rolenya.)
+│   ├── UserSeeder.php (Menambahkan user dummy ke tabel `users`, termasuk nama, email, dan prodi.)
+│   └── UserTableSeeder.php (Mengisi tabel `users` berdasarkan data `nomor_induk` dan `role`, cocok untuk generate massal akun.)
+├── .gitignore  
+└── database.sqlite
+ 
+node_modules/
+
+public/
+├── admin/
+│   ├── assets/
+│   │   ├── demo/
+│   │   │   ├── chart-area-demo.js (Contoh penggunaan Chart.js untuk grafik garis (line chart) data sesi pengguna.)
+│   │   │   ├── chart-bar-demo.js (Contoh Chart.js untuk menampilkan data pendapatan dalam bentuk bar chart.)
+│   │   │   ├── chart-pie-demo.js (Pie chart sederhana menggunakan Chart.js, menampilkan distribusi warna.)
+│   │   │   └── datatables-demo.js (Inisialisasi DataTables untuk tabel HTML dengan jQuery.)
+│   │   ├── img/
+│   │   │   └── error-404-monochrome.svg ( foto eror 404)
+│   ├── css/
+│   │   └── styles.css
+│   ├── js/
+│   │   ├── datatables-simple-demo.js (Inisialisasi Simple-DataTables (versi ringan tanpa jQuery) saat halaman dimuat.)
+│   │   └── scripts.js (Script utama template SB Admin untuk mengatur toggle sidebar dan localStorage.)
+│
+├── build/
+│   ├── assets/
+│   │   ├── app-Bf4POITK.js
+│   │   └── app-Bg1pxkvV.css
+│   └── manifest.json
+│
+├── css/
+│   ├── filament/
+│   │   ├── filament/
+│   │   │   ├── app.css
+│   │   ├── forms/
+│   │   │   ├── forms.css
+│   │   └── support/
+│   │   │   └── support.css
+│
+├── login_admins.css (Styling untuk halaman login admin dengan nuansa gelap dan tombol dinamis.)
+├── login_register_dosen.css (Desain UI login dan register untuk dosen, terdiri dari dua sisi (form masuk dan daftar).)
+├── login_register_mahasiswa.css (Tampilan login dan register untuk mahasiswa, dengan struktur layout yang sama seperti dosen.)
+├── nim_or_nigm.css (Styling futuristik dengan animasi logo dan form login berbasis NIM/NIGM (untuk landing page awal).)
+│
+├── images/
+│   └── black-bg.jpg
+│
+├── js/
+│   └── filament/
+│       ├── filament/
+│       │   ├── app.js
+│       │   ├── echo.js
+│       │
+│       ├── forms/components/
+│       │   ├── color-picker.js
+│       │   ├── date-time-picker.js
+│       │   ├── file-upload.js
+│       │   ├── key-value.js
+│       │   ├── markdown-editor.js
+│       │   ├── rich-editors.js
+│       │   ├── select.js
+│       │   ├── tags-input.js
+│       │   └── textarea.js
+│       │
+│       ├── notifications/
+│       │   └── notifications.js
+│       │
+│       ├── support/
+│       │   └── support.js
+│       │
+│       ├── tables/components/
+│       │   └── table.js
+│       │
+│       ├── widgets/components/stats-overview/stat/
+│       │          └── chart.js
+│       └── chart.js
+│
+├── login_admin.js (Mengatur validasi input login admin dan efek pergeseran tombol saat form belum terisi.)
+├── login_register_dosen.js (Animasi perpindahan form login/register dosen dan dekorasi canvas dengan Paper.js.)
+├── login_register_mahasiswa.js (Animasi perpindahan form login/register dosen dan dekorasi canvas dengan Paper.js.)
+├── nim_or_nigm.js (Efek animasi futuristik berbasis teks dan waktu untuk halaman awal berbasis NIM/NIGM.)
+│
+├── storage
+│   ├── avatars/
+│   └── .gitignore
+│
+├── vendor/livewire
+│   ├── livewire.esm.js
+│   ├── livewire.esm.js.map
+│   ├── livewire.js
+│   ├── livewire.min.js
+│   ├── livewire.min.js.map
+│   └── manifest.json
+│
+├── .htaccess
+├── favicon.ico
+├── index.php
+├── robots.txt
+│
+resources/
+├── css/
+│   └── app.css (File utama Tailwind CSS yang memuat deklarasi @tailwind base, components, dan utilities. Digunakan untuk styling global seluruh aplikasi Laravel.)
+│
+├── js/
+│   ├── app.js (Inisialisasi Alpine.js sebagai JavaScript framework ringan. Juga mengimpor bootstrap.js sebagai fondasi request Axios.)
+│   ├── bootstrap.js (File konfigurasi dasar Axios, mengatur X-Requested-With agar semua permintaan HTTP dianggap Ajax oleh Laravel.)
+│   └── role-handler.js (Script kecil yang digunakan untuk menampilkan/menyembunyikan kolom “Prodi” berdasarkan pilihan peran (role) saat register user. Aktif saat role = "mahasiswa".)
+│
+views/
+├── admin/
+│   ├── announcements/
+│   │   ├── create.blade.php (Form untuk admin menambahkan pengumuman baru beserta file opsional (gambar atau PDF).)
+│   │   ├── edit.blade.php (Halaman form untuk mengedit isi pengumuman yang sudah dipublikasikan.)
+│   │   ├── index.blade.php (Daftar seluruh pengumuman dan form kirim cepat ke semua user.)
+│   │   └── show.blade.php (Halaman detail pengumuman, menampilkan konten dan file (jika tersedia).)
+│
+│   ├── categories/
+│   │   ├── create.blade.php (Form tambah kategori diskusi seperti "Umum", "Teknik", atau "Pengumuman".)
+│   │   ├── edit.blade.php (Halaman untuk mengedit nama/deskripsi kategori yang sudah ada.)
+│   │   └── index.blade.php (Menampilkan daftar semua kategori dalam bentuk tabel.)
+│
+│   ├── comments/
+│   │   ├── index.blade.php (Daftar seluruh komentar, lengkap dengan tombol hapus dan kirim notifikasi.)
+│   │   ├── latest.blade.php (Placeholder halaman komentar terbaru (bisa dikembangkan nanti).)
+│   │   └── reported.blade.php (Menampilkan komentar yang dilaporkan user, disertai alasan dan tombol aksi admin.)
+│
+│   ├── reports/
+│   │   └── index.blade.php (Halaman untuk admin mengelola laporan dari user, baik terhadap komentar maupun thread.)
+│
+│   ├── stats/
+│   │   └── index.blade.php (Halaman visualisasi statistik berupa grafik (Chart.js) terkait pertumbuhan user, komentar, dan thread.)
+│
+│   ├── threads/
+│   │   ├── create.blade.php (Form untuk menambah thread baru oleh user/admin.)
+│   │   ├── edit.blade.php (Mengedit judul, isi, dan kategori thread yang sudah dibuat.)
+│   │   ├── index.blade.php (Tabel seluruh thread, bisa dicari berdasarkan nama user atau judul.)
+│   │   ├── reported.blade.php (Menampilkan thread yang dilaporkan oleh user lain, lengkap dengan form pesan admin.)
+│   │   └── show.blade.php (Menampilkan thread yang dilaporkan oleh user lain, lengkap dengan form pesan admin.)
+│
+│   ├── users/
+│   │   ├── create.blade.php (Form tambah user baru oleh admin dengan field lengkap (username, role, email, dll).)
+│   │   ├── edit.blade.php (Form untuk mengubah data user seperti nama, role, email, dan password.)
+│   │   ├── index.blade.php (Daftar user dengan fitur pencarian dan penambahan NIM/NIDN (username).)
+│   │   ├── notify.blade.php (Daftar user dengan fitur pencarian dan penambahan NIM/NIDN (username).)
+│   │   ├── reported.blade.php (Placeholder halaman pengguna yang dilaporkan.)
+│   │   └── show.blade.php (Menampilkan detail informasi user, termasuk avatar dan prodi.)
+│   │
+│   ├── dashboard.blade.php (Halaman beranda utama admin, berisi hero section dan statistik singkat.)
+│   ├── layout.blade.php (Template dasar admin (HTML+Blade), memuat navbar dan slot @yield.)
+│   ├── statistics.blade.php (Tampilan statistik umum untuk publik user (total user, diskusi, komentar, hashtag populer).)
+│   └── tables.blade.php (Halaman yang menggunakan Livewire untuk menampilkan tabel dinamis (DataTable user admin).)
+│       
+├── auth/
+│   ├── complete-profile.blade.php (Form untuk melengkapi profil pengguna setelah registrasi, termasuk angkatan (untuk mahasiswa) dan bio. Digunakan agar user memiliki data tambahan selain email dan nama.)
+│   ├── login_admin.blade.php (Halaman login khusus untuk admin dengan desain simpel dan terhubung ke file CSS/JS login_admin.)
+│   ├── login_register_dosen.blade.php (Tampilan login dan registrasi dalam satu halaman untuk dosen. Menggunakan animasi perpindahan form dan validasi dengan SweetAlert. Terdapat form input untuk mata kuliah dan foto profil.)
+│   ├── login_register_mahasiswa.blade.php (Tampilan login dan registrasi untuk mahasiswa dengan gaya dan logika mirip login_register_dosen. Input program studi tersedia dengan opsi pilihan dropdown.)
+│   ├── nim_or_nigm.blade.php (Tampilan login dan registrasi untuk mahasiswa dengan gaya dan logika mirip login_register_dosen. Input program studi tersedia dengan opsi pilihan dropdown.)
+│   ├── otp_admin.blade.php (Halaman verifikasi OTP untuk admin setelah login. OTP terdiri dari 4 input digit dan menggunakan TailwindCSS serta JavaScript untuk autofokus.)
+│   ├── otp.blade.php (Tampilan sederhana untuk input OTP pengguna setelah menerima email verifikasi. Validasi error muncul jika OTP salah atau tidak diisi.)
+│   ├── user_otp.blade.php (Halaman OTP untuk pengguna umum (mahasiswa/dosen). Menampilkan email tujuan OTP dan menyediakan form input serta tombol kirim ulang.)
+│   └── verify-otp.blade.php (Alternatif halaman verifikasi OTP yang lebih sederhana. Menampilkan pesan sukses atau error jika OTP valid/invalid.)
+│
+├── comments/
+│   └── edit.blade.php (Form edit komentar dengan validasi dan tombol batal. Didesain modern dan responsif menggunakan TailwindCSS.)
+│
+├── components/
+│   ├── application-logo.blade.php (SVG logo untuk digunakan sebagai identitas aplikasi di layout.)
+│   ├── auth-session-status.blade.php (SVG logo untuk digunakan sebagai identitas aplikasi di layout.)
+│   ├── danger-button.blade.php (Komponen tombol merah untuk aksi berbahaya seperti hapus data.)
+│   ├── dropdown-link.blade.php (Komponen untuk item link dalam dropdown menu.)
+│   ├── dropdown.blade.php (Komponen untuk item link dalam dropdown menu.)
+│   ├── input-error.blade.php (Menampilkan pesan error validasi secara dinamis di bawah input.)
+│   ├── input-label.blade.php (Label input form yang dapat disesuaikan.)
+│   ├── modal.blade.php (Komponen modal interaktif menggunakan Alpine.js dan Tailwind. Bisa digunakan untuk konfirmasi atau form di dalam modal popup.)
+│   ├── nav-link.blade.php (Link navigasi utama dengan indikator aktif (underline dan warna).)
+│   ├── primary-button.blade.php (Tombol utama berwarna gelap, digunakan untuk submit utama.)
+│   ├── question-list.blade.php(Komponen list pertanyaan dalam grid. Menampilkan avatar, judul, isi singkat, tag, komentar, dan likes. Menyediakan tombol edit & hapus jika user pemilikpertanyaan.)
+│   ├── responsive-nav-link.blade.php (Navigasi sidebar (mobile friendly) dengan style aktif dan hover.)
+│   ├── secondary-button.blade.php (Tombol sekunder dengan latar putih dan border abu-abu.)
+│   ├── text-input.blade.php (Komponen input text standar dengan gaya border dinamis saat focus.)
+│   └── thread-card.blade.php (Komponen untuk menampilkan pertanyaan/thread dalam bentuk kartu. Menampilkan user, isi, komentar, likes, dan hashtag.)
+│
+├── emails/
+│   ├── contact.blade.php (Template email masuk dari form kontak. Menampilkan nama, email, judul, dan isi pesan.)
+│   ├── password_confirmation.blade.php (Email konfirmasi pendaftaran user baru. Menyertakan informasi dasar akun dan ucapan selamat datang.)
+│   ├── test.blade.php (Template email uji coba kirim email di Laravel.)
+│   └── user_otp.blade.php (Template email yang mengirimkan kode OTP ke user. Mewarnai OTP dengan biru dan menekankan untuk tidak membagikan kode tersebut.)
+│
+├── errors/
+│   ├── 
+│   ├── 
+│   ├── 
+│   ├── 
+│   ├── 
+│   ├── 
+│   ├── 
+│   ├── 
+│   ├── 
+│   ├── 
+│   └── 
+│
+├── forum/
+│   ├── create.blade.php (Halaman membuat pertanyaan baru di forum. Ada fitur judul, isi, kategori, dan hashtag.)
+│   ├── edit.blade.php (Form edit thread yang sudah dibuat, bisa mengubah judul, isi, kategori, dan tag.)
+│   ├── index.blade.php (Halaman utama forum, menampilkan semua pertanyaan dengan filter dan pencarian.)
+│   └── show.blade.php (Menampilkan detail sebuah thread dan semua komentar, serta tombol like, laporkan, dan balas.)
+│   
+├── layouts/
+│   ├── admin/
+│   │   └── admin.blade.php (Tampilan dashboard khusus untuk admin, terdapat tombol logout)
+│   ├── app.blade.php (Layout utama yang digunakan oleh halaman yang memerlukan login (authenticated).)
+│   ├── guest.blade.php (Layout untuk halaman tamu (belum login), seperti login/register.)
+│   └── navigation.blade.php (Layout untuk halaman tamu (belum login), seperti login/register.)
+│   
+│   ├── livewire\admin
+│   │   └── user-table.blade.php (Tabel daftar user yang bisa difilter dan dicari oleh admin secara live.)
+│   
+├── notifikasi/
+│   └── index.blade.php (Menampilkan daftar notifikasi (belum dibaca dan sudah dibaca) serta tombol tandai dibaca.)
+│   
+├── profile/
+│   └── partials/
+│   │      ├── delete-user-form.blade.php (Form untuk menghapus akun user, dengan verifikasi password.)
+│   │      ├── update-password-form.blade.php (Form update password (lama & baru).)
+│   │      └── update-profile-information-form.blade.php (Form update nama dan email, termasuk verifikasi ulang email.)
+│   ├── edit.blade.php (Form update nama dan email, termasuk verifikasi ulang email.)
+│   └── show.blade.php (Menampilkan detail profil user, statistik aktivitasnya di forum.)
+│   
+├── questions/
+│   ├── create.blade.php (Buat pertanyaan baru)
+│   ├── edit.blade.php (Edit pertanyaan → atau buat baru via)
+│   ├── index.blade.php (Menampilkan semua pertanyaan → user klik salah satu →)
+│   └── show.blade.php (Lihat detail → klik Edit jika pemilik →)
+│   
+├── users/
+│   ├── index.blade.php (Menampilkan daftar semua user (dengan avatar, nama, prodi, role, dll).)
+│   └── profile.blade.php (Tampilan publik dari profil user yang mencakup bio, thread, dan komentar.)
+├── admin.blade.php (Halaman dashboard setelah admin login (versi dasar).)
+├── contact.blade.php (Halaman kontak, dengan Google Maps dan form kirim pesan.)
+├── dashboard.blade.php (Halaman utama setelah login, menampilkan feed pertanyaan, notifikasi, filter, dll.)
+└── welcome.blade.php (halama bawaan laravel)
+  
+├── routes/
+│   ├── auth.php (Rute-rute untuk autentikasi pengguna seperti login, register, verifikasi email, reset password, dan logout. Digunakan saat user belum login maupun setelah login.)
+│   ├── console.php (Berisi perintah artisan custom, salah satunya adalah perintah inspire yang menampilkan kutipan inspiratif. Cocok untuk pengujian atau demo CLI Laravel.)
+│   └── web.php (Rute utama aplikasi. Mengatur halaman seperti dashboard, forum, komentar, notifikasi, pengelolaan admin, profil publik, hingga contact form. Ini adalah pusat rute utama (frontend + backend admin).)
+│
+├── storage/
+│   ├── app/
+│   │   ├── private/
+│   │   │   ├── public
+│   │   │   │   ├── comment_images/
+│   │   │   │   │      └──    
+│   │   │   │   └── photo/
+│   │   │   │   │      └──    
+│   │   │   └── .gitignore
+│   │   ├── public/
+│   │   │   │   ├── avatars/
+│   │   │   │   │      └──  
+│   │   │   │   └── .gitignore
+│   │   └── .gitignore
+│   │
+│   ├── framework/
+│   │   ├── cache/
+│   │   │   └── data/
+│   │   │       └── .gitignore
+│   │   ├── sessions/
+│   │   │   └── <session file>
+│   │   ├── testing/
+│   │   │   └── .gitignore
+│   │   └── views/
+│   │       └── .gitignore
+│   │
+│   └── logs/
+│       ├── .gitignore
+│       └── laravel.log
+│
+├── tests/
+│   ├── Feature/
+│   │   ├── Auth/
+│   │   │   ├── AuthenticationTest.php (Menguji tampilan login, proses login yang valid/tidak valid, dan logout.)
+│   │   │   ├── EmailVerificationTest.php (Menguji proses verifikasi email, validasi hash, dan tampilan layar verifikasi.)
+│   │   │   ├── PasswordConfirmationTest.php (Menguji konfirmasi password sebelum aksi penting dilakukan.)
+│   │   │   ├── PasswordResetTest.php (Menguji proses lupa password: dari permintaan hingga pengaturan ulang password.)
+│   │   │   ├── PasswordUpdateTest.php (Menguji pembaruan password setelah login.)
+│   │   │   └── RegistrationTest.php (Menguji tampilan register dan proses pendaftaran user baru.)
+│   │   ├── ExampleTest.php (Tes dasar untuk memastikan endpoint / dapat diakses dengan sukses (200 OK).)
+│   │   └── ProfileTest.php (Tes dasar untuk memastikan endpoint / dapat diakses dengan sukses (200 OK).)
+│   │
+│   └── Unit/
+│   │      ├── ExampleTest.php (Tes dummy sederhana untuk memverifikasi bahwa true adalah true.)
+│   ├── Pet.php (Konfigurasi awal untuk PestPHP, termasuk: Binding ke Illuminate\Foundation\Testing\RefreshDatabase (agar database reset tiap test). Definisi custom expectation (toBeOne()). Placeholder untuk fungsi global.)
+│   └── TestCase.php (Base test case class custom yang mewarisi dari Laravel BaseTestCase. Biasanya di sini ditambahkan setup atau helper khusus test suite.)
+│
+├── vendor/
+├── .editorconfig
+├── .env
+├── .env.example
+├── .gitattributes
+├── .gitignore
+├── artisan
+├── composer.json
+├── composer.lock
+├── package.json
+├── package-lock.json
+├── phpunit.xml
+├── postcss.config.js
+├── tailwind.config.js
+├── vite.config.js
+└── webpack.mix.js

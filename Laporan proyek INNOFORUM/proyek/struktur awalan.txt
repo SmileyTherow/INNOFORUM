@@ -1,0 +1,61 @@
+1. Konsep User/Admin
+a. User Table
+	username = NIM/NIGM (unik, wajib diinput admin)
+	role = mahasiswa / dosen / admin
+	name, email, password: bisa dilengkapi sendiri oleh user 
+	admin = user dengan role "admin", biasanya mengelola data user, forum, dsb
+b. Alur Pengelolaan User
+	Admin: tambah user (NIM/NIGM & role) lewat panel Filament (CRUD, Create-Read-Update-Delete)
+	Mahasiswa/dosen: login dengan NIM/NIGM, lengkapi data sendiri
+
+2. Konsep Forum
+a. Forum = Tempat Diskusi
+	Biasanya forum terdiri dari:
+	Threads (atau Topic, atau Post utama): misal "Tanya Tugas UAS", "Info Kelas", dll
+	Posts/Replies: komentar/response di dalam thread
+b. Struktur Tabel Minimal Forum
+	Biasanya:
+		questions = thread/topik
+		answers = reply/komentar
+	Minimal:
+	questions
+		id
+		user_id (relasi ke users)
+		title (judul thread)
+		body (isi thread)
+		created_at, updated_at
+	answers
+		id
+		question_id (relasi ke questions)
+		user_id (relasi ke users)
+		body (isi komentar)
+		created_at, updated_at
+c. CRUD Forum
+	Create: user (mahasiswa/dosen) bisa buat thread atau post baru
+	Read: semua user bisa lihat daftar thread & isinya
+	Update/Delete: user bisa edit/hapus post sendiri, admin bisa edit/hapus semua
+
+3. Penjelasan CRUD dan Peran Admin di Forum
+	Admin panel (Filament): untuk kelola data (user, forum, dsb) secara backend.
+	Forum (Frontend): untuk interaksi mahasiswa/dosen (buat thread, balas, dll).
+	CRUD di Forum: user bisa buat, baca, edit, hapus thread/komentar sesuai haknya.
+	Admin bisa:
+		tambah user baru (input NIM/NIGM & role)
+		edit/hapus thread/komentar jika perlu (moderasi)
+
+4. Langkah Selanjutnya
+	CRUD Questions (thread utama forum)
+	Buat controller, model, views untuk questions (thread)
+	CRUD Answers (komentar/reply)
+	Buat controller, model, views untuk answers (reply)
+	Relasi: pastikan questions dan answers relasi ke users
+
+5. Contoh Alur Penggunaan
+	Mahasiswa/dosen login → lihat forum → buat thread/komentar → data tersimpan di tabel questions/answers
+	Admin login → kelola user/forum via Filament panel
+
+Kalau mau, saya bisa:
+Bantu buatkan struktur CRUD forum (controller, route, dsb)
+Atau, kasih contoh migration/model/controller untuk forum
+Tinggal bilang, mau langsung CRUD forum (soal thread/post), atau ada detail lain yang mau ditanya soal admin?
+Biar kita satu visi dulu bro!

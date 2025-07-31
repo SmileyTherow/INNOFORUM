@@ -13,10 +13,7 @@
 <div class="flex flex-col items-center w-full mb-16">
     {{-- Google Maps --}}
     <div class="w-full md:w-2/3 mb-8">
-        <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3960.802441625194!2d107.60607657499384!3d-6.908172493084382!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e68e6e1e1d8f7b9%3A0x5d2c9b252d79e1f5!2sSTTI%20NIIT%20I-TECH!5e0!3m2!1sen!2sid!4v1717431549766!5m2!1sen!2sid"
-            width="100%" height="300" style="border:0; border-radius: 18px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
-        </iframe>
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d618.6119444006174!2d106.79969159871801!3d-6.27181070290388!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f196d374e127%3A0x15eb176abbf174af!2sSTTI%20NIIT%20I-TECH!5e0!3m2!1sen!2sid!4v1753933369317!5m2!1sen!2sid" width="800" height="400" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
     </div>
 
     {{-- Contact Form Putih --}}

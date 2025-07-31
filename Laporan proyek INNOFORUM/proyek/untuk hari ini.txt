@@ -1,0 +1,34 @@
+Rekap Progres yang Sudah Dilakukan
+1. Setup Laravel & Tailwind CSS
+
+Laravel sudah terinstall dengan baik.
+Tailwind CSS sudah aktif dan berhasil diterapkan (bisa dilihat dari kotak “Tailwind Aktif!” di dashboard).
+Routing & View
+
+Route /dashboard sudah dibuat.
+Semua route di navbar (dashboard, tanya, profil, notifikasi, logout) sudah dibuat agar tidak error.
+View dashboard.blade.php sudah tampil tanpa error.
+Sudah menyelesaikan error terkait route yang belum ada dan variabel $questions yang tidak didefinisikan.
+Navbar dan Layout
+
+Navbar sudah muncul (walau styling masih bisa dibagusin).
+Layout forum sudah terstruktur dengan Tailwind.
+Fokus Selanjutnya: Membaguskan Tampilan Forum
+Agar tampilan forumnya rapi dan menarik untuk presentasi ke dosen, kamu bisa lakukan:
+
+Perbaiki Navbar
+Tambahkan jarak antar menu.
+Buat hover effect lebih jelas.
+Rapikan posisi menu kanan/kiri.
+Header dan Judul
+Tambahkan heading besar “Forum Diskusi”.
+Gunakan font bold dan ukuran yang pas.
+Card Pertanyaan
+Setiap pertanyaan tampil dalam card (kotak) rapi.
+Nama penanya, tanggal, judul, isi pertanyaan, hashtag, jumlah komentar/like.
+Jika belum ada pertanyaan, tampilkan pesan “Belum ada pertanyaan.”
+Button “+ Pertanyaan Baru”
+Letakkan tombol di pojok kanan atas/kanan forum.
+Gunakan warna utama (misal biru) agar menonjol.
+Tampilan Responsive
+Pastikan tampilan tetap rapi di HP/laptop.

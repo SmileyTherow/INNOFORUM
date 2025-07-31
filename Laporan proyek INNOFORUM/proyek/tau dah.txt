@@ -1,0 +1,56 @@
+Struktur File Laravel Blade (Tailwind)
+resources/views/layouts/app.blade.php → Layout utama (sidebar, dark mode, dll)
+resources/views/dashboard.blade.php → List forum (dashboard)
+resources/views/questions/create.blade.php → Form tanya
+resources/views/profile/show.blade.php → Profil user
+
+
+
+
+FITUR USER (Front-end & Back-end)
+Frontend User (UI/UX)
+ Dashboard/Forum List (Sudah: card, hero, tab filter, search, tag cloud, dsb)
+ Sidebar/Drawer Responsive (Sudah: animasi, menu)
+ Detail Pertanyaan (Biasanya: halaman detail tiap pertanyaan)
+ Form Buat Pertanyaan (Sudah: form tanya, tag, dsb)
+ Profil User (Sudah: card profil, statistik, dsb)
+ Footer Lengkap (Sudah)
+ Contact Us (Sudah, route dan halaman)
+ Edit Profil User
+ Edit/Hapus Pertanyaan Sendiri
+ Jawab Pertanyaan
+ Like/Unlike Pertanyaan & Jawaban
+ Notifikasi (UI ada di sidebar, halaman/fiturnya belum)
+ Lihat Riwayat Pertanyaan/Jawaban Sendiri
+ Filter Pertanyaan by Tag
+ Reset Password/Change Password (jika perlu)
+Backend User
+ Model, Seeder, Migration User & Question (Anggap sudah, jika belum perlu dibuat)
+ CRUD Pertanyaan (Sudah sebagian)
+ CRUD Jawaban
+ Sistem Like/Unlike
+ Sistem Notifikasi
+ Sistem Tag/Hashtag (bisa filter)
+ Edit Profil
+ Contact Message ke Admin (opsional)
+ Authorization: User hanya bisa edit/hapus miliknya sendiri
+FITUR ADMIN (Front-end & Back-end)
+Frontend Admin
+ Sidebar Menu Admin (Sudah ada menu admin jika role admin)
+ Halaman Kelola User (CRUD User, Block/Unblock)
+ Halaman Kelola Laporan/Report (CRUD Report, Tindak Lanjut)
+ Kelola Pertanyaan/Jawaban (Hapus, Moderasi)
+ Kelola Tag/Hashtag (opsional)
+ Statistik Forum (Dashboard Admin: jumlah user/pertanyaan/aktifitas)
+Backend Admin
+ CRUD User
+ CRUD Laporan/Report
+ Kelola Pertanyaan/Jawaban (hapus/restore)
+ CRUD Tag/Hashtag (jika perlu)
+ Sistem Role/Permission (User/Admin)
+ Statistik/Aktivitas
+RINGKASAN:
+Yang Sudah:
+Dashboard, Sidebar, Hero, Tab Filter, Search, Tag Cloud, Contact Us, Footer, Form Tanya, Profil User, Routing dasar.
+Yang Belum:
+CRUD Jawaban, CRUD User/Admin, Moderasi, Notifikasi, Like, Laporan/Report, Edit Profil, Kelola tag, sistem filter tag, detail pertanyaan, dsb.
