@@ -242,11 +242,13 @@ php artisan migrate --path=/database/migrations/specific_migration.php
 ## 👥 Contributors
 - Ahmad Zidan – Ketua tim & pengembang utama
 - [Add other contributors here]
+
 We welcome contributions! Please read our Contributing Guidelines before submitting a pull request.
 
 ## 📜 License
 
 Proyek ini dilisensikan di bawah MIT License – silakan gunakan, modifikasi, dan distribusikan dengan bebas, selama mencantumkan atribusi ke pemilik asli.
+
 This project is licensed under the MIT License - see the LICENSE file for details.
 
 ---
