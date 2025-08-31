@@ -15,13 +15,15 @@ Built with modern tools & technologies:
 - [Overview](#-overview)
 - [Features](#-features)
 - [Screenshots](#-screenshots)
-- [Demo & Roadmap Visual](#-demo-&-roadmap-visual)
+- [Demo & Roadmap Visual](#-demo--roadmap-visual)
 - [Getting Started](#-getting-started)
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
-  - [Run & Test](#️-run--test)
 - [Project Structure](#-project-structure)
-
+- [Development](#-development)
+- [Contributors](#-contributors)
+- [License](#-license)
+- [Contact](#-contact)
 ---
 
 ## 🔎 Overview
@@ -147,7 +149,7 @@ Berikut adalah gambaran visual alur sistem & roadmap proyek **INNOFORUM**:
 ### Installation
 ```bash
 # 1. Clone repository
-git clone https://github.com/FrederiyPatria/INNOFORUM
+git clone https://github.com/FrederiyPatria/INNOFORUM\
 
 # 2. Navigate to project folder
 cd INNOFORUM
@@ -163,3 +165,94 @@ php {entrypoint}
 # Run tests
 npm test
 vendor/bin/phpunit
+```
+
+---
+
+## 📂 Project Structure
+INNOFORUM/
+│── app/
+│   ├── Console/
+│   ├── Exceptions/
+│   ├── Http/
+│   │   ├── Controllers/
+│   │   ├── Middleware/
+│   │   └── Requests/
+│   ├── Models/
+│   └── Providers/
+│
+│── bootstrap/
+│── config/
+│── database/
+│   ├── factories/
+│   ├── migrations/
+│   └── seeders/
+│
+│── public/
+│── resources/
+│   ├── css/
+│   ├── js/
+│   ├── views/
+│   └── images/
+│
+│── routes/
+│   ├── api.php
+│   ├── channels.php
+│   ├── console.php
+│   └── web.php
+│
+│── storage/
+│── tests/
+│── vendor/
+│── artisan
+│── composer.json
+│── package.json
+│── vite.config.js
+│── README.md
+
+---
+
+## 🔧 Development
+Code Style
+This project follows PSR-12 coding standards. To check and fix code style:
+
+```bash
+composer check-style
+composer fix-style
+```
+Assets Compilation
+- Development with hot reload: npm run dev
+- Production build: npm run build
+- Watch for changes: npm run watch
+
+Common Artisan Commands
+```bash
+# Clear caches
+php artisan optimize:clear
+
+# Create a new model with migration and controller
+php artisan make:model ModelName -mc
+
+# Run specific migrations
+php artisan migrate --path=/database/migrations/specific_migration.php
+```
+
+---
+
+## 👥 Contributors
+- Ahmad Zidan – Ketua tim & pengembang utama
+- [Add other contributors here]
+We welcome contributions! Please read our Contributing Guidelines before submitting a pull request.
+
+## 📜 License
+
+Proyek ini dilisensikan di bawah MIT License – silakan gunakan, modifikasi, dan distribusikan dengan bebas, selama mencantumkan atribusi ke pemilik asli.
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+---
+
+## 📞 Contact
+For questions or support, please contact:
+- Email: ahmadzidantammimy@gmail.com
+- Issues: GitHub Issues
+- Discussions: GitHub Discussions
