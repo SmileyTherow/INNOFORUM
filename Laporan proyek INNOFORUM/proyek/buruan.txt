@@ -1,6 +1,0 @@
-RUD Kategori di Admin — Penjelasan dan Contoh Kode
-A. Tujuan CRUD Kategori
-Create: Admin bisa tambah kategori baru (misal: "Matematika", "Teknologi").
-Read: Admin lihat daftar kategori.
-Update: Admin bisa ubah nama kategori (misal typo atau ingin ganti nama).
-Delete: Admin bisa hapus kategori (misal kategori tidak terpakai).
