@@ -240,8 +240,8 @@ php artisan migrate --path=/database/migrations/specific_migration.php
 ---
 
 ## 👥 Contributors
-- Ahmad Zidan – Ketua tim & pengembang utama
-- [Add other contributors here]
+- Ahmad Zidan Tamimy – Ketua tim & pengembang utama (backend, arsitektur sistem, integrasi)
+- Agni Fatya Kholila – Penulis dokumentasi & kontributor frontend (laporan proyek, desain & implementasi sebagian tampilan)
 
 We welcome contributions! Please read our Contributing Guidelines before submitting a pull request.
 
@@ -255,6 +255,6 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## 📞 Contact
 For questions or support, please contact:
-- Email: ahmadzidantammimy@gmail.com
+- Email: ahmadzidantammimy@gmail.com & agnifatyakholila@gmail.com
 - Issues: GitHub Issues
 - Discussions: GitHub Discussions
