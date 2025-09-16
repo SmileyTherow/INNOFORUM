@@ -170,6 +170,7 @@ vendor/bin/phpunit
 ---
 
 ## 📂 Project Structure
+```text
 INNOFORUM/
 │── app/
 │   ├── Console/
@@ -209,6 +210,7 @@ INNOFORUM/
 │── package.json
 │── vite.config.js
 │── README.md
+```
 
 ---
 
