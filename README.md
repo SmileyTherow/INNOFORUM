@@ -393,7 +393,6 @@ We welcome contributions! Please follow these guidelines:
 ---
 
 ## 👥 Team
-## Team
 
 ### Core Contributors
 
