@@ -397,10 +397,10 @@ We welcome contributions! Please follow these guidelines:
 
 ### Core Contributors
 
-| Avatar | Name | Role | Responsibilities | Contact |
+| Foto | Name | Role | Responsibilities | Contact |
 |--------|------|------|-----------------|---------|
 | ![Data Thread](Laporan%20proyek%20INNOFORUM/Ahmad%20Zidan%20Tamimy.jpg) | **Ahmad Zidan Tamimy** | Team Leader & Backend Developer | • System architecture<br>• Backend development<br>• Database design<br>• Authentication system<br>• Role-based access control | ahmadzidantammimy@gmail.com |
-| ![Data Thread](Laporan%20proyek%20INNOFORUM/Agni%20Fatya%20Kholila.jpeg) | **Agni Fatya Kholila** | Documentation & Frontend Developer | • Project documentation<br>• Frontend implementation<br>• UI/UX design<br>• Project reporting<br>• User interface components | agnifatyakholila@gmail.com |
+| ![Data Thread](Laporan%20proyek%20INNOFORUM/Agni%20Fatya%20Kholila.jpg) | **Agni Fatya Kholila** | Documentation & Frontend Developer | • Project documentation<br>• Frontend implementation<br>• UI/UX design<br>• Project reporting<br>• User interface components | agnifatyakholila@gmail.com |
 
 ### Project Statistics
 
