@@ -139,6 +139,7 @@ Visit http://localhost:8000 to access the application.
 ---
 
 ## 🏗️ Project Structure
+```text
 INNOFORUM/
 ├── app/
 │   ├── Http/
@@ -183,6 +184,7 @@ INNOFORUM/
 ├── composer.json                  # PHP dependencies
 ├── package.json                   # Node.js dependencies
 └── vite.config.js                # Vite configuration
+```
 
 ---
 
