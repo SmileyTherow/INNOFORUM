@@ -754,10 +754,10 @@ Berikut adalah gambaran visual alur sistem & roadmap proyek **INNOFORUM**:
 ---
 
 **Academic Project Information**
-- **Course**: PPW (Pemrograman Web)
-- **Duration**: 1 Semester (14 weeks)
-- **Institution**: [Nama Institusi]
-- **Year**: 2024
+- **Course**: PPW (Perancangan dan Pemrograman Web)
+- **Duration**: 1 Semester (15 weeks)
+- **Institution**: STTI NIIT I TECH
+- **Year**: 2025
 
 This project demonstrates comprehensive web development skills and serves as a portfolio piece showcasing modern Laravel development practices.
 
