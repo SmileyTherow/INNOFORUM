@@ -1,7 +1,6 @@
 # 🚀 INNOFORUM
 
-![Laravel CI](https://github.com/SmileyTherow/INNOFORUM/actions/workflows/laravel-ci.yml/badge.svg)
-
+![Demo](2025-08-2611-03-43-ezgif.com-video-to-gif-converter.gif)
 
 **Ignite Innovation, Connect Minds, Shape the Future**  
 
