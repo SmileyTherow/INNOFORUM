@@ -2,7 +2,7 @@
 
 ![Demo](Laporan%20proyek%20INNOFORUM/2025-08-2611-03-43-ezgif.com-video-to-gif-converter.gif)
 
-**Ignite Innovation, Connect Minds, Shape the Future**  
+<h2 align="center">Ignite Innovation, Connect Minds, Shape the Future</h2>
 
 [![Last Commit](https://img.shields.io/github/last-commit/FrederiyPatria/INNOFORUM)](https://github.com/FrederiyPatria/INNOFORUM/commits/main)
 ![Languages](https://img.shields.io/github/languages/count/FrederiyPatria/INNOFORUM)
