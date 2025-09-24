@@ -138,52 +138,124 @@ Visit http://localhost:8000 to access the application.
 
 ---
 
-## 🏗️ Project Structure
+## 🗂️ Project Structure
 ```text
 INNOFORUM/
 ├── app/
 │   ├── Http/
 │   │   ├── Controllers/
-│   │   │   ├── Admin/              # Admin-specific controllers
-│   │   │   ├── Auth/               # Authentication controllers
-│   │   │   ├── AuthController.php  # Main auth controller
-│   │   │   ├── QuestionController.php
-│   │   │   ├── CommentController.php
-│   │   │   └── ...
-│   │   ├── Middleware/             # Custom middleware
-│   │   │   ├── AdminMiddleware.php
-│   │   │   ├── RoleMiddleware.php
-│   │   │   └── ...
-│   │   └── Requests/               # Form requests
-│   ├── Models/                     # Eloquent models
-│   │   ├── User.php
-│   │   ├── Question.php
-│   │   ├── Comment.php
-│   │   ├── Notification.php
-│   │   └── ...
-│   ├── Mail/                       # Mail classes
-│   │   ├── UserOtpMail.php
-│   │   └── ...
-│   └── Livewire/                   # Livewire components
+│   │   │   ├── Admin/                          # Admin-specific controllers
+│   │   │   │   ├── AdminAnnouncementController.php
+│   │   │   │   ├── AdminCategoryController.php
+│   │   │   │   ├── AdminCommentController.php
+│   │   │   │   ├── AdminUserController.php
+│   │   │   │   ├── AdminThreadController.php
+│   │   │   │   ├── AdminStatsController.php
+│   │   │   │   └── DashboardController.php
+│   │   │   ├── Auth/                           # Authentication controllers
+│   │   │   │   ├── AdminLoginController.php
+│   │   │   │   ├── AuthenticatedSessionController.php
+│   │   │   │   ├── OtpController.php
+│   │   │   │   ├── PasswordController.php
+│   │   │   │   └── VerifyEmailController.php
+│   │   │   ├── AuthController.php              # Main auth & registration logic
+│   │   │   ├── QuestionController.php          # Forum questions/threads
+│   │   │   ├── CommentController.php           # Comments with image upload
+│   │   │   ├── NotificationController.php      # User notifications
+│   │   │   ├── UserController.php              # Profile management
+│   │   │   ├── ReportController.php            # Content reporting
+│   │   │   └── ContactController.php           # Contact form
+│   │   ├── Middleware/
+│   │   │   ├── AdminMiddleware.php             # Admin access control
+│   │   │   ├── RoleMiddleware.php              # Role-based permissions
+│   │   │   ├── ForceNimSession.php             # NIM validation session
+│   │   │   └── MahasiswaDosenMiddleware.php    # Student/lecturer access
+│   │   └── Requests/                           # Form validation
+│   │       ├── Auth/LoginRequest.php
+│   │       └── ProfileUpdateRequest.php
+│   ├── Models/
+│   │   ├── User.php                            # User with roles & OTP
+│   │   ├── Question.php                        # Forum questions/threads
+│   │   ├── Comment.php                         # Comments with images
+│   │   ├── Notification.php                    # Real-time notifications
+│   │   ├── Category.php                        # Question categories
+│   │   ├── Hashtag.php                         # Thread hashtags
+│   │   ├── Report.php                          # Content reports
+│   │   ├── Announcement.php                    # Admin announcements
+│   │   └── UserProfile.php                     # Extended user profiles
+│   ├── Mail/                                   # Email classes
+│   │   ├── UserOtpMail.php                     # OTP verification emails
+│   │   ├── TestEmail.php                       # Email testing
+│   │   └── PasswordConfirmationMail.php        # Password confirmations
+│   └── Livewire/                               # Dynamic components
+│       └── Admin/UserTable.php                 # Admin user management
 ├── database/
-│   ├── migrations/                 # Database migrations
-│   └── seeders/                   # Database seeders
-├── resources/
-│   ├── views/                     # Blade templates
-│   │   ├── admin/                 # Admin views
-│   │   ├── auth/                  # Authentication views
-│   │   ├── questions/             # Question views
+│   ├── migrations/                             # 25+ migration files
+│   │   ├── create_users_table.php
+│   │   ├── create_questions_table.php
+│   │   ├── create_comments_table.php
+│   │   ├── create_notifications_table.php
+│   │   ├── create_categories_table.php
+│   │   ├── create_hashtags_table.php
 │   │   └── ...
-│   ├── js/                        # JavaScript files
-│   └── css/                       # CSS files
+│   ├── seeders/                                # Database seeding
+│   │   ├── UserSeeder.php
+│   │   ├── DataNimSeeder.php
+│   │   └── DatabaseSeeder.php
+│   └── factories/
+│       └── UserFactory.php                     # Test data generation
+├── resources/
+│   ├── views/
+│   │   ├── admin/                              # Admin dashboard views
+│   │   │   ├── users/                          # User management
+│   │   │   ├── categories/                     # Category management
+│   │   │   ├── comments/                       # Comment moderation
+│   │   │   ├── threads/                        # Thread management
+│   │   │   └── dashboard.blade.php
+│   │   ├── auth/                               # Authentication forms
+│   │   │   ├── login_admin.blade.php
+│   │   │   ├── login_register_mahasiswa.blade.php
+│   │   │   ├── login_register_dosen.blade.php
+│   │   │   ├── nim_or_nigm.blade.php
+│   │   │   ├── user_otp.blade.php
+│   │   │   └── otp_admin.blade.php
+│   │   ├── questions/                          # Forum views
+│   │   │   ├── create.blade.php
+│   │   │   ├── show.blade.php
+│   │   │   └── index.blade.php
+│   │   ├── profile/                            # User profiles
+│   │   ├── components/                         # Reusable components
+│   │   ├── layouts/                            # Base layouts
+│   │   └── dashboard.blade.php                 # Main dashboard
+│   ├── js/
+│   │   ├── app.js                              # Alpine.js initialization
+│   │   ├── bootstrap.js                        # Axios configuration
+│   │   └── role-handler.js                     # Dynamic form handling
+│   └── css/
+│       └── app.css                             # Tailwind CSS main file
 ├── routes/
-│   ├── web.php                    # Web routes
-│   └── api.php                    # API routes
-├── public/                        # Public assets
-├── storage/                       # Storage directory
-├── composer.json                  # PHP dependencies
-├── package.json                   # Node.js dependencies
-└── vite.config.js                # Vite configuration
+│   ├── web.php                                 # All web routes
+│   ├── auth.php                                # Authentication routes
+│   └── console.php                             # Artisan commands
+├── public/
+│   ├── css/                                    # Compiled stylesheets
+│   ├── js/                                     # Compiled JavaScript
+│   ├── storage/                                # File uploads (symlinked)
+│   └── admin/                                  # Admin template assets
+├── storage/
+│   ├── app/public/                             # File uploads
+│   │   ├── photo/                              # User profile photos
+│   │   ├── comment_images/                     # Comment images
+│   │   └── question_images/                    # Question attachments
+│   └── logs/                                   # Application logs
+├── tests/
+│   ├── Feature/                                # Feature tests
+│   │   └── Auth/                               # Authentication tests
+│   └── Unit/                                   # Unit tests
+├── composer.json                               # PHP dependencies
+├── package.json                                # Node.js dependencies
+├── vite.config.js                              # Vite build configuration
+└── database.sqlite                             # SQLite database file
 ```
 
 ---
