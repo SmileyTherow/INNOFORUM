@@ -1,5 +1,8 @@
 # 🚀 INNOFORUM
 
+![Laravel CI](https://github.com/SmileyTherow/INNOFORUM/actions/workflows/laravel-ci.yml/badge.svg)
+
+
 **Ignite Innovation, Connect Minds, Shape the Future**  
 
 [![Last Commit](https://img.shields.io/github/last-commit/FrederiyPatria/INNOFORUM)](https://github.com/FrederiyPatria/INNOFORUM/commits/main)
