@@ -18,20 +18,21 @@ Built with modern tools & technologies:
 - [Academic Context](#-academic-context)
 - [Course Requirements Fulfilled](#-course-requirements-fulfilled)
 - [Features](#-features)
-- [Prerequisites](#prerequisites)
-- [Installation](#installation)
-- [Project Structure](#project-structure)
-- [Usage Guide](#usage-guide)
-- [Configuration](#configuration)
-- [Development](#development)
-- [Troubleshooting](#troubleshooting)
-- [Contributing](#contributing)
-- [Team](#team)
-- [License](#license)
-- [Support](#support)
-- [Roadmap](#Roadmap)
-- [Acknowledgments](#Acknowledgments)
-- [Screenshots](#-screenshots)
+- [Prerequisites](#-prerequisites)
+- [Installation](#-installation)
+- [Project Structure](#️-project-structure)
+- [Usage Guide](#-usage-guide)
+- [Configuration](#️-configuration)
+- [Development](#-development)
+- [Troubleshooting](#-troubleshooting)
+- [Contributing](#-contributing)
+- [Team](#-team)
+- [License](#-license)
+- [Support](#-support)
+- [Roadmap](#-roadmap)
+- [Acknowledgments](#-acknowledgments)
+- [Screenshots](#--screenshots)
+- [Academic Project Details](#-academic-project-details)
 ---
 
 ## 🔎 Overview
@@ -594,9 +595,8 @@ You are free to:
 - ✅ Include in commercial projects
 
 Conditions:
-
-📋 Include the original license and copyright notice
-📋 State changes made to the original code
+- 📋 Include the original license and copyright notice
+- 📋 State changes made to the original code
 
 ---
 
@@ -753,13 +753,20 @@ Berikut adalah gambaran visual alur sistem & roadmap proyek **INNOFORUM**:
 
 ---
 
-**Academic Project Information**
-- **Course**: PPW (Perancangan dan Pemrograman Web)
-- **Duration**: 1 Semester (15 weeks)
-- **Institution**: STTI NIIT I TECH
-- **Year**: 2025
+## 📚 Academic Project Details
 
-This project demonstrates comprehensive web development skills and serves as a portfolio piece showcasing modern Laravel development practices.
+**Course Information:**
+- **Subject**: PPW (Perancangan dan Pemrograman Web)
+- **Duration**: 1 Semester (15 weeks) 
+- **Academic Year**: 2024
+- **Institution**: STTI NIIT I TECH
+- **Supervising Lecturer**: Anjeng Puspita Ningrum, S.Kom
+
+**Project Scope:**
+This project was developed to fulfill the final assignment requirements for Web Programming course, demonstrating comprehensive full-stack development skills.
+
+**Technical Achievement:**
+Successfully implemented a complete forum system using Laravel framework, exceeding course requirements with advanced features including real-time notifications, OTP verification, and comprehensive admin dashboard.
 
 ---
 
