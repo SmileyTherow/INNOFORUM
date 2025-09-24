@@ -15,6 +15,8 @@ Built with modern tools & technologies:
 
 ## 📖 Table of Contents
 - [Overview](#-overview)
+- [Academic Context](#-academic-context)
+- [Course Requirements Fulfilled](#-course-requirements-fulfilled)
 - [Features](#-features)
 - [Prerequisites](#prerequisites)
 - [Installation](#installation)
@@ -34,6 +36,60 @@ Built with modern tools & technologies:
 
 ## 🔎 Overview
 **INNOFORUM** is a feature-rich discussion platform that facilitates academic discussions and knowledge sharing within campus communities. The system supports role-based access control, real-time notifications, content moderation, and comprehensive user management.
+
+---
+
+## 📚 Academic Context
+
+This project was developed as a semester-long assignment for **PPW (Pemrograman Web)** course, demonstrating comprehensive web development skills using modern technologies and best practices.
+
+### Learning Objectives Achieved
+- **Full-Stack Development**: Complete Laravel application with frontend integration
+- **Database Design**: Comprehensive ERD implementation with proper relationships
+- **Authentication & Authorization**: Role-based access control system
+- **Real-time Features**: Notifications and dynamic user interactions
+- **Code Quality**: PSR-12 standards and testing implementation
+- **Deployment**: Production-ready application structure
+
+### Technical Skills Demonstrated
+- **Backend**: PHP 8.2+, Laravel 12, Eloquent ORM, Middleware
+- **Frontend**: Tailwind CSS, Alpine.js, Vite, Responsive Design
+- **Database**: SQLite/MySQL, Migrations, Seeders, Relationships
+- **Security**: CSRF Protection, Input Validation, OTP Verification
+- **Architecture**: MVC Pattern, Service Layer, Repository Pattern
+
+### 📅 Development Timeline
+- **Week 1-2**: Project planning, requirements analysis, ERD design
+- **Week 3-4**: Laravel setup, authentication system, database design
+- **Week 5-6**: Core forum functionality, user management
+- **Week 7-8**: Admin panel, content moderation, notifications
+- **Week 9-10**: Frontend enhancement, responsive design
+- **Week 11-12**: Testing, debugging, documentation
+- **Week 13-14**: Final optimization, deployment preparation
+
+---
+
+## 📋 Course Requirements Fulfilled
+
+### ✅ Mandatory Requirements
+- [x] **MVC Architecture**: Proper separation of concerns
+- [x] **Database Integration**: Complex relational database design
+- [x] **User Authentication**: Complete auth system with roles
+- [x] **CRUD Operations**: Full create, read, update, delete functionality
+- [x] **Form Validation**: Client and server-side validation
+- [x] **File Upload**: Image handling for profiles and comments
+- [x] **Session Management**: Secure session handling
+- [x] **Responsive Design**: Mobile-friendly interface
+
+### ✅ Additional Features (Bonus Points)
+- [x] **Real-time Notifications**: Dynamic user alerts
+- [x] **Email Integration**: OTP verification system
+- [x] **Advanced Search**: Filter and search functionality
+- [x] **Admin Dashboard**: Complete management interface
+- [x] **Content Moderation**: Report and moderation system
+- [x] **API-ready Structure**: RESTful design principles
+- [x] **Testing Suite**: Unit and feature tests
+- [x] **Modern Frontend**: Vite, Tailwind CSS, Alpine.js
 
 ---
 
@@ -478,7 +534,7 @@ We welcome contributions! Please follow these guidelines:
 | Metric | Value |
 |--------|-------|
 | **Lines of Code** | 15,000+ |
-| **Development Time** | 6 months |
+| **Development Time** | 3 months |
 | **Technologies Used** | 8+ |
 | **Features Implemented** | 20+ |
 
@@ -532,11 +588,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
 You are free to:
-
-✅ Use the software for any purpose
-✅ Modify the source code
-✅ Distribute copies
-✅ Include in commercial projects
+- ✅ Use the software for any purpose
+- ✅ Modify the source code
+- ✅ Distribute copies
+- ✅ Include in commercial projects
 
 Conditions:
 
@@ -547,10 +602,9 @@ Conditions:
 
 ## 📞 Support
 For questions, issues, or support:
-
-📧 Email: ahmadzidantammimy@gmail.com, agnifatyakholila@gmail.com
-🐛 Bug Reports: GitHub Issues
-💬 Discussions: GitHub Discussions
+- 📧 Email: ahmadzidantammimy@gmail.com, agnifatyakholila@gmail.com
+- 🐛 Bug Reports: GitHub Issues
+- 💬 Discussions: GitHub Discussions
 
 Before Asking for Help
 1. Check the Troubleshooting section
@@ -699,4 +753,14 @@ Berikut adalah gambaran visual alur sistem & roadmap proyek **INNOFORUM**:
 
 ---
 
-Built with ❤️ for Indonesian academic communities
+**Academic Project Information**
+- **Course**: PPW (Pemrograman Web)
+- **Duration**: 1 Semester (14 weeks)
+- **Institution**: [Nama Institusi]
+- **Year**: 2024
+
+This project demonstrates comprehensive web development skills and serves as a portfolio piece showcasing modern Laravel development practices.
+
+---
+
+*Built with ❤️ for Indonesian academic communities as a PPW course final project*
