@@ -16,23 +16,71 @@ Built with modern tools & technologies:
 ## 📖 Table of Contents
 - [Overview](#-overview)
 - [Academic Context](#-academic-context)
+    - [Learning Objectives Achieved](#learning-objectives-achieved)
+    - [Technical Skills Demonstrated](#technical-skills-demonstrated)
+    - [Development Timeline](#-development-timeline)
 - [Course Requirements Fulfilled](#-course-requirements-fulfilled)
+    - [Mandatory Requirements](#-mandatory-requirements)
+    - [Additional Features](#-additional-features)
 - [Features](#-features)
 - [Prerequisites](#-prerequisites)
 - [Installation](#-installation)
+    - [Clone Repository](#1-clone-repository)
+    - [Install Dependencies](#2-install-dependencies)
+    - [Environment Setup](#3-environment-setup)
+    - [EnviConfigure Environment](#4-enviconfigure-environment)
+    - [Database Migration](#5-database-migration)
+    - [Build Assets](#6-build-assets)
+    - [Start Development Server](#7-start-development-server)
 - [Project Structure](#️-project-structure)
 - [Usage Guide](#-usage-guide)
+    - [For Students & Lecturers](#for-students--lecturers)
+        - [Registration Process](#1-registration-process)
+        - [Using the Forum](#2-using-the-forum)
+    - [For Administrators](#for-administrators)
+        - [Access Admin Panel](#1-access-admin-panel)
+        - [Admin Features](#2-admin-features)
 - [Configuration](#️-configuration)
+    - [Mail Configuration](#mail-configuration-required-for-otp)
+    - [Database Options SQLite](#database-options)
+    - [MySQL](#mysql)
+    - [PostgreSQL](#postgresql)
 - [Development](#-development)
 - [Troubleshooting](#-troubleshooting)
+    - [Permission Issues](#1-permission-issues)
+    - [Database Connection Issues](#2-database-connection-issues)
+    - [Asset Compilation Issues](#3-asset-compilation-issues)
+    - [OTP/Email Issues](#4-otpemail-issues)
+    - [Session Issues](#5-session-issues)
 - [Contributing](#-contributing)
+    - [Getting Started](#1-getting-started)
+    - [Development Guidelines](#2-development-guidelines)
+    - [Code Review Process](#3-code-review-process)
 - [Team](#-team)
+    - [Core Contributors](#core-contributors)
+    - [Project Statistics](#project-statistics)
+    - [Contribution Guidelines](#contribution-guidelines)
+    - [Contact Information](#contact-information)
 - [License](#-license)
 - [Support](#-support)
 - [Roadmap](#-roadmap)
+    - [Current Version Features](#current-version-features)
+    - [Planned Features](#planned-features)
+    - [Future Considerations](#future-considerations)
 - [Acknowledgments](#-acknowledgments)
+- [Security Features](#-security-features)
 - [Screenshots](#--screenshots)
+    - [Admin Pages](#-admin-pages)
+    - [Forum Pages](#-forum-pages)
+    - [User Profile Pages](#-user-profile-pages)
+    - [Authentication Pages](#-authentication-pages)
+    - [Validation & OTP Pages](#-validation--otp-pages)
+- [Demo & Roadmap Visual](#-demo--roadmap-visual)
+    - [System Flow](#-system-flow)
+    - [Roadmap Proyek](#-roadmap-proyek)
+    - [Data Base](#-data-base)
 - [Academic Project Details](#-academic-project-details)
+
 ---
 
 ## 🔎 Overview
@@ -42,7 +90,7 @@ Built with modern tools & technologies:
 
 ## 📚 Academic Context
 
-This project was developed as a semester-long assignment for **PPW (Pemrograman Web)** course, demonstrating comprehensive web development skills using modern technologies and best practices.
+This project was developed as a semester-long assignment for **PPW (Perancangan dan Pemrograman Web)** course, demonstrating comprehensive web development skills using modern technologies and best practices.
 
 ### Learning Objectives Achieved
 - **Full-Stack Development**: Complete Laravel application with frontend integration
@@ -82,7 +130,7 @@ This project was developed as a semester-long assignment for **PPW (Pemrograman 
 - [x] **Session Management**: Secure session handling
 - [x] **Responsive Design**: Mobile-friendly interface
 
-### ✅ Additional Features (Bonus Points)
+### ✅ Additional Features
 - [x] **Real-time Notifications**: Dynamic user alerts
 - [x] **Email Integration**: OTP verification system
 - [x] **Advanced Search**: Filter and search functionality
@@ -318,27 +366,27 @@ INNOFORUM/
 ---
 
 ## 🎮 Usage Guide
-For Students & Lecturers
-1. Registration Process:
+### For Students & Lecturers
+#### 1. Registration Process:
     - NIM/NIDM Validation: Enter your student/lecturer ID
     - Complete Registration: Fill out the registration form
     - Email Verification: Enter the OTP code sent to your email
     - Profile Completion: Add additional profile information
     - Login: Access the forum with your credentials
 
-2. Using the Forum:
+#### 2. Using the Forum:
     - Browse Discussions: View threads by category or hashtags
     - Create Threads: Start new discussions with rich content
     - Comment & Interact: Reply to threads, upload images, mention users
     - Notifications: Receive alerts for interactions and announcements
 
-For Administrators
-1. Access Admin Panel:
-    - Special Validation: Use admin code 404039582 during NIM validation
+### For Administrators
+#### 1. Access Admin Panel:
+    - Special Validation: Use admin code (404039582) during NIM validation, otp (2531) and password (admin12345)
     - OTP Verification: Enter OTP code from database
     - Admin Login: Use admin credentials to access dashboard
 
-2. Admin Features:
+#### 2. Admin Features:
     - User Management: Create, edit, delete, and manage user accounts
     - Content Moderation: Review reports, moderate discussions
     - System Administration: Manage categories, send announcements
@@ -347,7 +395,7 @@ For Administrators
 ---
 
 ## ⚙️ Configuration
-Mail Configuration (Required for OTP)
+### Mail Configuration (Required for OTP)
 Configure SMTP settings in .env:
 ```bash
 MAIL_MAILER=smtp
@@ -359,13 +407,13 @@ MAIL_ENCRYPTION=tls
 MAIL_FROM_ADDRESS=your-email@gmail.com
 MAIL_FROM_NAME="${APP_NAME}"
 ```
-Database Options
+### Database Options
 SQLite (Default):
 ```bash
 DB_CONNECTION=sqlite
 DB_DATABASE=/absolute/path/to/database/database.sqlite
 ```
-MySQL:
+### MySQL:
 ```bash
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
@@ -374,7 +422,7 @@ DB_DATABASE=innoforum
 DB_USERNAME=root
 DB_PASSWORD=your-password
 ```
-PostgreSQL:
+### PostgreSQL:
 ```bash
 DB_CONNECTION=pgsql
 DB_HOST=127.0.0.1
@@ -444,7 +492,7 @@ php artisan make:middleware MiddlewareName
 
 ## 🔧 Troubleshooting
 Common Issues
-1. Permission Issues:
+### 1. Permission Issues
 ```bash
 # Fix storage and cache permissions
 chmod -R 775 storage/
@@ -453,7 +501,7 @@ chown -R www-data:www-data storage/
 chown -R www-data:www-data bootstrap/cache/
 ```
 
-2. Database Connection Issues:
+### 2. Database Connection Issues
 ```bash
 # For SQLite, ensure file exists and is writable
 touch database/database.sqlite
@@ -464,7 +512,7 @@ php artisan config:clear
 php artisan cache:clear
 ```
 
-3. Asset Compilation Issues:
+### 3. Asset Compilation Issues
 ```bash
 # Clear Node modules and reinstall
 rm -rf node_modules/
@@ -475,7 +523,7 @@ npm install
 rm -rf node_modules/.vite
 npm run build
 ```
-4. OTP/Email Issues:
+### 4. OTP/Email Issues
     - Verify SMTP credentials in .env
     - Check if emails are going to spam folder
     - Test mail configuration: php artisan tinker then
@@ -483,7 +531,7 @@ npm run build
     Mail::raw('Test', function($m) { $m->to('test@example.com')->subject('Test'); });
     ```
 
-5. Session Issues:
+### 5. Session Issues
 ```bash
 # Clear sessions and cache
 php artisan session:table
@@ -496,7 +544,7 @@ php artisan config:clear
 
 ## 🤝 Contributing
 We welcome contributions! Please follow these guidelines:
-1. Getting Started
+### 1. Getting Started
     - Fork the repository
     - Create a feature branch: git checkout -b feature/amazing-feature
     - Make your changes following our coding standards
@@ -505,7 +553,7 @@ We welcome contributions! Please follow these guidelines:
     - Push to the branch: git push origin feature/amazing-feature
     - Open a Pull Request
 
-2. Development Guidelines
+### 2. Development Guidelines
     - Follow PSR-12 coding standards
     - Write meaningful commit messages
     - Update documentation for new features
@@ -513,7 +561,7 @@ We welcome contributions! Please follow these guidelines:
     - Use descriptive variable and method names
     - Comment complex logic appropriately
 
-3. Code Review Process
+### 3. Code Review Process
     - All submissions require review
     - Maintain backward compatibility when possible
     - Follow existing architectural patterns
@@ -535,7 +583,7 @@ We welcome contributions! Please follow these guidelines:
 | Metric | Value |
 |--------|-------|
 | **Lines of Code** | 15,000+ |
-| **Development Time** | 3 months |
+| **Development Time** | 4 months |
 | **Technologies Used** | 8+ |
 | **Features Implemented** | 20+ |
 
@@ -614,7 +662,7 @@ Before Asking for Help
 ---
 
 ## 🚀 Roadmap
-Current Version Features
+### Current Version Features
 - ✅ Role-based authentication system
 - ✅ Discussion threads with categories
 - ✅ Comment system with image uploads
@@ -623,7 +671,7 @@ Current Version Features
 - ✅ Email OTP verification
 - ✅ Content moderation tools
 
-Planned Features
+### Planned Features
 - 🔄 Real-time chat functionality
 - 🔄 Mobile-responsive improvements
 - 🔄 Advanced search with filters
@@ -633,7 +681,7 @@ Planned Features
 - 🔄 Enhanced analytics dashboard
 - 🔄 Multi-language support
 
-Future Considerations
+### Future Considerations
 - 📱 Mobile app development
 - 🔗 Single Sign-On (SSO) integration
 - 📊 Advanced reporting features
@@ -649,6 +697,18 @@ Future Considerations
 - Livewire: For seamless PHP-JavaScript integration
 - Vite: For fast and modern build tooling
 - Open Source Community: For inspiration, tools, and continuous learning
+
+---
+
+## 🔒 Security Features
+
+- ✅ **CSRF Protection**: All forms protected
+- ✅ **XSS Prevention**: Input sanitization
+- ✅ **SQL Injection**: Eloquent ORM protection
+- ✅ **Authentication**: Secure password hashing
+- ✅ **Email Verification**: OTP-based verification
+- ✅ **Role-based Access**: Granular permissions
+- ✅ **File Upload Security**: Type and size validation
 
 ---
 
@@ -758,9 +818,17 @@ Berikut adalah gambaran visual alur sistem & roadmap proyek **INNOFORUM**:
 **Course Information:**
 - **Subject**: PPW (Perancangan dan Pemrograman Web)
 - **Duration**: 1 Semester (15 weeks) 
-- **Academic Year**: 2024
+- **Academic Year**: 2025
 - **Institution**: STTI NIIT I TECH
+- **Faculty**: Tehnik Informatika
 - **Supervising Lecturer**: Anjeng Puspita Ningrum, S.Kom
+
+**Learning Outcomes Demonstrated:**
+- Advanced Laravel framework implementation
+- Database design and relationship management
+- Authentication and authorization systems
+- Modern frontend development practices
+- Project management and documentation skills
 
 **Project Scope:**
 This project was developed to fulfill the final assignment requirements for Web Programming course, demonstrating comprehensive full-stack development skills.
