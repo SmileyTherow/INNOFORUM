@@ -44,6 +44,9 @@ Built with modern tools & technologies:
     - [Build Assets](#6-build-assets)
     - [Start Development Server](#7-start-development-server)
 - [Project Structure](#️-project-structure)
+- [System Design](#-system-design)
+    -[Database Schema (ERD)](#database-schema-erd)
+    -[Use Case Diagram](#use-case-diagram)
 - [Usage Guide](#-usage-guide)
     - [For Students & Lecturers](#for-students--lecturers)
         - [Registration Process](#1-registration-process)
@@ -374,6 +377,33 @@ INNOFORUM/
 ├── vite.config.js                              # Vite build configuration
 └── database.sqlite                             # SQLite database file
 ```
+
+---
+
+
+## 📊 System Design
+### Database Schema (ERD)
+The database design follows a comprehensive relational model supporting all forum features:
+
+![Database ERD](Laporan%20proyek%20INNOFORUM/Entity%20Relationship%20Diagram.png)
+
+**Key Relationships:**
+- **Users** → **Questions** (1:N) - Users can create multiple questions
+- **Users** → **Comments** (1:N) - Users can post multiple comments  
+- **Questions** → **Comments** (1:N) - Questions can have multiple comments
+- **Users** → **Notifications** (1:N) - Users receive multiple notifications
+- **Questions** ↔ **Hashtags** (N:M) - Questions can have multiple hashtags
+- **Categories** → **Questions** (1:N) - Categories contain multiple questions
+
+### Use Case Diagram
+System functionality is organized around three main user roles:
+
+![Use Case Diagram](Laporan%20proyek%20INNOFORUM/Rancangan%20Use%20Case%20Diagram.png)
+
+**Actor Roles:**
+- **Admin**: Complete system management, user moderation, content oversight
+- **Mahasiswa (Student)**: Forum participation, profile management, notifications
+- **Dosen (Lecturer)**: Enhanced forum access, student interaction, content creation
 
 ---
 
