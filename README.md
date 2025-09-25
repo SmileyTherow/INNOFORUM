@@ -87,6 +87,7 @@ Built with modern tools & technologies:
     - [Authentication Pages](#-authentication-pages)
     - [Validation & OTP Pages](#-validation--otp-pages)
 - [Demo & Roadmap Visual](#-demo--roadmap-visual)
+    - [Live Demo](#-live-demo)
     - [System Flow](#-system-flow)
     - [Roadmap Proyek](#-roadmap-proyek)
     - [Data Base](#-data-base)
@@ -813,7 +814,7 @@ Before Asking for Help
 
 Berikut adalah  Live Demo, gambaran visual alur sistem, roadmap proyek & Data Base **INNOFORUM**:
 
-### 🔹 Live Demo 
+### 🔹 Live Demo
 Demo Video: [Live demo](Laporan%20proyek%20INNOFORUM//Demo.mp4)
 
 ### 🔹 System Flow
