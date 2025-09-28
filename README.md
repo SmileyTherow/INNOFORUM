@@ -1,4 +1,8 @@
-<h1 align="center">🚀 INNOFORUM</h1>
+<p align="center">
+  <img src="Laporan%20proyek%20INNOFORUM/logo/logo.png" alt="Logo" width="800">
+</p>
+
+<h1 align="center">INNOFORUM</h1>
 
 ![Demo](Laporan%20proyek%20INNOFORUM/2025-08-2611-03-43-ezgif.com-video-to-gif-converter.gif)
 
