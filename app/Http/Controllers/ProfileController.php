@@ -7,6 +7,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use App\Models\User;
 
 class ProfileController extends Controller
 {
@@ -15,19 +16,31 @@ class ProfileController extends Controller
         $this->middleware('auth');
     }
 
-    /**
-     * Display the user's profile form.
-     */
-    public function edit(Request $request)
+    public function show($id)
     {
-        return view('profile.edit', [
-            'user' => $request->user(),
-        ]);
+        // Load user dengan social links dan relasi lainnya
+        $user = User::with([
+            'socialLinks' => function($query) {
+                $query->where('visible', true)->orderBy('order');
+            },
+            'questions',
+            'comments'
+        ])->findOrFail($id);
+
+        // Hitung statistik
+        $threadCount = $user->questions->count();
+        $commentCount = $user->comments->count();
+        $likeCount = $user->totalQuestionLikes();
+
+        return view('profile.show', compact('user', 'threadCount', 'commentCount', 'likeCount'));
     }
 
-    /**
-     * Update the user's profile information.
-     */
+    public function edit(Request $request)
+    {
+        $user = $request->user()->load('socialLinks');
+        return view('profile.edit', compact('user'));
+    }
+
     public function update(ProfileUpdateRequest $request)
     {
         $user = $request->user();
@@ -42,9 +55,6 @@ class ProfileController extends Controller
         return Redirect::route('profile.edit')->with('status', 'Profile updated successfully.');
     }
 
-    /**
-     * Delete the user's account.
-     */
     public function destroy(Request $request)
     {
         $request->validate([
@@ -62,4 +72,6 @@ class ProfileController extends Controller
 
         return Redirect::to('/');
     }
+
+
 }

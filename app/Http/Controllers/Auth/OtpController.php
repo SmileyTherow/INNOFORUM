@@ -17,6 +17,9 @@ class OtpController extends Controller
 
     /**
      * Memproses verifikasi OTP.
+     * Tidak melakukan Auth::login() — user tetap belum login.
+     * Setelah OTP valid, redirect ke halaman lengkapi profil (complete-profile).
+     * Mengandalkan session('register_user_id') yang disimpan waktu registrasi.
      */
     public function verify(Request $request)
     {
@@ -24,7 +27,6 @@ class OtpController extends Controller
             'otp' => ['required', 'numeric', 'digits:6'],
         ]);
 
-        // Contoh validasi OTP (sesuaikan dengan logika Anda)
         if ($request->otp !== session('otp_code')) {
             return back()->withErrors(['otp' => 'Kode OTP salah.']);
         }
@@ -32,7 +34,26 @@ class OtpController extends Controller
         // Bersihkan session OTP
         session()->forget('otp_code');
 
-        // Redirect ke dashboard
-        return redirect()->route('dashboard')->with('success', 'Verifikasi OTP berhasil!');
+        // Pastikan kita punya id user yang sedang daftar
+        $userId = session('register_user_id');
+
+        if (!$userId) {
+            // fallback: jika email dikirim di form, coba cari user berdasarkan email
+            if ($request->filled('email')) {
+                $user = \App\Models\User::where('email', $request->input('email'))->first();
+                if ($user) {
+                    session(['register_user_id' => $user->id]);
+                    $userId = $user->id;
+                }
+            }
+        }
+
+        if (!$userId) {
+            // Tidak ada info siapa yang mendaftar — arahkan ke register ulang
+            return redirect()->route('register')->with('error', 'Proses verifikasi gagal — silakan daftar ulang.');
+        }
+
+        // Redirect ke halaman lengkapi profil (user belum login)
+        return redirect()->route('profile.complete')->with('success', 'Verifikasi OTP berhasil — silakan lengkapi profil Anda (opsional).');
     }
 }

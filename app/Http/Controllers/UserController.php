@@ -8,6 +8,11 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
 
+// HAPUS BARIS INI ↓
+// Log::info('Pesan log kamu');
+// Log::error('Pesan error');
+// HAPUS BARIS INI ↑
+
 class UserController extends Controller
 {
     // Form edit profil (sendiri)
@@ -26,13 +31,12 @@ class UserController extends Controller
         return view('profile.edit', compact('user', 'threadCount', 'commentCount', 'likeCount'));
     }
 
-    // Update profil (sendiri)
     public function update(Request $request, $id)
     {
-         // Cek user yang login
+        // Cek user yang login
         if (Auth::id() != $id) abort(403);
 
-         // Ambil user
+        // Ambil user
         $user = User::findOrFail($id);
 
         // Validasi input
@@ -40,6 +44,7 @@ class UserController extends Controller
             'username' => 'required|string|max:255|unique:users,username,' . $id,
             'name'     => 'required|string|max:255',
             'email'    => 'nullable|email|max:255|unique:users,email,' . $id,
+            'gender' => 'required|in:Laki-laki,Perempuan',
             'prodi'    => 'required|string|max:255',
             'angkatan' => 'nullable|string|max:10',
             'bio'      => 'nullable|string|max:500',
@@ -47,11 +52,12 @@ class UserController extends Controller
             'photo'    => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-         // Isi data user
+        // Isi data user
         $user->username = $validatedData['username'];
         $user->name     = $validatedData['name'];
         $user->email    = $validatedData['email'];
         $user->prodi    = $validatedData['prodi'];
+        $user->gender   = $validatedData['gender'];
 
         Log::info('USER DATA', $user->toArray());
         Log::info('REQUEST DATA', $request->all());
@@ -85,11 +91,42 @@ class UserController extends Controller
             ]
         );
 
-        // Redirect ke halaman edit dengan pesan sukses
+        // ===== TAMBAHKAN INI UNTUK PROCESS SOCIAL LINKS =====
+        $links = $request->input('links', []);
+
+        Log::info('Update Profile - Social Links Input:', $links); // Debug
+
+        // Hapus social links yang lama
+        $user->socialLinks()->delete();
+
+        // Simpan social links yang baru
+        foreach ($links as $i => $link) {
+            $url = trim($link['url'] ?? '');
+            if (empty($url)) continue;
+
+            // Normalize URL
+            if (!preg_match('~^https?://~i', $url)) {
+                $url = 'https://' . $url;
+            }
+
+            // Auto-detect type
+            $type = $this->detectSocialMediaType($url);
+
+            $user->socialLinks()->create([
+                'type' => $type,
+                'url' => $url,
+                'label' => $link['label'] ?? null,
+                'order' => $i,
+                'visible' => true,
+            ]);
+
+            Log::info("Updated social link: {$type} - {$url}"); // Debug
+        }
+        // ===== END SOCIAL LINKS =====
+
         return redirect()->route('profile.edit', $id)->with('success', 'Profil berhasil diperbarui.');
     }
 
-    // Hapus foto profil
     public function deletePhoto($id)
     {
         if (Auth::id() != $id && Auth::user()->role !== 'admin') abort(403);
@@ -107,14 +144,22 @@ class UserController extends Controller
     // Tampilkan profil publik user
     public function show($id)
     {
-        $user = User::with(['profile', 'questions', 'comments'])->withCount(['questions', 'comments'])->findOrFail($id);
+        $user = User::with([
+            'profile',
+            'questions',
+            'comments',
+            'badges',
+            'socialLinks' => function($query) {
+                $query->where('visible', true)->orderBy('order');
+            }
+        ])->withCount(['questions', 'comments'])->findOrFail($id);
 
         // Ambil thread dan komentar milik user
         $threads = $user->questions()->latest()->get();
         $comments = $user->comments()->latest()->get();
         $threadCount = $user->questions_count ?? $user->questions()->count();
         $commentCount = $user->comments_count ?? $user->comments()->count();
-        $likeCount = 0; // Isi dengan perhitungan like jika ada relasinya
+        $likeCount = $user->comments()->withCount('likes')->get()->sum('likes_count');
 
         return view('users.profile', compact('user', 'threads', 'comments', 'threadCount', 'commentCount', 'likeCount'));
     }
@@ -145,6 +190,7 @@ class UserController extends Controller
             ]);
         }
 
+        // Simpan profil dasar
         $user->profile()->updateOrCreate(
             ['user_id' => $user->id],
             [
@@ -153,6 +199,66 @@ class UserController extends Controller
             ]
         );
 
+        // ===== TAMBAHKAN INI UNTUK PROCESS SOCIAL LINKS =====
+        $links = $request->input('links', []);
+
+        Log::info('Complete Profile - Social Links Input:', $links); // Debug
+
+        // Hapus social links yang lama jika ada
+        $user->socialLinks()->delete();
+
+        // Simpan social links yang baru
+        foreach ($links as $i => $link) {
+            $url = trim($link['url'] ?? '');
+            if (empty($url)) continue;
+
+            // Normalize URL
+            if (!preg_match('~^https?://~i', $url)) {
+                $url = 'https://' . $url;
+            }
+
+            // Auto-detect type
+            $type = $this->detectSocialMediaType($url);
+
+            $user->socialLinks()->create([
+                'type' => $type,
+                'url' => $url,
+                'label' => $link['label'] ?? null,
+                'order' => $i,
+                'visible' => true,
+            ]);
+
+            Log::info("Created social link: {$type} - {$url}"); // Debug
+        }
+        // ===== END SOCIAL LINKS =====
+
         return redirect()->route('login')->with('success', 'Profil berhasil dilengkapi. Silakan login untuk melanjutkan.');
+    }
+
+    private function detectSocialMediaType($url): string
+    {
+        $url = strtolower($url);
+
+        $patterns = [
+            'instagram' => '/instagram|instagr\.am/',
+            'github' => '/github/',
+            'facebook' => '/facebook|fb\.me/',
+            'linkedin' => '/linkedin/',
+            'twitter' => '/twitter|t\.co/',
+            'youtube' => '/youtube|youtu\.be/',
+            'tiktok' => '/tiktok/',
+            'whatsapp' => '/whatsapp/',
+            'telegram' => '/telegram|t\.me/',
+            'discord' => '/discord/',
+            'google' => '/google|gmail|docs\.google|drive\.google|share\.google/',
+        ];
+
+        foreach ($patterns as $type => $pattern) {
+            if (preg_match($pattern, $url)) {
+                return $type;
+            }
+        }
+
+        return 'other';
     }
 }

@@ -139,6 +139,18 @@ class QuestionController extends Controller
             'images' => $imagePaths,
         ]);
         $question->hashtags()->sync($request->hashtags ?? []);
+
+        // === Penambahan Poin dan Badge ===
+        $user = \App\Models\User::find(Auth::id());
+        $user->increment('points', 10); // Tambah 10 poin untuk buat thread
+        // Cek & kasih badge jika ada pencapaian
+        // Contoh: Thread Starter (10 thread)
+        if ($user->questions()->count() >= 10) {
+            $badge = \App\Models\Badge::where('name', 'Thread Starter')->first();
+            if ($badge && !$user->badges->contains($badge->id)) {
+                $user->badges()->attach($badge->id, ['awarded_at' => now()]);
+            }
+        }
         return redirect()->route('dashboard')->with('success', 'Thread berhasil dibuat.');return redirect()->route('dashboard')->with('success', 'Thread berhasil dihapus.');
 
     }

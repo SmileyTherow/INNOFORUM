@@ -8,9 +8,9 @@
     </a>
 </div>
 
-<!-- List Thread/Forum -->
+<!-- List Pertanyaan/Forum -->
 <div class="space-y-4">
-    <!-- Contoh Card Thread (ulang ini untuk setiap pertanyaan) -->
+    <!-- Contoh Card Pertanyaan (ulang ini untuk setiap pertanyaan) -->
     @for ($i = 0; $i < 3; $i++)
         @include('components.thread-card')
     @endfor

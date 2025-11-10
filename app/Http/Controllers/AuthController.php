@@ -30,6 +30,10 @@ class AuthController extends Controller
             return redirect('/admin/login');
         }
 
+        if ($request->nim_or_nigm == '285930404') {
+            return redirect('/admin/login');
+        }
+
         $user = User::where('username', $request->nim_or_nigm)->first();
 
         if ($user) {
@@ -100,6 +104,7 @@ class AuthController extends Controller
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
+            'gender' => 'required|in:Laki-laki,Perempuan',
             'password' => 'required|string|min:6|confirmed',
             'prodi' => 'required|string|max:255',
             'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
@@ -116,6 +121,7 @@ class AuthController extends Controller
         $user->update([
             'name' => $validatedData['name'],
             'email' => $validatedData['email'],
+            'gender' => $validatedData['gender'],
             'password' => Hash::make($validatedData['password']),
             'prodi' => $validatedData['prodi'],
             'photo' => $photoPath,
@@ -326,20 +332,54 @@ class AuthController extends Controller
     {
         $user = User::findOrFail($user_id);
 
-        $request->validate([
-            'angkatan' => 'required|string|max:10',
-            'bio'      => 'nullable|string|max:500',
-        ]);
+        $rules = ['bio' => 'nullable|string|max:500'];
+        if ($user->role === 'mahasiswa') $rules['angkatan'] = 'required|string|max:10';
+        $rules['links'] = 'nullable|array|max:3';
+        $rules['links.*.url'] = 'nullable|string|max:2048';
+        $rules['links.*.label'] = 'nullable|string|max:100';
 
+        $request->validate($rules);
+
+        // save profile
         $user->profile()->updateOrCreate(
             ['user_id' => $user->id],
             [
-                'angkatan' => $request->angkatan,
-                'bio'      => $request->bio,
+                'angkatan' => $request->input('angkatan'),
+                'bio' => $request->input('bio'),
             ]
         );
 
-        // Setelah profil lengkap, redirect ke login
+        // save social links (delete lalu create)
+        $links = $request->input('links', []);
+        $user->socialLinks()->delete();
+
+        $toCreate = [];
+        foreach ($links as $i => $link) {
+            $raw = trim($link['url'] ?? '');
+            if ($raw === '') continue;
+
+            $url = $raw;
+            if (!preg_match('~^https?://~i', $url) && strpos($url, '@') === false) {
+                $url = 'https://' . $url;
+            }
+
+            $type = $this->detectSocialType($url);
+
+            $toCreate[] = [
+                'type' => $type,
+                'url' => $url,
+                'label' => $link['label'] ?? null,
+                'order' => $i,
+                'visible' => true,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+        }
+
+        if (!empty($toCreate)) {
+            $user->socialLinks()->createMany($toCreate);
+        }
+
         return redirect()->route('login')->with('success', 'Profil berhasil dilengkapi. Silakan login untuk melanjutkan.');
     }
 }

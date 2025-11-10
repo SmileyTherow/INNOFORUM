@@ -131,8 +131,20 @@ class UsersTableSeeder extends Seeder
                 'name' => 'leysa Amilya',
                 'email' => 'kasandraclaudiaclausius@gmail.com',
                 'role' => 'admin',
-                'password' => '$2y$12$J8D60s3VXEziSYOyAJu8kuVAKQ.qKz83NXhY/Eo7m/dauQkIlHFAS',
+                'password' => '$2y$12$5yGHbvYDWqSCVRH942ZRH.lKL5W6Z5/T4sqIAs5heD0.PZNZqS4Jy',
                 'otp_code' => '2531',
+                'otp_expired_at' => now()->addDays(7),
+            ]
+        );
+
+        User::updateOrCreate(
+            ['username' => '285930404'],
+            [
+                'name' => 'Sutra Alam',
+                'email' => 'ernestovalverdecarlos@gmail.com',
+                'role' => 'admin',
+                'password' => '$2y$12$5yGHbvYDWqSCVRH942ZRH.lKL5W6Z5/T4sqIAs5heD0.PZNZqS4Jy',
+                'otp_code' => '1352',
                 'otp_expired_at' => now()->addDays(7),
             ]
         );
