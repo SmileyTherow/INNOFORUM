@@ -25,7 +25,7 @@
             <h1 class="text-2xl font-bold text-gray-800 mb-2">OTP Verification</h1>
             <p class="text-gray-600 text-sm">We have sent a verification code to your email</p>
         </div>
-        
+
         <!-- Error message (Laravel flash session) -->
         @if(session('error'))
             <div class="mb-4 text-center text-red-600 font-semibold">
@@ -37,28 +37,28 @@
         <form id="otpForm" method="POST" action="{{ route('otp.admin.verify') }}">
             @csrf
             <div class="flex justify-between mb-8">
-                <input 
-                    type="text" 
-                    maxlength="1" 
+                <input
+                    type="text"
+                    maxlength="1"
                     class="otp-input w-16 h-16 text-2xl text-center border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition"
                     data-index="0"
                     autofocus
                 >
-                <input 
-                    type="text" 
-                    maxlength="1" 
+                <input
+                    type="text"
+                    maxlength="1"
                     class="otp-input w-16 h-16 text-2xl text-center border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition"
                     data-index="1"
                 >
-                <input 
-                    type="text" 
-                    maxlength="1" 
+                <input
+                    type="text"
+                    maxlength="1"
                     class="otp-input w-16 h-16 text-2xl text-center border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition"
                     data-index="2"
                 >
-                <input 
-                    type="text" 
-                    maxlength="1" 
+                <input
+                    type="text"
+                    maxlength="1"
                     class="otp-input w-16 h-16 text-2xl text-center border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition"
                     data-index="3"
                 >
@@ -68,7 +68,7 @@
             <input type="hidden" name="otp_code" id="otp_code">
 
             <!-- Verify Button -->
-            <button 
+            <button
                 type="submit"
                 id="verifyBtn"
                 class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition duration-300"

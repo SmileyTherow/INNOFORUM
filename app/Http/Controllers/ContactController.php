@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Message;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
@@ -16,6 +18,18 @@ class ContactController extends Controller
             'message' => 'required|string|max:2000',
         ]);
 
+        // Simpan ke database (messages)
+        $message = Message::create([
+            'user_id' => Auth::check() ? Auth::id() : null,
+            'name'    => $validated['name'],
+            'email'   => $validated['email'],
+            'title'   => $validated['title'],
+            'body'    => $validated['message'],
+            'is_read' => false,
+            'status'  => 'open',
+        ]);
+
+        // Kirim email ke admin
         Mail::send('emails.contact', [
             'name'    => $validated['name'],
             'email'   => $validated['email'],
@@ -28,5 +42,46 @@ class ContactController extends Controller
         });
 
         return back()->with('success', 'Pesan berhasil dikirim!');
+    }
+
+    /**
+     * Handle guest message (from pre-login help/contact modal)
+     */
+    public function guestSend(Request $request)
+    {
+        $validated = $request->validate([
+            'name'      => 'required|string|max:100',
+            'email'     => 'required|email|max:150',
+            'context'   => 'required|string|max:100',
+            'reference' => 'nullable|string|max:120',
+            'message'   => 'required|string|max:2000',
+        ]);
+
+        // Simpan pesan sebagai guest (user_id = null)
+        $message = Message::create([
+            'user_id'   => null,
+            'name'      => $validated['name'],
+            'email'     => $validated['email'],
+            'title'     => $validated['context'],
+            'body'      => $validated['message'],
+            'is_read'   => false,
+            'status'    => 'open',
+            'reference' => $validated['reference'] ?? null,
+        ]);
+
+        // Kirim email ke admin (re-use view emails.contact untuk kesederhanaan)
+        Mail::send('emails.contact', [
+            'name'  => $validated['name'],
+            'email' => $validated['email'],
+            'title' => '[Guest] ' . $validated['context'] . ($validated['reference'] ? ' - ' . $validated['reference'] : ''),
+            'pesan' => $validated['message'],
+        ], function($mail) use ($validated) {
+            $mail->to('fortech.forumteknologi@gmail.com')
+                ->subject('[INNOFORUM Guest] ' . $validated['context'])
+                ->replyTo($validated['email'], $validated['name']);
+        });
+
+        // kembali ke halaman (modal akan menutup manual), tampilkan flash
+        return back()->with('success', 'Pesan Anda telah dikirim. Admin akan menghubungi melalui email.');
     }
 }

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Question;
 use App\Models\Notification;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 class DashboardController extends Controller
 {
@@ -25,6 +26,19 @@ class DashboardController extends Controller
         } else {
             $query->orderByDesc('created_at');
         }
+
+        // Ambil top 5 user berdasarkan poin
+        $topUsers = User::withCount(['comments', 'questions'])
+            ->get()
+            ->map(function ($user) {
+                // Hitung total like komentar user
+                $user->like_count = $user->comments->sum(function ($c) {
+                    return $c->likes->count();
+                });
+                return $user;
+            })
+            ->sortByDesc('points')
+            ->take(5);
 
         // (Opsional) search
         if ($request->has('search') && trim($request->search) !== '') {
@@ -55,7 +69,7 @@ class DashboardController extends Controller
             $notifications = [];
             $global_notifications = [];
         }
-        return view('dashboard', compact('questions', 'popularTags', 'notifications', 'global_notifications'));
+        return view('dashboard', compact('questions', 'popularTags', 'notifications', 'global_notifications', 'topUsers'));
     }
 
     /**

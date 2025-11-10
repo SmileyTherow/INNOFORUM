@@ -20,6 +20,16 @@ use App\Http\Controllers\Admin\AdminReportController;
 use App\Http\Controllers\Admin\AdminStatsController;
 use App\Http\Controllers\Admin\AdminAnnouncementController;
 use App\Http\Controllers\AdminSettingsController;
+use App\Http\Controllers\AcademicEventController;
+use App\Http\Controllers\LegalController;
+use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\Auth\VerifyPasswordCodeController;
+use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\Pesan\ConversationController as PesanConversationController;
+use App\Http\Controllers\Pesan\MessageController as PesanMessageController;
+use App\Http\Controllers\UserSocialLinkController;
+use App\Http\Controllers\ProfileCompletionController;
+
 
 // ===================== AUTH & REGISTER ===================== //
 Route::get('/', [AuthController::class, 'showNimForm'])->name('nim.form');
@@ -32,14 +42,28 @@ Route::get('/login/register/mahasiswa', [AuthController::class, 'showMahasiswaRe
 Route::get('/login/register/dosen', [AuthController::class, 'showDosenRegisterPage'])->name('register.dosen');
 Route::post('/register', [AuthController::class, 'register'])->name('register.process');
 
+
+// ===================== PASSWORD RESET ===================== //
+Route::get('password/forgot', [ForgotPasswordController::class, 'show'])->name('password.forgot');
+Route::post('password/forgot', [ForgotPasswordController::class, 'send'])->name('password.forgot.send');
+
+Route::get('password/verify', [VerifyPasswordCodeController::class, 'show'])->name('password.verify');
+Route::post('password/verify', [VerifyPasswordCodeController::class, 'verify'])->name('password.verify.post');
+
+Route::get('password/reset', [ResetPasswordController::class, 'show'])->name('password.reset.form');
+Route::post('password/reset', [ResetPasswordController::class, 'reset'])->name('password.reset.post');
+
+
 // ===================== OTP VERIFICATION ===================== //
 Route::get('/register/verify-otp', [AuthController::class, 'showUserOtpForm'])->name('user.otp.form');
 Route::post('/register/verify-otp', [AuthController::class, 'verifyUserOtp'])->name('user.otp.verify');
 Route::post('/register/resend-otp', [AuthController::class, 'resendUserOtp'])->name('user.otp.resend');
 
+
 // ===================== LENGKAPI PROFIL (SETELAH OTP, SEBELUM LOGIN) ===================== //
 Route::get('/lengkapi-profil/{user_id}', [UserController::class, 'showCompleteProfileForm'])->name('profile.complete');
 Route::post('/lengkapi-profil/{user_id}', [UserController::class, 'submitCompleteProfile'])->name('profile.complete.submit');
+
 
 // ===================== ADMIN AUTH ===================== //
 Route::get('/admin/login', [AdminLoginController::class, 'showLoginForm'])->name('login.admin');
@@ -47,6 +71,7 @@ Route::post('/admin/login', [AdminLoginController::class, 'login'])->name('login
 Route::get('/admin/otp', [AdminLoginController::class, 'showOtpForm'])->name('otp.admin');
 Route::post('/admin/otp', [AdminLoginController::class, 'verifyOtp'])->name('otp.admin.verify');
 Route::post('/admin/logout', [AdminLoginController::class, 'logout'])->name('admin.logout');
+
 
 // ===================== USER AREA (SETELAH LOGIN) ===================== //
 Route::middleware('auth')->group(function () {
@@ -81,7 +106,20 @@ Route::middleware('auth')->group(function () {
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
     Route::post('/notifications/read/{id}', [NotificationController::class, 'read'])->name('notifications.read.manual');
     Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read.ajax');
+    Route::post('/notifications/mark-all-read', [App\Http\Controllers\NotificationController::class, 'markAllAsRead'])->name('notifications.markAllAsRead');
 });
+
+// ===================== SISTEM PESANAN / CHAT ===================== //
+Route::middleware('auth')->group(function () {
+    Route::get('/pesan', [PesanConversationController::class, 'index'])->name('pesan.index');
+
+    Route::post('/pesan/conversations', [PesanConversationController::class, 'store'])->name('pesan.conversations.store');
+    Route::get('/pesan/conversations/{conversation}/messages', [PesanConversationController::class, 'messages'])->name('pesan.conversations.messages');
+
+    Route::post('/pesan/conversations/{conversation}/messages', [PesanMessageController::class, 'store'])->name('pesan.messages.store');
+    Route::post('/pesan/conversations/{conversation}/read', [PesanMessageController::class, 'markRead'])->name('pesan.conversations.read');
+});
+
 
 // ===================== ADMIN AREA ===================== //
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
@@ -95,6 +133,14 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::post('/comments/notify', [AdminCommentController::class, 'notify'])->name('comments.notify');
     Route::get('/threads/{id}', [AdminThreadController::class, 'show'])->name('threads.show');
     Route::post('/threads/notify', [AdminThreadController::class, 'notify'])->name('threads.notify');
+    Route::get('/privacy-policy', [LegalController::class, 'adminPrivacyPolicy'])->name('privacy.policy');
+    Route::get('/terms-conditions', [LegalController::class, 'adminTermsAndConditions'])->name('terms.conditions');
+
+    // Manajemen Pesan dari Contact Form
+    Route::get('/messages', [\App\Http\Controllers\Admin\MessageController::class, 'index'])->name('messages.index');
+    Route::get('/messages/{id}', [\App\Http\Controllers\Admin\MessageController::class, 'show'])->name('messages.show');
+    Route::post('/messages/{id}/reply', [\App\Http\Controllers\Admin\MessageController::class, 'reply'])->name('messages.reply');
+    Route::delete('/messages/{id}', [\App\Http\Controllers\Admin\MessageController::class, 'destroy'])->name('messages.destroy');
 });
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::resource('threads', App\Http\Controllers\Admin\AdminThreadController::class);
@@ -132,8 +178,11 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/admin/announcements/{id}', [AdminAnnouncementController::class, 'show'])->name('admin.announcements.show');
     Route::resource('announcements', App\Http\Controllers\Admin\AdminAnnouncementController::class);
 
+
 // ===================== PROFIL PUBLIK USER ===================== //
 Route::get('/users/{id}', [UserController::class, 'show'])->name('users.show');
+Route::get('/profile/{id}', [UserController::class, 'show'])->name('profile.show');
+
 
 // ===================== LOGOUT & CONTACT ===================== //
 Route::post('/logout', function () {
@@ -145,6 +194,7 @@ Route::post('/logout', function () {
 
 Route::get('/contact', fn() => view('contact'))->name('contact');
 Route::post('/contact', [ContactController::class, 'send'])->name('contact.send');
+
 
 // ===================== DEBUG (OPSIONAL) ===================== //
 Route::get('/debug-kernel', fn() => app()->make(\Illuminate\Contracts\Http\Kernel::class)::class);
@@ -193,3 +243,43 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
 Route::get('/admin/comments', [CommentController::class, 'index'])->name('admin.comments.index');
 Route::resource('admin/threads', AdminThreadController::class)->names('admin.threads');
 Route::post('admin/threads/notify', [AdminThreadController::class, 'notify'])->name('admin.threads.notify');
+
+// Leaderboard lengkap
+Route::get('/leaderboard', [App\Http\Controllers\LeaderboardController::class, 'index'])->name('leaderboard');
+
+// footer
+Route::view('/about', 'about')->name('about');
+Route::view('/terms', 'terms')->name('terms');
+
+// Legal Pages Routes
+Route::get('/privacy-policy', [LegalController::class, 'privacyPolicy'])->name('privacy.policy');
+Route::get('/terms-conditions', [LegalController::class, 'termsAndConditions'])->name('terms.conditions');
+
+// bantuan, faq, tips
+Route::get('/bantuan', function () {
+    return view('bantuan');
+})->name('bantuan');
+
+// user view calendar
+Route::get('/kalender', [AcademicEventController::class, 'index'])->name('calendar.index');
+
+// API route (bisa juga di routes/api.php)
+Route::get('/api/events', [App\Http\Controllers\AcademicEventController::class, 'apiIndex'])->middleware('throttle:60,1');
+
+// Admin CRUD Kalender Akademik
+Route::middleware(['auth','admin'])->prefix('admin')->group(function () {
+    Route::get('/kalender', [App\Http\Controllers\AcademicEventController::class, 'adminIndex'])->name('admin.calendar.index');
+    Route::post('/kalender', [App\Http\Controllers\AcademicEventController::class, 'store'])->name('admin.calendar.store');
+    Route::put('/kalender/{academicEvent}', [App\Http\Controllers\AcademicEventController::class, 'update'])->name('admin.calendar.update');
+    Route::delete('/kalender/{academicEvent}', [App\Http\Controllers\AcademicEventController::class, 'destroy'])->name('admin.calendar.destroy');
+    // Admin API untuk fetch events
+    Route::get('/kalender/api', [App\Http\Controllers\AcademicEventController::class, 'adminApiIndex'])->name('admin.calendar.api');
+});
+
+Route::get('/admin/kalender', [AcademicEventController::class, 'adminIndex'])->name('admin.calendar.index');
+Route::get('/kalender/event/{id}', [AcademicEventController::class, 'show'])->name('calendar.event.show');
+
+// Guest Message Submission (tanpa login)
+Route::post('/guest/message', [App\Http\Controllers\ContactController::class, 'guestSend'])
+    ->name('guest.message.send')
+    ->middleware('throttle:6,1');

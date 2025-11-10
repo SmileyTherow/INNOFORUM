@@ -9,6 +9,6 @@
             @endforeach
         </select>
     </div>
-    <!-- input judul dan body thread -->
-    <button type="submit" class="btn btn-primary">Kirim Thread</button>
+    <!-- input judul dan body Pertanyaan -->
+    <button type="submit" class="btn btn-primary">Kirim Pertanyaan</button>
 </form>

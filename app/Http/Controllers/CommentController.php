@@ -48,6 +48,28 @@ class CommentController extends Controller
             'image' => $filename,
         ]);
 
+        // === Penambahan Poin dan Badge ===
+        $user = \App\Models\User::find(Auth::id());
+        $user->increment('points', 5); // Tambah 5 poin untuk komentar
+
+        // Cek & kasih badge jika ada pencapaian
+        // Contoh: Active Commenter (50 komentar)
+        if ($user->comments()->count() >= 50) {
+            $badge = \App\Models\Badge::where('name', 'Active Commenter')->first();
+            if ($badge && !$user->badges->contains($badge->id)) {
+                $user->badges()->attach($badge->id, ['awarded_at' => now()]);
+            }
+        }
+
+        // Cek Top Contributor (jumlah like di komentar)
+        $likeCount = $user->comments()->withCount('likes')->get()->sum('likes_count');
+        if ($likeCount >= 100) {
+            $badge = \App\Models\Badge::where('name', 'Top Contributor')->first();
+            if ($badge && !$user->badges->contains($badge->id)) {
+                $user->badges()->attach($badge->id, ['awarded_at' => now()]);
+            }
+        }
+
         // === NOTIFIKASI JAWABAN (untuk owner pertanyaan) ===
         $question = Question::find($request->question_id);
         if ($question && $question->user_id !== Auth::id()) {

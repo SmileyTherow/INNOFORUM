@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
@@ -74,33 +75,26 @@
                             </nav>
                         </div>
 
-                        <!-- THREAD & KOMENTAR -->
+                        <!-- Pertanyaan & KOMENTAR -->
                         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseForum" aria-expanded="false" aria-controls="collapseForum">
                             <div class="sb-nav-link-icon"><i class="fas fa-comments"></i></div>
-                            Thread & Komentar
+                            Pertanyaan & Komentar
                             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
                         <div class="collapse" id="collapseForum" aria-labelledby="headingForum" data-bs-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="{{ route('admin.threads.index') }}">Semua Thread</a>
+                                <a class="nav-link" href="{{ route('admin.threads.index') }}">Semua Pertanyaan</a>
                                 <a class="nav-link" href="{{ route('admin.comments.index') }}">Semua Komentar</a>
-                                <a class="nav-link" href="{{ route('admin.threads.reported') }}">Thread Dilaporkan</a>
+                                <a class="nav-link" href="{{ route('admin.threads.reported') }}">Pertanyaan Dilaporkan</a>
                                 <a class="nav-link" href="{{ route('admin.comments.reported') }}">Komentar Dilaporkan</a>
                             </nav>
                         </div>
 
                         <!-- KATEGORI FORUM -->
-                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseCategory" aria-expanded="false" aria-controls="collapseCategory">
-                            <div class="sb-nav-link-icon"><i class="fas fa-folder"></i></div>
+                        <a class="nav-link" href="{{ route('admin.categories.index') }}">
+                            <div class="sb-nav-link-icon"><i class="fas fa-chart-bar"></i></div>
                             Kategori Forum
-                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
-                        <div class="collapse" id="collapseCategory" aria-labelledby="headingCategory" data-bs-parent="#sidenavAccordion">
-                            <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="{{ route('admin.categories.index') }}">Lihat/Edit Kategori</a>
-                                <a class="nav-link" href="{{ route('admin.categories.create') }}">Tambah Kategori</a>
-                            </nav>
-                        </div>
 
                         <!-- STATISTIK FORUM -->
                         <a class="nav-link" href="{{ route('admin.stats.index') }}">
@@ -112,6 +106,22 @@
                         <a class="nav-link" href="{{ route('admin.announcements.index') }}">
                             <div class="sb-nav-link-icon"><i class="fas fa-bullhorn"></i></div>
                             Pengumuman
+                        </a>
+
+                        <!-- KALENDER AKADEMIK -->
+                        <a class="nav-link" href="{{ route('admin.calendar.index') }}">
+                            <div class="sb-nav-link-icon"><i class="fas fa-calendar-alt"></i></div>
+                            Kalender Akademik
+                        </a>
+
+                        <!-- Pusat Bantuan -->
+                        <a class="nav-link" href="{{ route('admin.messages.index') }}">
+                            <div class="sb-nav-link-icon"><i class="fas fa-envelope"></i></div>
+                            Pusat Bantuan
+                            @php $unread = \App\Models\Message::where('is_read', false)->count(); @endphp
+                            @if($unread)
+                                <span class="badge badge-danger ml-2">{{ $unread }}</span>
+                            @endif
                         </a>
                     </div>
                 </div>
@@ -129,13 +139,11 @@
             <footer class="py-4 bg-light mt-auto">
                 <div class="container-fluid px-4">
                     <div class="d-flex align-items-center justify-content-between small">
-                        <div class="text-muted">Copyright &copy; {{ date('Y') }} Innoforum
-
-                        </div>
+                        <div class="text-muted">Copyright &copy; {{ date('Y') }} Innoforum </div>
                         <div>
-                            <a href="#">Privacy Policy</a>
+                            <a href="{{ route('admin.privacy.policy') }}">Privacy Policy</a>
                             &middot;
-                            <a href="#">Terms &amp; Conditions</a>
+                            <a href="{{ route('admin.terms.conditions') }}">Terms &amp; Conditions</a>
                         </div>
                     </div>
                 </div>

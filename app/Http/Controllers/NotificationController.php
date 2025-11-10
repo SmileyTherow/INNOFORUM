@@ -11,15 +11,16 @@ class NotificationController extends Controller
     public function index(Request $request)
     {
         $tab = $request->get('tab', 'unread');
-        $query = Notification::where('user_id', Auth::id());
+        $query = Auth::user()->notifications();$query = \App\Models\Notification::where('user_id', Auth::id());
+        
         if ($tab === 'read') {
             $query->where('is_read', true);
         } else {
             $query->where('is_read', false);
         }
+        
         $notifications = $query->orderBy('created_at', 'desc')->paginate(10);
-
-        $count_unread = Notification::where('user_id', Auth::id())->where('is_read', false)->count();
+        $count_unread = Auth::user()->notifications()->where('is_read', false)->count();
 
         return view('notifikasi.index', compact('notifications', 'tab', 'count_unread'));
     }
