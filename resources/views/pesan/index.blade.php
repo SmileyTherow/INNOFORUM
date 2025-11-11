@@ -167,8 +167,7 @@
                                             <!-- If editing -->
                                             <template x-if="msg._editing">
                                                 <div>
-                                                    <textarea :id="'edit-textarea-' + msg.id" x-model="msg.body"
-                                                        class="w-full px-2 py-1 rounded bg-gray-700 text-white"></textarea>
+                                                    <textarea :id="'edit-textarea-' + msg.id" x-model="msg.body" class="w-full px-2 py-1 rounded bg-gray-700 text-white"></textarea>
                                                     <div class="mt-2 flex gap-2">
                                                         <button @click="saveEdit(msg)"
                                                             class="px-3 py-1 bg-blue-600 text-white rounded">Simpan</button>
@@ -181,8 +180,8 @@
                                             <!-- Normal display -->
                                             <template x-if="!msg._editing">
                                                 <div>
-                                                    <div x-text="msg.body"
-                                                        class="whitespace-pre-wrap break-words text-sm"></div>
+                                                    <div x-text="msg.body" class="whitespace-pre-wrap break-words text-sm">
+                                                    </div>
                                                     <template x-if="msg.attachment">
                                                         <div class="mt-2">
                                                             <img :src="msg.attachment"
@@ -199,12 +198,51 @@
 
                                             <!-- Edit & Delete hanya untuk pengirim -->
                                             <template x-if="msg.sender.id === {{ auth()->id() }}">
-                                                <span class="flex gap-1 ml-2">
-                                                    <button @click="startEdit(msg)"
-                                                        class="text-blue-300 hover:text-blue-200">Edit</button>
-                                                    <button @click="deleteMessage(msg)"
-                                                        class="text-red-400 hover:text-red-300">Hapus</button>
-                                                </span>
+                                                <div class="ml-2 relative" x-data="{ openMenu: false }">
+                                                    <button @click.stop="openMenu = !openMenu"
+                                                        @keydown.escape.stop="openMenu = false"
+                                                        :aria-expanded="openMenu ? 'true' : 'false'" aria-haspopup="true"
+                                                        title="Opsi pesan"
+                                                        class="p-1.5 bg-gray-800/70 hover:bg-gray-700 text-gray-300 rounded-full border border-gray-700 shadow-sm transition transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-400">
+                                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"
+                                                            aria-hidden="true">
+                                                            <path
+                                                                d="M6 10a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm8 0a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 0a2 2 0 1 1-4 0 2 2 0 0 1 4 0z" />
+                                                        </svg>
+                                                    </button>
+
+                                                    <!-- Dropdown menu -->
+                                                    <div x-show="openMenu" x-transition.origin.top.right
+                                                        @click.outside="openMenu = false"
+                                                        class="origin-top-right absolute right-0 mt-2 w-36 rounded-lg bg-gray-800 border border-gray-700 shadow-lg z-50"
+                                                        style="display: none;" role="menu"
+                                                        aria-orientation="vertical">
+                                                        <button @click.stop="startEdit(msg); openMenu = false"
+                                                            class="w-full text-left px-3 py-2 flex items-center gap-2 hover:bg-gray-700 transition text-gray-200"
+                                                            role="menuitem">
+                                                            <svg class="w-4 h-4 text-blue-300" fill="none"
+                                                                stroke="currentColor" stroke-width="1.5"
+                                                                viewBox="0 0 24 24" aria-hidden="true">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    d="M15.232 5.232l3.536 3.536M9 11l6 6L21 11l-6-6-6 6z" />
+                                                            </svg>
+                                                            <span class="text-sm">Edit</span>
+                                                        </button>
+
+                                                        <button
+                                                            @click.stop="if(confirm('Yakin ingin menghapus pesan ini?')) { deleteMessage(msg); openMenu = false }"
+                                                            class="w-full text-left px-3 py-2 flex items-center gap-2 hover:bg-red-700 hover:text-white transition text-red-300"
+                                                            role="menuitem">
+                                                            <svg class="w-4 h-4" fill="none" stroke="currentColor"
+                                                                stroke-width="1.5" viewBox="0 0 24 24"
+                                                                aria-hidden="true">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    d="M6 7h12M9 7v10a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2V7M10 3h4l1 4H9l1-4z" />
+                                                            </svg>
+                                                            <span class="text-sm">Hapus</span>
+                                                        </button>
+                                                    </div>
+                                                </div>
                                             </template>
                                         </div>
                                     </div>
