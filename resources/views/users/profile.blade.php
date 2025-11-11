@@ -1,364 +1,472 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="bg-gray-900 min-h-screen py-10 px-2">
-        <div class="container mx-auto">
-            <div class="max-w-4xl mx-auto bg-gray-800 rounded-xl shadow-md overflow-hidden border border-gray-700">
-                <!-- Header Profil -->
-                <div class="bg-gradient-to-r from-blue-900 to-blue-700 px-8 pt-8 pb-6 rounded-t-xl text-center">
-                    <h1 class="text-2xl md:text-3xl font-bold text-white">Profil Pengguna</h1>
-                    <p class="opacity-90 text-blue-100 md:text-lg">Informasi akun forum kampus Anda</p>
+    <!DOCTYPE html>
+    <html lang="id">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Profil Pengguna</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <script>
+            tailwind.config = {
+                theme: {
+                    extend: {
+                        colors: {
+                            dark: {
+                                900: '#0f172a',
+                                800: '#1e293b',
+                                700: '#334155',
+                                600: '#475569',
+                                500: '#64748b',
+                            }
+                        },
+                        animation: {
+                            'fade-in': 'fadeIn 0.5s ease-in-out',
+                            'slide-up': 'slideUp 0.5s ease-out',
+                            'pulse-glow': 'pulseGlow 2s infinite',
+                        },
+                        keyframes: {
+                            fadeIn: {
+                                '0%': {
+                                    opacity: '0'
+                                },
+                                '100%': {
+                                    opacity: '1'
+                                },
+                            },
+                            slideUp: {
+                                '0%': {
+                                    transform: 'translateY(20px)',
+                                    opacity: '0'
+                                },
+                                '100%': {
+                                    transform: 'translateY(0)',
+                                    opacity: '1'
+                                },
+                            },
+                            pulseGlow: {
+                                '0%, 100%': {
+                                    boxShadow: '0 0 5px rgba(59, 130, 246, 0.5)'
+                                },
+                                '50%': {
+                                    boxShadow: '0 0 20px rgba(59, 130, 246, 0.8)'
+                                },
+                            }
+                        }
+                    }
+                }
+            }
+        </script>
+    </head>
+
+    <body class="bg-dark-900 text-gray-100 min-h-screen">
+        <div class="min-h-screen py-8 px-4">
+            <div class="max-w-6xl mx-auto">
+                <!-- Header dengan animasi -->
+                <div class="text-center mb-10 animate-fade-in">
+                    <h1
+                        class="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+                        Profil Pengguna</h1>
+                    <p class="text-gray-400 mt-2">Kelola informasi akun forum kampus Anda</p>
                 </div>
-                <!-- Konten Profil -->
-                <div class="md:flex px-8 py-8 gap-8">
-                    <!-- Bagian Kiri -->
-                    <div class="md:w-1/3 flex flex-col items-center">
-                        <div class="relative -mt-20 mb-4">
-                            @if ($user->photo)
-                                <img src="{{ asset('storage/photo/' . $user->photo) }}" alt="Foto Profil"
-                                    class="w-40 h-40 rounded-full object-cover border-4 border-gray-800 shadow-lg bg-gray-700">
-                            @else
-                                <div
-                                    class="w-40 h-40 flex items-center justify-center rounded-full bg-blue-500/20 text-blue-300 text-5xl font-bold border-4 border-gray-800 shadow-lg">
-                                    {{ strtoupper(substr($user->name, 0, 2)) }}
-                                </div>
-                            @endif
-                            <div
-                                class="absolute bottom-2 right-2 bg-green-500 rounded-full p-2 border-2 border-gray-800 shadow">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" fill="currentColor"
-                                    viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-                                        clip-rule="evenodd" />
-                                </svg>
-                            </div>
-                        </div>
-                        <div class="text-center mb-4">
-                            <h2 class="text-xl font-semibold text-white">{{ $user->name }}</h2>
-                            <p class="text-gray-400 text-sm">Anggota sejak:
-                                {{ $user->created_at ? $user->created_at->translatedFormat('d F Y') : '-' }}</p>
-                        </div>
 
-                        <!-- Badge Display -->
-                        <div class="mb-6 text-center">
-                            <h3 class="text-sm font-semibold text-gray-400 mb-2">Pencapaian</h3>
-                            <div class="flex flex-wrap justify-center gap-2 mb-3">
-                                @foreach ($user->badges as $badge)
-                                    <div class="badge-item" title="{{ $badge->description }}">
+                <!-- Container utama -->
+                <div class="bg-dark-800 rounded-2xl shadow-2xl overflow-hidden border border-dark-600 animate-slide-up">
+                    <!-- Header dengan gradient dinamis -->
+                    <div class="h-40 bg-gradient-to-r from-blue-900 via-purple-900 to-indigo-900 relative">
+                        <div class="absolute inset-0 bg-black/20"></div>
+
+                    </div>
+
+                    <!-- Konten utama -->
+                    <div class="md:flex px-6 py-8 gap-8 -mt-16 relative z-10">
+                        <!-- Sidebar kiri -->
+                        <div class="md:w-1/3 flex flex-col items-center mb-8 md:mb-0">
+                            <!-- Foto profil dengan frame -->
+                            <div class="relative mb-6 group">
+                                @if ($user->photo)
+                                    <div class="relative">
+                                        <img src="{{ asset('storage/photo/' . $user->photo) }}" alt="Foto Profil"
+                                            class="w-40 h-40 rounded-full object-cover border-4 border-dark-700 shadow-xl bg-dark-700 group-hover:border-blue-500 transition-all duration-300">
                                         <div
-                                            class="bg-yellow-500/20 text-yellow-300 rounded-full p-2 cursor-pointer hover:scale-110 transition-transform border border-yellow-500/30">
-                                            @if ($badge->icon)
-                                                <img src="{{ asset('storage/badges/' . $badge->icon) }}"
-                                                    alt="{{ $badge->name }}" class="w-6 h-6 inline">
-                                            @else
-                                                <i class="fas fa-trophy text-sm"></i>
-                                            @endif
+                                            class="absolute inset-0 rounded-full bg-blue-500/20 group-hover:bg-blue-500/10 transition-all duration-300">
                                         </div>
                                     </div>
-                                @endforeach
-                            </div>
-                            <p class="text-xs text-gray-500">Klik badge untuk detail</p>
-                        </div>
-                        <p class="text-white font-semibold">Total Poin: {{ $user->points ?? 0 }}</p>
-
-                        <!-- Statistik -->
-                        <div
-                            class="w-full bg-gray-700 rounded-lg p-4 mb-4 flex justify-center gap-6 shadow border border-gray-600">
-                            <div class="text-center">
-                                <p class="text-xl font-bold text-white">{{ $threadCount ?? ($user->questions_count ?? 0) }}
-                                </p>
-                                <p class="text-xs text-gray-400">Pertanyaan</p>
-                            </div>
-                            <div class="text-center">
-                                <p class="text-xl font-bold text-white">{{ $commentCount ?? ($user->comments_count ?? 0) }}
-                                </p>
-                                <p class="text-xs text-gray-400">Komentar</p>
-                            </div>
-                            <div class="text-center">
-                                <p class="text-xl font-bold text-white">{{ $likeCount ?? 0 }}</p>
-                                <p class="text-xs text-gray-400">Like</p>
-                            </div>
-                        </div>
-                        <div class="w-full mb-6 mt-2">
-                            <h4 class="text-sm font-semibold text-gray-300 mb-3 text-center">🌐 Media Sosial & Links</h4>
-
-                            @php
-                                $iconMap = [
-                                    'instagram' => 'fab fa-instagram text-pink-400',
-                                    'github' => 'fab fa-github text-gray-300',
-                                    'facebook' => 'fab fa-facebook text-blue-400',
-                                    'linkedin' => 'fab fa-linkedin text-blue-300',
-                                    'website' => 'fas fa-globe text-blue-300',
-                                    'twitter' => 'fab fa-twitter text-blue-200',
-                                    'google' => 'fab fa-google text-red-400',
-                                    'other' => 'fas fa-link text-gray-400',
-                                ];
-                            @endphp
-
-                            @if ($user->socialLinks && $user->socialLinks->where('visible', true)->isNotEmpty())
-                                <div class="space-y-2">
-                                    @foreach ($user->socialLinks->where('visible', true) as $link)
-                                        @php
-                                            $iconClass = $iconMap[$link->type] ?? 'fas fa-link text-gray-400';
-                                            $label =
-                                                $link->label ?:
-                                                parse_url($link->url, PHP_URL_HOST) .
-                                                    (parse_url($link->url, PHP_URL_PATH)
-                                                        ? parse_url($link->url, PHP_URL_PATH)
-                                                        : '');
-                                        @endphp
-                                        <div
-                                            class="flex items-center justify-between py-2 px-3 bg-gray-700 rounded-lg border border-gray-600 hover:border-blue-400 transition-colors">
-                                            <div class="flex items-center space-x-3">
-                                                <i class="{{ $iconClass }} text-lg"></i>
-                                                <span class="text-gray-300 text-sm">{{ $label }}</span>
-                                            </div>
-                                            <a href="{{ $link->url }}" target="_blank" rel="noopener"
-                                                class="text-blue-400 hover:text-blue-300">
-                                                <i class="fas fa-external-link-alt text-sm"></i>
-                                            </a>
-                                        </div>
-                                    @endforeach
-                                </div>
-                            @else
-                                <div
-                                    class="w-full mb-4 text-center text-sm text-gray-500 border border-dashed border-gray-600 rounded-lg p-3">
-                                    Belum ada media sosial. Edit profil untuk menambahkan.
-                                </div>
-                            @endif
-                        </div>
-                        @if (auth()->id() == $user->id)
-                            <div class="w-full space-y-4 mt-6">
-                                <!-- Tombol Edit Profile -->
-                                <a href="{{ route('profile.edit', $user->id) }}"
-                                    class="group inline-flex items-center justify-center w-full bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:from-blue-600 hover:via-blue-700 hover:to-blue-800 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 shadow-lg hover:shadow-2xl border border-blue-400/30 relative overflow-hidden">
+                                @else
                                     <div
-                                        class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -skew-x-12 transform translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000">
+                                        class="w-40 h-40 flex items-center justify-center rounded-full bg-gradient-to-br from-blue-500/30 to-purple-500/30 text-blue-300 text-5xl font-bold border-4 border-dark-700 shadow-xl group-hover:border-blue-500 transition-all duration-300">
+                                        {{ strtoupper(substr($user->name, 0, 2)) }}
                                     </div>
-                                    <svg class="w-5 h-5 mr-3 transition-transform duration-300 group-hover:scale-110"
-                                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                    </svg>
-                                    <span class="relative">Edit Profile</span>
-                                </a>
+                                @endif
 
-                                <!-- Tombol Log Out -->
-                                <form method="POST" action="{{ route('logout') }}" class="w-full">
-                                    @csrf
-                                    <button type="submit"
-                                        class="group inline-flex items-center justify-center w-full bg-gradient-to-r from-red-500 via-red-600 to-red-700 hover:from-red-600 hover:via-red-700 hover:to-red-800 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 shadow-lg hover:shadow-2xl border border-red-400/30 relative overflow-hidden">
-                                        <div
-                                            class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -skew-x-12 transform translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000">
+                                <!-- Status online -->
+                                <div
+                                    class="absolute bottom-2 right-2 bg-green-500 rounded-full p-2 border-2 border-dark-800 shadow-lg animate-pulse-glow">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" fill="currentColor"
+                                        viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                </div>
+                            </div>
+
+                            <!-- Nama dan role -->
+                            <div class="text-center mb-6">
+                                <h2 class="text-xl font-bold text-white">{{ $user->name }}</h2>
+                                <p class="text-blue-200 text-sm">Anggota sejak:
+                                    {{ $user->created_at ? $user->created_at->translatedFormat('d F Y') : '-' }}</p>
+                                <div
+                                    class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium mt-2
+                                @if ($user->role === 'mahasiswa') bg-blue-500/20 text-blue-300
+                                @elseif($user->role === 'dosen') bg-purple-500/20 text-purple-300
+                                @else bg-gray-500/20 text-gray-300 @endif">
+                                    <span
+                                        class="w-2 h-2 rounded-full mr-2
+                                    @if ($user->role === 'mahasiswa') bg-blue-400
+                                    @elseif($user->role === 'dosen') bg-purple-400
+                                    @else bg-gray-400 @endif"></span>
+                                    {{ ucfirst($user->role) }}
+                                </div>
+                            </div>
+
+                            <!-- Poin dan level -->
+                            <div
+                                class="w-full bg-dark-700/50 backdrop-blur-sm rounded-xl p-4 mb-6 border border-dark-600 shadow-lg">
+                                <div class="flex justify-between items-center mb-3">
+                                    <span class="text-gray-400 text-sm">Total Poin</span>
+                                    <span class="text-yellow-400 font-bold">{{ $user->points ?? 0 }}</span>
+                                </div>
+                                <div class="w-full bg-dark-600 rounded-full h-2">
+                                    <div class="bg-gradient-to-r from-yellow-500 to-yellow-300 h-2 rounded-full"
+                                        style="width: {{ min(($user->points ?? 0) / 10, 100) }}%"></div>
+                                </div>
+                                <div class="flex justify-between text-xs text-gray-500 mt-1">
+                                    <span>Level 1</span>
+                                    <span>Level 10</span>
+                                </div>
+                            </div>
+
+                            <!-- Badge Display -->
+                            <div class="w-full mb-6">
+                                <h3 class="text-sm font-semibold text-gray-300 mb-3 text-center">🏆 Pencapaian</h3>
+                                <div class="flex flex-wrap justify-center gap-3 mb-3">
+                                    @forelse ($user->badges as $badge)
+                                        <div class="badge-item group relative" title="{{ $badge->description }}">
+                                            <div
+                                                class="bg-gradient-to-br from-yellow-500/30 to-amber-500/30 text-yellow-300 rounded-full p-3 cursor-pointer transform transition-all duration-300 hover:scale-110 hover:rotate-12 border border-yellow-500/30 shadow-lg">
+                                                @if ($badge->icon)
+                                                    <img src="{{ asset('storage/badges/' . $badge->icon) }}"
+                                                        alt="{{ $badge->name }}" class="w-6 h-6">
+                                                @else
+                                                    <i class="fas fa-trophy text-lg"></i>
+                                                @endif
+                                            </div>
+                                            <div
+                                                class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-1 bg-dark-800 text-xs text-white rounded-lg opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-300 z-10 whitespace-nowrap border border-dark-600 shadow-lg">
+                                                {{ $badge->name }}
+                                                <div
+                                                    class="absolute top-full left-1/2 transform -translate-x-1/2 border-4 border-transparent border-t-dark-800">
+                                                </div>
+                                            </div>
                                         </div>
-                                        <svg class="w-5 h-5 mr-3 transition-transform duration-300 group-hover:scale-110"
+                                    @empty
+                                        <div class="text-center text-gray-500 text-sm py-2">
+                                            <i class="fas fa-trophy text-lg mb-1 block"></i>
+                                            Belum ada badge
+                                        </div>
+                                    @endforelse
+                                </div>
+                            </div>
+
+                            <!-- Statistik -->
+                            <div
+                                class="w-full bg-dark-700/50 backdrop-blur-sm rounded-xl p-4 mb-6 border border-dark-600 shadow-lg">
+                                <h3 class="text-sm font-semibold text-gray-300 mb-3 text-center">📊 Statistik Aktivitas</h3>
+                                <div class="grid grid-cols-3 gap-4">
+                                    <div class="text-center">
+                                        <div
+                                            class="bg-blue-500/20 rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-2">
+                                            <i class="fas fa-question text-blue-400"></i>
+                                        </div>
+                                        <p class="text-xl font-bold text-white">
+                                            {{ $threadCount ?? ($user->questions_count ?? 0) }}</p>
+                                        <p class="text-xs text-gray-400">Pertanyaan</p>
+                                    </div>
+                                    <div class="text-center">
+                                        <div
+                                            class="bg-green-500/20 rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-2">
+                                            <i class="fas fa-comment text-green-400"></i>
+                                        </div>
+                                        <p class="text-xl font-bold text-white">
+                                            {{ $commentCount ?? ($user->comments_count ?? 0) }}</p>
+                                        <p class="text-xs text-gray-400">Komentar</p>
+                                    </div>
+                                    <div class="text-center">
+                                        <div
+                                            class="bg-red-500/20 rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-2">
+                                            <i class="fas fa-heart text-red-400"></i>
+                                        </div>
+                                        <p class="text-xl font-bold text-white">{{ $likeCount ?? 0 }}</p>
+                                        <p class="text-xs text-gray-400">Like</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Media Sosial -->
+                            <div class="w-full mb-6">
+                                <h3 class="text-sm font-semibold text-gray-300 mb-3 text-center">🌐 Media Sosial</h3>
+
+                                @php
+                                    $iconMap = [
+                                        'instagram' => 'fab fa-instagram text-pink-400',
+                                        'github' => 'fab fa-github text-gray-300',
+                                        'facebook' => 'fab fa-facebook text-blue-400',
+                                        'linkedin' => 'fab fa-linkedin text-blue-300',
+                                        'website' => 'fas fa-globe text-blue-300',
+                                        'twitter' => 'fab fa-twitter text-blue-200',
+                                        'google' => 'fab fa-google text-red-400',
+                                        'other' => 'fas fa-link text-gray-400',
+                                    ];
+                                @endphp
+
+                                @if ($user->socialLinks && $user->socialLinks->where('visible', true)->isNotEmpty())
+                                    <div class="space-y-2">
+                                        @foreach ($user->socialLinks->where('visible', true) as $link)
+                                            @php
+                                                $iconClass = $iconMap[$link->type] ?? 'fas fa-link text-gray-400';
+                                                $label =
+                                                    $link->label ?:
+                                                    parse_url($link->url, PHP_URL_HOST) .
+                                                        (parse_url($link->url, PHP_URL_PATH)
+                                                            ? parse_url($link->url, PHP_URL_PATH)
+                                                            : '');
+                                            @endphp
+                                            <a href="{{ $link->url }}" target="_blank" rel="noopener"
+                                                class="flex items-center justify-between py-2 px-3 bg-dark-700 rounded-lg border border-dark-600 hover:border-blue-400 transition-all duration-300 group">
+                                                <div class="flex items-center space-x-3">
+                                                    <i class="{{ $iconClass }} text-lg"></i>
+                                                    <span
+                                                        class="text-gray-300 text-sm group-hover:text-white">{{ $label }}</span>
+                                                </div>
+                                                <i
+                                                    class="fas fa-external-link-alt text-sm text-blue-400 group-hover:text-blue-300"></i>
+                                            </a>
+                                        @endforeach
+                                    </div>
+                                @else
+                                    <div
+                                        class="text-center text-gray-500 text-sm py-4 border border-dashed border-dark-600 rounded-lg">
+                                        <i class="fas fa-share-alt text-lg mb-2 block"></i>
+                                        Belum ada media sosial
+                                    </div>
+                                @endif
+                            </div>
+
+                            <!-- Tombol Aksi -->
+                            @if (auth()->id() == $user->id)
+                                <div class="w-full space-y-3 mt-4">
+                                    <!-- Tombol Edit Profile -->
+                                    <a href="{{ route('profile.edit', $user->id) }}"
+                                        class="group flex items-center justify-center w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-medium py-3 px-4 rounded-xl transition-all duration-300 transform hover:scale-[1.02] shadow-lg hover:shadow-blue-500/20 border border-blue-400/30">
+                                        <svg class="w-5 h-5 mr-2 transition-transform duration-300 group-hover:rotate-12"
                                             fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                         </svg>
-                                        <span class="relative">Log Out</span>
-                                    </button>
-                                </form>
-                            </div>
-                        @endif
-                    </div>
-                    <!-- Bagian Kanan -->
-                    <div class="md:w-2/3 md:pl-8 mt-6 md:mt-0 flex flex-col gap-8">
-                        <!-- Informasi Pribadi -->
-                        <div>
-                            <h3 class="text-lg font-semibold text-white border-b border-gray-600 pb-2 mb-4">Informasi
-                                Pribadi</h3>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                    <p class="text-sm text-gray-400">Nama Lengkap</p>
-                                    <p class="font-medium text-white">{{ $user->name }}</p>
-                                </div>
-                                <div>
-                                    <p class="text-sm text-gray-400">Jenis Kelamin</p>
-                                    <p class="font-medium text-white">{{ $user->gender ?? '-' }}</p>
-                                </div>
-                                @if ($user->role === 'mahasiswa')
-                                    <div>
-                                        <p class="text-sm text-gray-400">NIM</p>
-                                        <p class="font-medium text-white">{{ $user->nim ?? ($user->username ?? '-') }}</p>
-                                    </div>
-                                @elseif($user->role === 'dosen')
-                                    <div>
-                                        <p class="text-sm text-gray-400">NIDN</p>
-                                        <p class="font-medium text-white">{{ $user->nidm ?? ($user->username ?? '-') }}</p>
-                                    </div>
-                                @endif
+                                        <span>Edit Profile</span>
+                                    </a>
 
-                                @if ($user->role === 'mahasiswa')
-                                    <div>
-                                        <p class="text-sm text-gray-400">Program Studi</p>
-                                        <p class="font-medium text-white">
-                                            {{ $user->prodi ?? '-' }}
-                                        </p>
+                                    <!-- Tombol Log Out -->
+                                    <form method="POST" action="{{ route('logout') }}" class="w-full">
+                                        @csrf
+                                        <button type="submit"
+                                            class="group flex items-center justify-center w-full bg-gradient-to-r from-dark-600 to-dark-700 hover:from-dark-700 hover:to-dark-800 text-white font-medium py-3 px-4 rounded-xl transition-all duration-300 transform hover:scale-[1.02] shadow-lg border border-dark-500/30">
+                                            <svg class="w-5 h-5 mr-2 transition-transform duration-300 group-hover:rotate-12"
+                                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                                            </svg>
+                                            <span>Log Out</span>
+                                        </button>
+                                    </form>
+                                </div>
+                            @endif
+                        </div>
+
+                        <!-- Konten kanan -->
+                        <div class="md:w-2/3 md:pl-8 flex flex-col gap-8">
+                            <!-- Informasi Pribadi -->
+                            <div class="bg-dark-700/50 backdrop-blur-sm rounded-xl p-6 border border-dark-600 shadow-lg">
+                                <h3 class="text-lg font-semibold text-white mb-4 flex items-center">
+                                    <i class="fas fa-user-circle text-blue-400 mr-2"></i>
+                                    Informasi Pribadi
+                                </h3>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+                                        <p class="text-sm text-gray-400">Nama Lengkap</p>
+                                        <p class="font-medium text-white mt-1">{{ $user->name }}</p>
                                     </div>
-                                @elseif($user->role === 'dosen')
-                                    <div>
-                                        <p class="text-sm text-gray-400">Mata Kuliah Diampu</p>
-                                        <p class="font-medium text-white">
-                                            {{ $user->prodi ?? '-' }}
-                                        </p>
+                                    <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+                                        <p class="text-sm text-gray-400">Jenis Kelamin</p>
+                                        <p class="font-medium text-white mt-1">{{ $user->gender ?? '-' }}</p>
                                     </div>
-                                @endif
-                                @if ($user->role === 'mahasiswa')
-                                    <div>
-                                        <p class="text-sm text-gray-400">Angkatan</p>
-                                        <p class="font-medium text-white">
-                                            {{ $user->angkatan ?? ($user->profile->angkatan ?? '-') }}
-                                        </p>
+                                    @if ($user->role === 'mahasiswa')
+                                        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+                                            <p class="text-sm text-gray-400">NIM</p>
+                                            <p class="font-medium text-white mt-1">
+                                                {{ $user->nim ?? ($user->username ?? '-') }}</p>
+                                        </div>
+                                    @elseif($user->role === 'dosen')
+                                        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+                                            <p class="text-sm text-gray-400">NIDN</p>
+                                            <p class="font-medium text-white mt-1">
+                                                {{ $user->nidm ?? ($user->username ?? '-') }}</p>
+                                        </div>
+                                    @endif
+
+                                    @if ($user->role === 'mahasiswa')
+                                        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+                                            <p class="text-sm text-gray-400">Program Studi</p>
+                                            <p class="font-medium text-white mt-1">
+                                                {{ $user->prodi ?? '-' }}
+                                            </p>
+                                        </div>
+                                    @elseif($user->role === 'dosen')
+                                        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+                                            <p class="text-sm text-gray-400">Mata Kuliah Diampu</p>
+                                            <p class="font-medium text-white mt-1">
+                                                {{ $user->prodi ?? '-' }}
+                                            </p>
+                                        </div>
+                                    @endif
+                                    @if ($user->role === 'mahasiswa')
+                                        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+                                            <p class="text-sm text-gray-400">Angkatan</p>
+                                            <p class="font-medium text-white mt-1">
+                                                {{ $user->angkatan ?? ($user->profile->angkatan ?? '-') }}
+                                            </p>
+                                        </div>
+                                    @endif
+                                    <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600">
+                                        <p class="text-sm text-gray-400">Email</p>
+                                        <p class="font-medium text-white mt-1">{{ $user->email }}</p>
                                     </div>
-                                @endif
-                                <div>
-                                    <p class="text-sm text-gray-400">Email</p>
-                                    <p class="font-medium text-white">{{ $user->email }}</p>
                                 </div>
                             </div>
-                        </div>
-                        <!-- Bio Singkat -->
-                        <div>
-                            <h3 class="text-lg font-semibold text-white border-b border-gray-600 pb-2 mb-4">Bio Singkat
-                            </h3>
-                            <div class="bg-gray-700 rounded-lg p-4 text-gray-300 shadow border border-gray-600">
-                                {{ $user->bio ?? ($user->profile->bio ?? '-') }}
+
+                            <!-- Bio Singkat -->
+                            <div class="bg-dark-700/50 backdrop-blur-sm rounded-xl p-6 border border-dark-600 shadow-lg">
+                                <h3 class="text-lg font-semibold text-white mb-4 flex items-center">
+                                    <i class="fas fa-id-card text-purple-400 mr-2"></i>
+                                    Bio Singkat
+                                </h3>
+                                <div
+                                    class="bg-dark-800/50 rounded-lg p-4 text-gray-300 border border-dark-600 min-h-[100px]">
+                                    @if ($user->bio ?? ($user->profile->bio ?? false))
+                                        {{ $user->bio ?? ($user->profile->bio ?? '-') }}
+                                    @else
+                                        <div class="flex flex-col items-center justify-center h-full text-gray-500">
+                                            <i class="fas fa-id-card text-2xl mb-2"></i>
+                                            <p>Belum ada bio. Tambahkan bio untuk memperkenalkan diri.</p>
+                                        </div>
+                                    @endif
+                                </div>
                             </div>
-                        </div>
-                        <!-- Pertanyaan oleh User -->
-                        <div>
-                            <h3 class="text-lg font-semibold text-white border-b border-gray-600 pb-2 mb-4">Pertanyaan oleh
-                                {{ $user->name }}</h3>
-                            <div class="bg-gray-700 rounded-lg p-6 text-center border border-gray-600">
-                                @if (isset($threads) && count($threads))
-                                    <ul class="divide-y divide-gray-600">
-                                        @foreach ($threads as $thread)
-                                            <li class="py-3">
-                                                <a href="{{ route('questions.show', $thread->id) }}"
-                                                    class="text-blue-400 font-medium hover:text-blue-300 hover:underline">
-                                                    {{ $thread->title }}
-                                                </a>
-                                                <span
-                                                    class="block text-xs text-gray-400">{{ $thread->created_at->diffForHumans() }}</span>
-                                            </li>
-                                        @endforeach
-                                    </ul>
-                                @else
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-gray-500 mb-3"
-                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                    </svg>
-                                    <p class="text-gray-400 font-medium">Belum ada Pertanyaan.</p>
-                                    <p class="text-sm text-gray-500 mt-1">Pertanyaan yang dibuat akan muncul di sini</p>
-                                @endif
+
+                            <!-- Pertanyaan oleh User -->
+                            <div class="bg-dark-700/50 backdrop-blur-sm rounded-xl p-6 border border-dark-600 shadow-lg">
+                                <h3 class="text-lg font-semibold text-white mb-4 flex items-center">
+                                    <i class="fas fa-question-circle text-green-400 mr-2"></i>
+                                    Pertanyaan oleh {{ $user->name }}
+                                </h3>
+                                <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600">
+                                    @if (isset($threads) && count($threads))
+                                        <ul class="divide-y divide-dark-600">
+                                            @foreach ($threads as $thread)
+                                                <li
+                                                    class="py-3 transition-all duration-300 hover:bg-dark-700/50 rounded-lg px-2">
+                                                    <a href="{{ route('questions.show', $thread->id) }}"
+                                                        class="text-blue-400 font-medium hover:text-blue-300 flex items-start">
+                                                        <i class="fas fa-question text-xs mt-1 mr-2 text-gray-500"></i>
+                                                        <span class="flex-1">{{ $thread->title }}</span>
+                                                    </a>
+                                                    <span
+                                                        class="block text-xs text-gray-400 mt-1 ml-4">{{ $thread->created_at->diffForHumans() }}</span>
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    @else
+                                        <div class="text-center py-8">
+                                            <i class="fas fa-question-circle text-4xl text-gray-600 mb-3"></i>
+                                            <p class="text-gray-400 font-medium">Belum ada Pertanyaan.</p>
+                                            <p class="text-sm text-gray-500 mt-1">Pertanyaan yang dibuat akan muncul di
+                                                sini</p>
+                                        </div>
+                                    @endif
+                                </div>
                             </div>
-                        </div>
-                        <!-- Komentar oleh User -->
-                        <div>
-                            <h3 class="text-lg font-semibold text-white border-b border-gray-600 pb-2 mb-4">Komentar oleh
-                                {{ $user->name }}</h3>
-                            <div class="bg-gray-700 rounded-lg p-6 text-center border border-gray-600">
-                                @if (isset($comments) && count($comments))
-                                    <ul class="divide-y divide-gray-600">
-                                        @foreach ($comments as $comment)
-                                            <li class="py-3">
-                                                <span
-                                                    class="text-gray-300">{{ \Illuminate\Support\Str::limit($comment->content, 80) }}</span>
-                                                <a href="{{ route('questions.show', $comment->question_id) }}#comment-{{ $comment->id }}"
-                                                    class="ml-2 text-xs text-blue-400 hover:text-blue-300 hover:underline">Lihat</a>
-                                                <span
-                                                    class="block text-xs text-gray-400">{{ $comment->created_at->diffForHumans() }}</span>
-                                            </li>
-                                        @endforeach
-                                    </ul>
-                                @else
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-gray-500 mb-3"
-                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                            d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                                    </svg>
-                                    <p class="text-gray-400 font-medium">Belum ada komentar.</p>
-                                    <p class="text-sm text-gray-500 mt-1">Komentar yang diberikan akan muncul di sini</p>
-                                @endif
+
+                            <!-- Komentar oleh User -->
+                            <div class="bg-dark-700/50 backdrop-blur-sm rounded-xl p-6 border border-dark-600 shadow-lg">
+                                <h3 class="text-lg font-semibold text-white mb-4 flex items-center">
+                                    <i class="fas fa-comments text-yellow-400 mr-2"></i>
+                                    Komentar oleh {{ $user->name }}
+                                </h3>
+                                <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600">
+                                    @if (isset($comments) && count($comments))
+                                        <ul class="divide-y divide-dark-600">
+                                            @foreach ($comments as $comment)
+                                                <li
+                                                    class="py-3 transition-all duration-300 hover:bg-dark-700/50 rounded-lg px-2">
+                                                    <div class="flex">
+                                                        <i class="fas fa-comment text-xs mt-1 mr-2 text-gray-500"></i>
+                                                        <span
+                                                            class="text-gray-300 flex-1">{{ \Illuminate\Support\Str::limit($comment->content, 80) }}</span>
+                                                    </div>
+                                                    <div class="flex justify-between items-center mt-1 ml-4">
+                                                        <span
+                                                            class="text-xs text-gray-400">{{ $comment->created_at->diffForHumans() }}</span>
+                                                        <a href="{{ route('questions.show', $comment->question_id) }}#comment-{{ $comment->id }}"
+                                                            class="text-xs text-blue-400 hover:text-blue-300 hover:underline flex items-center">
+                                                            Lihat <i class="fas fa-external-link-alt text-xs ml-1"></i>
+                                                        </a>
+                                                    </div>
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    @else
+                                        <div class="text-center py-8">
+                                            <i class="fas fa-comments text-4xl text-gray-600 mb-3"></i>
+                                            <p class="text-gray-400 font-medium">Belum ada komentar.</p>
+                                            <p class="text-sm text-gray-500 mt-1">Komentar yang diberikan akan muncul di
+                                                sini</p>
+                                        </div>
+                                    @endif
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <style>
-        /* MEMASTIKAN BACKGROUND HALAMAN TETAP GELAP */
-        body {
-            background-color: #111827 !important;
-            color: #e5e7eb !important;
-        }
+        <style>
+            @keyframes float {
 
-        /* Override untuk semua elemen container */
-        .bg-white,
-        .bg-gray-50,
-        .bg-gray-100 {
-            background-color: #1f2937 !important;
-        }
+                0%,
+                100% {
+                    transform: translateY(0);
+                }
 
-        /* Untuk card/container spesifik */
-        .bg-gray-800 {
-            background-color: #1f2937 !important;
-        }
+                50% {
+                    transform: translateY(-10px);
+                }
+            }
 
-        .bg-gray-700 {
-            background-color: #374151 !important;
-        }
-
-        .bg-gray-900 {
-            background-color: #111827 !important;
-        }
-
-        .border-gray-700 {
-            border-color: #374151 !important;
-        }
-
-        .border-gray-600 {
-            border-color: #4b5563 !important;
-        }
-
-        /* Text colors */
-        .text-gray-800,
-        .text-gray-700,
-        .text-gray-600 {
-            color: #e5e7eb !important;
-        }
-
-        .text-gray-300 {
-            color: #d1d5db !important;
-        }
-
-        .text-gray-400 {
-            color: #9ca3af !important;
-        }
-
-        .text-gray-500 {
-            color: #6b7280 !important;
-        }
-
-        /* Shadow adjustments */
-        .shadow-md {
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2) !important;
-        }
-
-        .shadow-lg {
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2) !important;
-        }
-
-        /* Hero section gradient */
-        .bg-gradient-to-r.from-blue-900.to-blue-700 {
-            background-image: linear-gradient(to right, #1e3a8a, #1d4ed8) !important;
-        }
-
-        /* Override khusus untuk mode light */
-        @media (prefers-color-scheme: light) {
+            @media (prefers-color-scheme: light) {
             body {
                 background-color: #111827 !important;
                 color: #e5e7eb !important;
@@ -367,29 +475,50 @@
             .bg-white {
                 background-color: #1f2937 !important;
             }
+
+            input,
+            textarea,
+            select {
+                background-color: #374151 !important;
+                color: #e5e7eb !important;
+                border-color: #4b5563 !important;
+            }
+
+            input::placeholder,
+            textarea::placeholder {
+                color: #9ca3af !important;
+            }
         }
 
-        /* Transisi smooth */
-        .transition {
-            transition: all 0.2s ease;
-        }
+            .animate-float {
+                animation: float 3s ease-in-out infinite;
+            }
 
-        .transform {
-            transition: transform 0.2s ease;
-        }
+            .glass {
+                background: rgba(30, 41, 59, 0.7);
+                backdrop-filter: blur(10px);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+            }
 
-        /* Hover effects */
-        .hover\:scale-105:hover {
-            transform: scale(1.05);
-        }
+            ::-webkit-scrollbar {
+                width: 6px;
+            }
 
-        /* Divide colors */
-        .divide-gray-200 {
-            border-color: #374151 !important;
-        }
+            ::-webkit-scrollbar-track {
+                background: #1e293b;
+            }
 
-        .divide-gray-600 {
-            border-color: #4b5563 !important;
-        }
-    </style>
+            ::-webkit-scrollbar-thumb {
+                background: #475569;
+                border-radius: 3px;
+            }
+
+            ::-webkit-scrollbar-thumb:hover {
+                background: #64748b;
+            }
+        </style>
+    </body>
+
+    </html>
+
 @endsection
