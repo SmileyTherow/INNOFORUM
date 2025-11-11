@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use App\Services\AdminActivityLogger;
 
 class CommentController extends Controller
 {
@@ -90,12 +91,21 @@ class CommentController extends Controller
             }
         }
 
-        // === Penambahan Poin dan Badge ===
+        // Log jika admin yang membuat komentar
+        if (Auth::check() && Auth::user()->role === 'admin') {
+            AdminActivityLogger::log(
+                'admin_comment',
+                "Membuat komentar pada pertanyaan #{$comment->question_id}: \"" . Str::limit($comment->content,150) . "\"",
+                ['type'=>'Question','id'=>$comment->question_id],
+                ['comment_id' => $comment->id]
+            );
+        }
+
+        // === Penambahan Poin dan Badge (tetap seperti sebelumnya) ===
         $user = \App\Models\User::find(Auth::id());
         if ($user) {
             $user->increment('points', 5); // Tambah 5 poin untuk komentar
 
-            // Cek & kasih badge jika ada pencapaian
             if ($user->comments()->count() >= 50) {
                 $badge = \App\Models\Badge::where('name', 'Active Commenter')->first();
                 if ($badge && !$user->badges->contains($badge->id)) {
@@ -157,10 +167,8 @@ class CommentController extends Controller
                 'data' => [
                     'comment_id' => $comment->id,
                     'by_user_id' => $user->id,
-                    'message' => $user->name . ' menyukai komentarmu',
-                    'link' => route('questions.show', $comment->question_id) . '#comment-' . $comment->id,
-                ],
-                'is_read' => false,
+                    'message' => $user->name . ' menyukai komentarmu'
+                ]
             ]);
         }
 
@@ -232,15 +240,15 @@ class CommentController extends Controller
         // Fitur pencarian
         if ($request->has('q')) {
             $search = $request->q;
-            $query->where(function ($q) use ($search) {
-                $q->where('content', 'like', '%' . $search . '%')
-                    ->orWhereHas('user', function ($q) use ($search) {
-                        $q->where('name', 'like', '%' . $search . '%');
-                    })
-                    ->orWhereHas('question', function ($q) use ($search) {
-                        $q->where('title', 'like', '%' . $search . '%')
-                            ->orWhere('content', 'like', '%' . $search . '%');
-                    });
+            $query->where(function($q) use ($search) {
+                $q->where('content', 'like', '%'.$search.'%')
+                ->orWhereHas('user', function($q) use ($search) {
+                    $q->where('name', 'like', '%'.$search.'%');
+                })
+                ->orWhereHas('question', function($q) use ($search) {
+                    $q->where('title', 'like', '%'.$search.'%')
+                        ->orWhere('content', 'like', '%'.$search.'%');
+                });
             });
         }
 

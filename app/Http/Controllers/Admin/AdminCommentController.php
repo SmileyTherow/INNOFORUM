@@ -4,19 +4,18 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Comment;
 use App\Models\Notification;
+use App\Services\AdminActivityLogger;
 
 class AdminCommentController extends Controller
 {
-    public function latest()
-    {
-        return view('admin.comments.latest');
-    }
+    public function latest() { return view('admin.comments.latest'); }
 
     public function index()
     {
-        $comments = \App\Models\Comment::with(['question', 'user'])->latest()->paginate(20);
+        $comments = Comment::with(['question', 'user'])->latest()->paginate(20);
         return view('admin.comments.index', compact('comments'));
     }
 
@@ -29,6 +28,7 @@ class AdminCommentController extends Controller
 
         $comment = Comment::find($request->comment_id);
         $user = $comment->user;
+
         if (!$user) return back()->with('error', 'User tidak ditemukan.');
 
         // siapkan link langsung ke comment di thread
@@ -55,20 +55,40 @@ class AdminCommentController extends Controller
             'is_read' => false,
         ]);
 
+        // log admin activity (hanya jika current user adalah admin)
+        if (Auth::check() && Auth::user()->role === 'admin') {
+            AdminActivityLogger::log(
+                'admin_warn_comment',
+                "Memberi peringatan pada komentar #{$comment->id}: \"" . \Illuminate\Support\Str::limit($request->message, 150) . "\"",
+                ['type' => 'Comment', 'id' => $comment->id],
+                ['warning' => \Illuminate\Support\Str::limit($request->message, 150)]
+            );
+        }
+
         return back()->with('success', 'Pesan notifikasi berhasil dikirim!');
     }
 
     public function destroy($id)
     {
-        $comment = \App\Models\Comment::findOrFail($id);
+        $comment = Comment::findOrFail($id);
         $comment->delete();
+
+        // Log activity if admin removed it
+        if (Auth::check() && Auth::user()->role === 'admin') {
+            AdminActivityLogger::log(
+                'delete_comment',
+                "Menghapus komentar #{$id}",
+                ['type' => 'Comment','id' => $id],
+                []
+            );
+        }
 
         return back()->with('success', 'Komentar berhasil dihapus!');
     }
 
     public function reported()
     {
-        $reportedComments = \App\Models\Comment::with(['user', 'reports', 'question'])
+        $reportedComments = Comment::with(['user', 'reports', 'question'])
             ->whereHas('reports')
             ->paginate(20);
 

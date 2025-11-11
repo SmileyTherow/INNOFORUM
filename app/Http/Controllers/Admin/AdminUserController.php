@@ -3,15 +3,16 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+use App\Services\AdminActivityLogger;
 
 class AdminUserController extends Controller
 {
-    // ADMIN: List user (tanpa soft deleted)
     public function index(Request $request)
     {
-        $query = \App\Models\User::query();
+        $query = User::query();
         if ($request->q) {
             $query->where(function ($q) use ($request) {
                 $q->where('name', 'like', '%' . $request->q . '%')
@@ -26,13 +27,11 @@ class AdminUserController extends Controller
         return view('admin.users.index', compact('users'));
     }
 
-    // ADMIN: Form tambah user
     public function create()
     {
         return view('admin.users.create');
     }
 
-    // ADMIN: Simpan user baru
     public function store(Request $request)
     {
         $validatedData = $request->validate([
@@ -42,13 +41,24 @@ class AdminUserController extends Controller
             'role'     => 'required|in:admin,mahasiswa,dosen',
             'password' => 'required|string|min:6|confirmed',
         ]);
-        User::create([
+        $user = User::create([
             'username' => $validatedData['username'],
             'name'     => $validatedData['name'],
             'email'    => $validatedData['email'],
             'role'     => $validatedData['role'],
             'password' => bcrypt($validatedData['password']),
         ]);
+
+        // Log creation by admin
+        if (Auth::check() && Auth::user()->role === 'admin') {
+            AdminActivityLogger::log(
+                'create_user',
+                "Membuat user #{$user->id}",
+                ['type'=>'User','id'=>$user->id],
+                []
+            );
+        }
+
         return redirect()->route('admin.users.index')->with('success', 'User berhasil ditambahkan.');
     }
 
@@ -67,6 +77,7 @@ class AdminUserController extends Controller
     }
 
     // ADMIN: Update user
+    // other methods unchanged; ensure Auth:: used where needed (update/destroy)
     public function update(Request $request, $id)
     {
         $user = User::findOrFail($id);
@@ -85,19 +96,38 @@ class AdminUserController extends Controller
             $user->password = bcrypt($validatedData['password']);
         }
         $user->save();
+
+        // log update
+        if (Auth::check() && Auth::user()->role === 'admin') {
+            AdminActivityLogger::log(
+                'update_user',
+                "Mengupdate data user #{$user->id}",
+                ['type'=>'User','id'=>$user->id],
+                ['changes' => array_keys($validatedData)]
+            );
+        }
+
         return redirect()->route('admin.users.index')->with('success', 'User berhasil diupdate.');
     }
 
-    // ADMIN: Soft delete user
     public function destroy($id)
     {
         $user = User::findOrFail($id);
         $user->delete();
+
+        if (Auth::check() && Auth::user()->role === 'admin') {
+            AdminActivityLogger::log(
+                'delete_user',
+                "Menghapus user #{$id}",
+                ['type'=>'User','id'=>$id],
+                []
+            );
+        }
+
         return redirect()->route('admin.users.index')->with('success', 'User berhasil dihapus (soft delete).');
     }
 
-    public function reported()
-    {
+    public function reported() {
         return view('admin.users.reported');
     }
 
@@ -126,26 +156,14 @@ class AdminUserController extends Controller
     // Kirim notifikasi ke user
     public function sendNotification(Request $request, $id)
     {
-        $request->validate(['message' => 'required|string|max:500']);
+        $request->validate(['message' => 'required|string|max:255']);
         $user = User::findOrFail($id);
 
-        // Jika belum buat conversation, set null agar tidak error
-        $convId = null; // ganti bila kamu membuat/menemukan conversation id
-
-        $data = [
-            'message' => $request->message,
-            'from_admin' => true,
-        ];
-
-        if (!empty($convId)) {
-            $data['conversation_id'] = $convId;
-            $data['link'] = route('pesan.index') . '?conv=' . $convId;
-        }
-
+        // Asumsikan kamu punya model Notification
         \App\Models\Notification::create([
             'user_id' => $user->id,
             'type' => 'admin_message',
-            'data' => $data,
+            'data' => (['message' => $request->message]),
             'is_read' => false,
         ]);
 

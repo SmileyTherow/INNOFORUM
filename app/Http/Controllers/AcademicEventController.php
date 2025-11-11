@@ -9,6 +9,7 @@ use App\Notifications\EventCreated;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use App\Services\AdminActivityLogger;
 
 class AcademicEventController extends Controller
 {
@@ -17,17 +18,11 @@ class AcademicEventController extends Controller
         // Pastikan route admin memakai middleware auth + admin
     }
 
-    /**
-     * Public calendar view (user-facing).
-     */
     public function index()
     {
         return view('calendar.index');
     }
 
-    /**
-     * Public API: get events
-     */
     public function apiIndex(Request $request)
     {
         $month = $request->get('month'); // format yyyy-mm
@@ -55,9 +50,6 @@ class AcademicEventController extends Controller
         return response()->json($events->map->toCalendarArray()->values());
     }
 
-    /**
-     * Admin API: return events for admin
-     */
     public function adminApiIndex(Request $request)
     {
         $month = $request->get('month');
@@ -78,52 +70,55 @@ class AcademicEventController extends Controller
         return response()->json($events->map->toCalendarArray()->values());
     }
 
-    /**
-     * Admin calendar view (CRUD UI)
-     */
     public function adminIndex()
     {
         $events = AcademicEvent::orderBy('start_date', 'asc')->paginate(25);
         return view('admin.academic_events.index', compact('events'));
     }
 
-    /**
-     * Store new event (admin)
-     */
+    // store method yang aman: hanya akan buat event jika model ada
     public function store(Request $request)
     {
-        $data = $request->validate([
+        $request->validate([
             'title' => 'required|string|max:255',
+            'start' => 'required|date',
+            'end' => 'nullable|date',
             'description' => 'nullable|string',
-            'start_date' => 'required|date',
-            'end_date' => 'nullable|date|after_or_equal:start_date',
-            'color' => 'nullable|string|max:32',
-            'is_published' => 'nullable|boolean',
         ]);
 
-        $data['created_by'] = Auth::id();
-        $data['color'] = $data['color'] ?? 'blue';
-        $data['is_published'] = true;
-
-        $event = AcademicEvent::create($data);
-
-        try {
-            $users = User::all();
-            Notification::send($users, new EventCreated($event));
-        } catch (\Throwable $e) {
-            Log::error('Gagal kirim notifikasi event: ' . $e->getMessage());
+        if (!class_exists(\App\Models\AcademicEvent::class)) {
+            // log bahwa admin mencoba membuat event tapi model tidak tersedia
+            if (Auth::check() && Auth::user()->role === 'admin') {
+                AdminActivityLogger::log(
+                    'create_event_failed',
+                    "Mencoba membuat event (model AcademicEvent tidak ditemukan): \"" . \Illuminate\Support\Str::limit($request->title,150) . "\"",
+                    null,
+                    ['title' => $request->title]
+                );
+            }
+            return back()->with('error', 'Model AcademicEvent tidak tersedia. Hubungi dev.');
         }
 
-        return response()->json([
-            'success' => true,
-            'event' => $event->toCalendarArray(),
-            'message' => 'Event created and notifications queued/sent.'
-        ], 201);
+        $event = \App\Models\AcademicEvent::create([
+            'title' => $request->title,
+            'start' => $request->start,
+            'end' => $request->end,
+            'description' => $request->description,
+            'created_by' => Auth::id(),
+        ]);
+
+        if (Auth::check() && Auth::user()->role === 'admin') {
+            AdminActivityLogger::log(
+                'create_event',
+                "Membuat event kalender: \"" . \Illuminate\Support\Str::limit($request->title,150) . "\"",
+                ['type'=>'Event','id'=>$event->id],
+                ['start' => $request->start, 'end' => $request->end]
+            );
+        }
+
+        return redirect()->route('events.index')->with('success', 'Event berhasil dibuat.');
     }
 
-    /**
-     * Update event (admin)
-     */
     public function update(Request $request, AcademicEvent $academicEvent)
     {
         $data = $request->validate([
@@ -145,9 +140,6 @@ class AcademicEventController extends Controller
         ]);
     }
 
-    /**
-     * Delete event (admin)
-     */
     public function destroy(AcademicEvent $academicEvent)
     {
         $academicEvent->delete();
@@ -155,9 +147,6 @@ class AcademicEventController extends Controller
         return response()->json(['success' => true]);
     }
 
-    /**
-     * Show single event (public detail page).
-     */
     public function show($id)
     {
         $event = AcademicEvent::findOrFail($id);

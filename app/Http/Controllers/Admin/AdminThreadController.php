@@ -2,18 +2,20 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Question;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Notification;
+use App\Models\Question;
+use App\Services\AdminActivityLogger;
 
 class AdminThreadController extends Controller
 {
-    public function index(Request $request)
-    {
+    public function index(Request $request) {
         $query = Question::with('user');
         if ($request->q) {
             $query->where('title', 'like', '%' . $request->q . '%')
-                ->orWhereHas('user', function ($q2) use ($request) {
+                ->orWhereHas('user', function($q2) use ($request) {
                     $q2->where('name', 'like', '%' . $request->q . '%');
                 });
         }
@@ -21,8 +23,7 @@ class AdminThreadController extends Controller
         return view('admin.threads.index', compact('threads'));
     }
 
-    public function reported()
-    {
+    public function reported() {
         $reportedThreads = \App\Models\Question::with(['user', 'reports.reporter'])
             ->whereHas('reports')
             ->paginate(20);
@@ -30,8 +31,7 @@ class AdminThreadController extends Controller
         return view('admin.threads.reported', compact('reportedThreads'));
     }
 
-    public function show($id)
-    {
+    public function show($id) {
         $thread = \App\Models\Question::with(['user', 'category'])->findOrFail($id);
         return view('admin.threads.show', compact('thread'));
     }
@@ -68,30 +68,32 @@ class AdminThreadController extends Controller
             'message' => 'required|string|max:500'
         ]);
 
-        $thread = \App\Models\Question::find($request->thread_id);
+        $thread = Question::find($request->thread_id);
         if (!$thread || !$thread->user) {
             return back()->with('error', 'User tidak ditemukan.');
         }
 
-        // siapkan link ke thread (opsional)
-        $link = null;
-        try {
-            $link = route('questions.show', $thread->id);
-        } catch (\Exception $e) {
-            $link = null;
-        }
-
-        \App\Models\Notification::create([
+        Notification::create([
             'user_id' => $thread->user->id,
             'type' => 'admin_warning',
             'data' => [
                 'thread_id' => $thread->id,
                 'message' => $request->message,
                 'from_admin' => true,
-                'link' => $link,
+                'link' => route('questions.show', $thread->id),
             ],
             'is_read' => false,
         ]);
+
+        // Log activity
+        if (Auth::check() && Auth::user()->role === 'admin') {
+            AdminActivityLogger::log(
+                'admin_warn_thread',
+                "Memberi peringatan pada thread #{$thread->id}: \"" . \Illuminate\Support\Str::limit($request->message,150) . "\"",
+                ['type'=>'Question','id'=>$thread->id],
+                ['warning' => \Illuminate\Support\Str::limit($request->message,150)]
+            );
+        }
 
         return back()->with('success', 'Pesan notifikasi berhasil dikirim!');
     }
