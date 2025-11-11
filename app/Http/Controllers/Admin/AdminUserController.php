@@ -13,10 +13,10 @@ class AdminUserController extends Controller
     {
         $query = \App\Models\User::query();
         if ($request->q) {
-            $query->where(function($q) use ($request) {
+            $query->where(function ($q) use ($request) {
                 $q->where('name', 'like', '%' . $request->q . '%')
-                ->orWhere('email', 'like', '%' . $request->q . '%')
-                ->orWhere('username', 'like', '%' . $request->q . '%');
+                    ->orWhere('email', 'like', '%' . $request->q . '%')
+                    ->orWhere('username', 'like', '%' . $request->q . '%');
             });
         }
 
@@ -96,7 +96,8 @@ class AdminUserController extends Controller
         return redirect()->route('admin.users.index')->with('success', 'User berhasil dihapus (soft delete).');
     }
 
-    public function reported() {
+    public function reported()
+    {
         return view('admin.users.reported');
     }
 
@@ -125,14 +126,26 @@ class AdminUserController extends Controller
     // Kirim notifikasi ke user
     public function sendNotification(Request $request, $id)
     {
-        $request->validate(['message' => 'required|string|max:255']);
+        $request->validate(['message' => 'required|string|max:500']);
         $user = User::findOrFail($id);
 
-        // Asumsikan kamu punya model Notification
+        // Jika belum buat conversation, set null agar tidak error
+        $convId = null; // ganti bila kamu membuat/menemukan conversation id
+
+        $data = [
+            'message' => $request->message,
+            'from_admin' => true,
+        ];
+
+        if (!empty($convId)) {
+            $data['conversation_id'] = $convId;
+            $data['link'] = route('pesan.index') . '?conv=' . $convId;
+        }
+
         \App\Models\Notification::create([
             'user_id' => $user->id,
             'type' => 'admin_message',
-            'data' => (['message' => $request->message]),
+            'data' => $data,
             'is_read' => false,
         ]);
 

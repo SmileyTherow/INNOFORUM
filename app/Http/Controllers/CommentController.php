@@ -7,6 +7,7 @@ use App\Models\Question;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class CommentController extends Controller
 {
@@ -31,7 +32,8 @@ class CommentController extends Controller
         $request->validate([
             'question_id' => 'required|integer|exists:questions,id',
             'content' => 'required|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'reply_to_comment_id' => 'nullable|integer|exists:comments,id'
         ]);
 
         $filename = null;
@@ -48,41 +50,66 @@ class CommentController extends Controller
             'image' => $filename,
         ]);
 
-        // === Penambahan Poin dan Badge ===
-        $user = \App\Models\User::find(Auth::id());
-        $user->increment('points', 5); // Tambah 5 poin untuk komentar
+        // pastikan relations tersedia
+        $comment->load('question', 'user');
 
-        // Cek & kasih badge jika ada pencapaian
-        // Contoh: Active Commenter (50 komentar)
-        if ($user->comments()->count() >= 50) {
-            $badge = \App\Models\Badge::where('name', 'Active Commenter')->first();
-            if ($badge && !$user->badges->contains($badge->id)) {
-                $user->badges()->attach($badge->id, ['awarded_at' => now()]);
-            }
-        }
-
-        // Cek Top Contributor (jumlah like di komentar)
-        $likeCount = $user->comments()->withCount('likes')->get()->sum('likes_count');
-        if ($likeCount >= 100) {
-            $badge = \App\Models\Badge::where('name', 'Top Contributor')->first();
-            if ($badge && !$user->badges->contains($badge->id)) {
-                $user->badges()->attach($badge->id, ['awarded_at' => now()]);
-            }
-        }
-
-        // === NOTIFIKASI JAWABAN (untuk owner pertanyaan) ===
-        $question = Question::find($request->question_id);
-        if ($question && $question->user_id !== Auth::id()) {
+        // notifikasi ke owner question (jika commenter bukan owner)
+        $question = $comment->question;
+        if ($question && $question->user_id && $question->user_id != $comment->user_id) {
             \App\Models\Notification::create([
                 'user_id' => $question->user_id,
-                'type' => 'answer',
+                'type' => 'comment_posted',
                 'data' => [
-                    'question_id' => $question->id,
-                    'by_user_id' => Auth::id(),
+                    'thread_id' => $comment->question_id,
                     'comment_id' => $comment->id,
-                    'message' => Auth::user()->name . ' menjawab pertanyaanmu'
-                ]
+                    'message' => 'Ada komentar baru: ' . Str::limit($comment->content, 150),
+                    'from_user_id' => $comment->user_id,
+                    'link' => route('questions.show', $comment->question_id) . '#comment-' . $comment->id,
+                ],
+                'is_read' => false,
             ]);
+        }
+
+        // jika ini balasan ke comment tertentu dan pemilik komentar berbeda, notifikasi ke pemilik komentar
+        $replyToId = $request->input('reply_to_comment_id') ?? null;
+        if ($replyToId) {
+            $parentComment = Comment::find($replyToId);
+            if ($parentComment && $parentComment->user_id && $parentComment->user_id != $comment->user_id) {
+                \App\Models\Notification::create([
+                    'user_id' => $parentComment->user_id,
+                    'type' => 'comment_reply',
+                    'data' => [
+                        'thread_id' => $comment->question_id,
+                        'comment_id' => $comment->id,
+                        'message' => 'Balasan untuk komentar Anda: ' . Str::limit($comment->content, 150),
+                        'from_user_id' => $comment->user_id,
+                        'link' => route('questions.show', $comment->question_id) . '#comment-' . $comment->id,
+                    ],
+                    'is_read' => false,
+                ]);
+            }
+        }
+
+        // === Penambahan Poin dan Badge ===
+        $user = \App\Models\User::find(Auth::id());
+        if ($user) {
+            $user->increment('points', 5); // Tambah 5 poin untuk komentar
+
+            // Cek & kasih badge jika ada pencapaian
+            if ($user->comments()->count() >= 50) {
+                $badge = \App\Models\Badge::where('name', 'Active Commenter')->first();
+                if ($badge && !$user->badges->contains($badge->id)) {
+                    $user->badges()->attach($badge->id, ['awarded_at' => now()]);
+                }
+            }
+
+            $likeCount = $user->comments()->withCount('likes')->get()->sum('likes_count');
+            if ($likeCount >= 100) {
+                $badge = \App\Models\Badge::where('name', 'Top Contributor')->first();
+                if ($badge && !$user->badges->contains($badge->id)) {
+                    $user->badges()->attach($badge->id, ['awarded_at' => now()]);
+                }
+            }
         }
 
         // === NOTIFIKASI MENTION ===
@@ -99,8 +126,10 @@ class CommentController extends Controller
                         'question_id' => $comment->question_id,
                         'by_user_id' => Auth::id(),
                         'by_name' => Auth::user()->name,
-                        'message' => Auth::user()->name . ' mention kamu di komentar'
-                    ]
+                        'message' => Auth::user()->name . ' mention kamu di komentar',
+                        'link' => route('questions.show', $comment->question_id) . '#comment-' . $comment->id,
+                    ],
+                    'is_read' => false,
                 ]);
             }
         }
@@ -128,8 +157,10 @@ class CommentController extends Controller
                 'data' => [
                     'comment_id' => $comment->id,
                     'by_user_id' => $user->id,
-                    'message' => $user->name . ' menyukai komentarmu'
-                ]
+                    'message' => $user->name . ' menyukai komentarmu',
+                    'link' => route('questions.show', $comment->question_id) . '#comment-' . $comment->id,
+                ],
+                'is_read' => false,
             ]);
         }
 
@@ -201,15 +232,15 @@ class CommentController extends Controller
         // Fitur pencarian
         if ($request->has('q')) {
             $search = $request->q;
-            $query->where(function($q) use ($search) {
-                $q->where('content', 'like', '%'.$search.'%')
-                ->orWhereHas('user', function($q) use ($search) {
-                    $q->where('name', 'like', '%'.$search.'%');
-                })
-                ->orWhereHas('question', function($q) use ($search) {
-                    $q->where('title', 'like', '%'.$search.'%')
-                        ->orWhere('content', 'like', '%'.$search.'%');
-                });
+            $query->where(function ($q) use ($search) {
+                $q->where('content', 'like', '%' . $search . '%')
+                    ->orWhereHas('user', function ($q) use ($search) {
+                        $q->where('name', 'like', '%' . $search . '%');
+                    })
+                    ->orWhereHas('question', function ($q) use ($search) {
+                        $q->where('title', 'like', '%' . $search . '%')
+                            ->orWhere('content', 'like', '%' . $search . '%');
+                    });
             });
         }
 

@@ -8,6 +8,7 @@ use App\Models\Conversation;
 use App\Models\ChatMessage;
 use Illuminate\Http\Request;
 use App\Notifications\PrivateMessageReceived;
+use Illuminate\Support\Facades\Notification as NotificationFacade;
 
 class MessageController extends Controller
 {
@@ -34,39 +35,74 @@ class MessageController extends Controller
         }
 
         $message = ChatMessage::create([
-            'conversation_id' => $conversation->id,
-            'sender_id' => $user->id,
-            'body' => $validated['body'] ?? null,
-            'attachment' => $attachmentPath,
-            'attachment_type' => $attachmentType,
+            'conversation_id'  => $conversation->id,
+            'sender_id'        => $user->id,
+            'body'             => $validated['body'] ?? null,
+            'attachment'       => $attachmentPath,
+            'attachment_type'  => $attachmentType,
         ]);
 
-        // update last_message_at
+        // update last_message_at safely
         $conversation->update(['last_message_at' => $message->created_at]);
 
-        // load relations
-        $message->load('sender');
-
-        // Broadcast event to conversation channel
-        broadcast(new MessageSent($message))->toOthers();
-
-        // Notify recipient (database + broadcast via Notification)
-        $recipient = $conversation->users()->where('users.id', '<>', $user->id)->first();
-        if ($recipient) {
-            $recipient->notify(new PrivateMessageReceived($message));
+        // load sender relation (safe)
+        if (method_exists($message, 'sender')) {
+            $message->load('sender');
         }
 
-        // Prepare payload with ISO8601 timestamps for JS compatibility
+        // cari penerima (user lain di conversation)
+        $recipientUser = $conversation->users()->where('users.id', '!=', $user->id)->first();
+
+        if ($recipientUser) {
+            // Simpan notifikasi yang konsisten ke tabel notifications
+            \App\Models\Notification::create([
+                'user_id' => $recipientUser->id,
+                'type' => 'private_message',
+                'data' => [
+                    'message' => [
+                        'id' => $message->id,
+                        'conversation_id' => $message->conversation_id,
+                        'sender' => [
+                            'id' => $message->sender->id ?? $user->id,
+                            'name' => $message->sender->name ?? $user->name,
+                        ],
+                        'body' => $message->body,
+                        'created_at' => $message->created_at?->toDateTimeString(),
+                    ],
+                    'text' => $message->body, // ringkasan mudah diakses oleh view
+                    'sender_id' => $message->sender_id,
+                    'conversation_id' => $message->conversation_id,
+                    'link' => route('pesan.index') . '?conv=' . $message->conversation_id,
+                ],
+                'is_read' => false,
+            ]);
+
+            // Notify model-based (optional) untuk broadcast / mail jika ada notifikasi class
+            try {
+                $recipientUser->notify(new PrivateMessageReceived($message));
+            } catch (\Throwable $e) {
+                // jika class notifikasi tidak tersedia / error, jangan crash
+            }
+        }
+
+        // Broadcast realtime ke channel conversation
+        try {
+            broadcast(new MessageSent($message))->toOthers();
+        } catch (\Throwable $e) {
+            // ignore broadcast errors in controller
+        }
+
+        // Prepare payload for response
         $payload = [
             'id' => $message->id,
             'conversation_id' => $message->conversation_id,
             'sender' => [
-                'id' => $message->sender->id,
-                'name' => $message->sender->name,
-                'avatar' => $message->sender->avatar ? asset('storage/'.$message->sender->avatar) : null,
+                'id' => $message->sender->id ?? $user->id,
+                'name' => $message->sender->name ?? $user->name,
+                'avatar' => $message->sender->avatar ? asset('storage/' . $message->sender->avatar) : null,
             ],
             'body' => $message->body,
-            'attachment' => $message->attachment ? asset('storage/'.$message->attachment) : null,
+            'attachment' => $message->attachment ? asset('storage/' . $message->attachment) : null,
             'attachment_type' => $message->attachment_type,
             'created_at' => $message->created_at?->toIso8601String(),
         ];

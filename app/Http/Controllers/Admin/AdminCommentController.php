@@ -9,7 +9,10 @@ use App\Models\Notification;
 
 class AdminCommentController extends Controller
 {
-    public function latest() { return view('admin.comments.latest'); }
+    public function latest()
+    {
+        return view('admin.comments.latest');
+    }
 
     public function index()
     {
@@ -21,19 +24,34 @@ class AdminCommentController extends Controller
     {
         $request->validate([
             'comment_id' => 'required|exists:comments,id',
-            'message' => 'required|string|max:255'
+            'message' => 'required|string|max:500'
         ]);
 
         $comment = Comment::find($request->comment_id);
         $user = $comment->user;
+        if (!$user) return back()->with('error', 'User tidak ditemukan.');
+
+        // siapkan link langsung ke comment di thread
+        $threadId = $comment->question_id ?? ($comment->question->id ?? null);
+        $link = null;
+        try {
+            if ($threadId) {
+                $link = route('questions.show', $threadId) . '#comment-' . $comment->id;
+            }
+        } catch (\Exception $e) {
+            $link = null;
+        }
 
         Notification::create([
             'user_id' => $user->id,
-            'type' => 'admin_warning',
-            'data' => json_encode([
+            'type' => 'admin_report',
+            'data' => [
                 'comment_id' => $comment->id,
-                'message' => $request->message
-            ]),
+                'thread_id' => $threadId,
+                'message' => $request->message,
+                'from_admin' => true,
+                'link' => $link,
+            ],
             'is_read' => false,
         ]);
 
@@ -48,7 +66,8 @@ class AdminCommentController extends Controller
         return back()->with('success', 'Komentar berhasil dihapus!');
     }
 
-    public function reported() {
+    public function reported()
+    {
         $reportedComments = \App\Models\Comment::with(['user', 'reports', 'question'])
             ->whereHas('reports')
             ->paginate(20);
