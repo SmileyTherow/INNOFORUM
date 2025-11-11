@@ -3,12 +3,13 @@
 namespace App\Http\Controllers\Pesan;
 
 use App\Events\MessageSent;
+use App\Events\MessageUpdated;
+use App\Events\MessageDeleted;
 use App\Http\Controllers\Controller;
 use App\Models\Conversation;
 use App\Models\ChatMessage;
 use Illuminate\Http\Request;
 use App\Notifications\PrivateMessageReceived;
-use Illuminate\Support\Facades\Notification as NotificationFacade;
 
 class MessageController extends Controller
 {
@@ -54,7 +55,7 @@ class MessageController extends Controller
         $recipientUser = $conversation->users()->where('users.id', '!=', $user->id)->first();
 
         if ($recipientUser) {
-            // Simpan notifikasi yang konsisten ke tabel notifications
+            // Simpan notifikasi konsisten
             \App\Models\Notification::create([
                 'user_id' => $recipientUser->id,
                 'type' => 'private_message',
@@ -69,7 +70,7 @@ class MessageController extends Controller
                         'body' => $message->body,
                         'created_at' => $message->created_at?->toDateTimeString(),
                     ],
-                    'text' => $message->body, // ringkasan mudah diakses oleh view
+                    'text' => $message->body,
                     'sender_id' => $message->sender_id,
                     'conversation_id' => $message->conversation_id,
                     'link' => route('pesan.index') . '?conv=' . $message->conversation_id,
@@ -77,11 +78,11 @@ class MessageController extends Controller
                 'is_read' => false,
             ]);
 
-            // Notify model-based (optional) untuk broadcast / mail jika ada notifikasi class
+            // Notify model-based (optional) untuk broadcast / mail jika ada
             try {
                 $recipientUser->notify(new PrivateMessageReceived($message));
             } catch (\Throwable $e) {
-                // jika class notifikasi tidak tersedia / error, jangan crash
+                // ignore
             }
         }
 
@@ -89,10 +90,9 @@ class MessageController extends Controller
         try {
             broadcast(new MessageSent($message))->toOthers();
         } catch (\Throwable $e) {
-            // ignore broadcast errors in controller
+            // ignore
         }
 
-        // Prepare payload for response
         $payload = [
             'id' => $message->id,
             'conversation_id' => $message->conversation_id,
@@ -108,6 +108,63 @@ class MessageController extends Controller
         ];
 
         return response()->json(['message' => $payload], 201);
+    }
+
+    // Update (edit) message
+    public function update(Request $request, Conversation $conversation, ChatMessage $message)
+    {
+        $user = $request->user();
+
+        // authorization checks
+        if ($message->conversation_id != $conversation->id) {
+            abort(404);
+        }
+        if ($message->sender_id != $user->id) {
+            abort(403);
+        }
+
+        $validated = $request->validate([
+            'body' => 'nullable|string|max:2000',
+        ]);
+
+        $message->body = $validated['body'] ?? $message->body;
+        $message->save();
+
+        // load sender for payload
+        if (method_exists($message, 'sender')) {
+            $message->load('sender');
+        }
+
+        // broadcast event so other participant updates UI
+        try {
+            broadcast(new MessageUpdated($message))->toOthers();
+        } catch (\Throwable $e) {}
+
+        return response()->json(['message' => $message], 200);
+    }
+
+    // Delete message
+    public function destroy(Request $request, Conversation $conversation, ChatMessage $message)
+    {
+        $user = $request->user();
+
+        if ($message->conversation_id != $conversation->id) {
+            abort(404);
+        }
+        if ($message->sender_id != $user->id) {
+            abort(403);
+        }
+
+        // hard delete (atau gunakan soft delete jika model mendukung)
+        $messageId = $message->id;
+        $message->delete();
+
+        // broadcast event so other participant removes message
+        try {
+            broadcast(new MessageDeleted($conversation->id, $messageId))->toOthers();
+        } catch (\Throwable $e) {}
+
+        return response()->json(['ok' => true], 200);
     }
 
     public function markRead(Request $request, Conversation $conversation)

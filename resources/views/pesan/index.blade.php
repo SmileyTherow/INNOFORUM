@@ -128,7 +128,7 @@
                 </div>
 
                 <!-- Messages Area -->
-                <div class="flex-1 overflow-y-auto bg-gray-900 bg-chat-pattern" x-ref="messagesBox"
+                <div class="flex-1 overflow-y-auto bg-gray-900 bg-chat-pattern messages-list" x-ref="messagesBox"
                     style="background-image: url('data:image/svg+xml,%3Csvg width=\"100\" height=\"100\" viewBox=\"0 0 100 100\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cpath d=\"M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z\" fill=\"%23333\" fill-opacity=\"0.05\" fill-rule=\"evenodd\"/%3E%3C/svg%3E');">
 
                     <template x-if="!currentConversation">
@@ -152,38 +152,65 @@
                         </div>
                     </template>
 
-                    <!-- Messages -->
-                    <template x-for="msg in messages" :key="msg.id">
-                        <div class="px-4 py-1">
-                            <div class="flex"
-                                :class="msg.sender.id === {{ auth()->id() }} ? 'justify-end' : 'justify-start'">
-                                <div class="max-w-[70%]">
-                                    <div class="rounded-lg px-4 py-2 shadow-sm"
-                                        :class="msg.sender.id === {{ auth()->id() }} ?
-                                            'bg-green-700 text-white rounded-br-none' :
-                                            'bg-gray-800 text-gray-100 rounded-bl-none'">
+                    <!-- Messages List (render tiap pesan menggunakan x-for) -->
+                    <template x-if="currentConversation">
+                        <template x-for="msg in messages" :key="msg.id">
+                            <div class="px-4 py-1">
+                                <div class="flex"
+                                    :class="msg.sender.id === {{ auth()->id() }} ? 'justify-end' : 'justify-start'">
+                                    <div class="max-w-[70%]">
+                                        <div class="rounded-lg px-4 py-2 shadow-sm"
+                                            :class="msg.sender.id === {{ auth()->id() }} ?
+                                                'bg-green-700 text-white rounded-br-none' :
+                                                'bg-gray-800 text-gray-100 rounded-bl-none'">
 
-                                        <!-- Message text -->
-                                        <div x-text="msg.body" class="whitespace-pre-wrap break-words text-sm"></div>
+                                            <!-- If editing -->
+                                            <template x-if="msg._editing">
+                                                <div>
+                                                    <textarea :id="'edit-textarea-' + msg.id" x-model="msg.body"
+                                                        class="w-full px-2 py-1 rounded bg-gray-700 text-white"></textarea>
+                                                    <div class="mt-2 flex gap-2">
+                                                        <button @click="saveEdit(msg)"
+                                                            class="px-3 py-1 bg-blue-600 text-white rounded">Simpan</button>
+                                                        <button @click="cancelEdit(msg)"
+                                                            class="px-3 py-1 bg-gray-600 text-white rounded">Batal</button>
+                                                    </div>
+                                                </div>
+                                            </template>
 
-                                        <!-- Attachment -->
-                                        <template x-if="msg.attachment">
-                                            <div class="mt-2">
-                                                <img :src="msg.attachment"
-                                                    class="max-w-full max-h-64 rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
-                                                    @click="openImage(msg.attachment)" />
-                                            </div>
-                                        </template>
+                                            <!-- Normal display -->
+                                            <template x-if="!msg._editing">
+                                                <div>
+                                                    <div x-text="msg.body"
+                                                        class="whitespace-pre-wrap break-words text-sm"></div>
+                                                    <template x-if="msg.attachment">
+                                                        <div class="mt-2">
+                                                            <img :src="msg.attachment"
+                                                                style="max-width:160px;max-height:120px;" />
+                                                        </div>
+                                                    </template>
+                                                </div>
+                                            </template>
+                                        </div>
 
-                                        <!-- Timestamp -->
-                                        <div class="text-xs mt-1 text-right opacity-70"
-                                            :class="msg.sender.id === {{ auth()->id() }} ? 'text-green-200' : 'text-gray-400'"
-                                            x-text="formatMessageTime(msg.created_at)">
+                                        <!-- Action buttons -->
+                                        <div class="text-xs text-gray-400 mt-1 flex items-center gap-2">
+                                            <span x-text="new Date(msg.created_at).toLocaleString()"></span>
+
+                                            <!-- Edit & Delete hanya untuk pengirim -->
+                                            <template x-if="msg.sender.id === {{ auth()->id() }}">
+                                                <span class="flex gap-1 ml-2">
+                                                    <button @click="startEdit(msg)"
+                                                        class="text-blue-300 hover:text-blue-200">Edit</button>
+                                                    <button @click="deleteMessage(msg)"
+                                                        class="text-red-400 hover:text-red-300">Hapus</button>
+                                                </span>
+                                            </template>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </template>
                     </template>
 
                     <!-- Typing Indicator -->
@@ -323,7 +350,34 @@
                 newMessage: '',
                 fileToSend: null,
                 isTyping: false,
+                _echoChannel: null,
 
+                // Inisialisasi: buka percakapan dari query param bila ada
+                initOpenFromQuery() {
+                    try {
+                        const params = new URLSearchParams(window.location.search);
+                        const convId = params.get('conv');
+                        if (convId && this.conversations && this.conversations.length) {
+                            const found = this.conversations.find(c => String(c.id) === String(convId));
+                            if (found) {
+                                this.openConversation(found);
+                            }
+                        }
+                    } catch (e) {}
+                },
+
+                // Utility: format waktu singkat
+                formatTime(ts) {
+                    if (!ts) return '';
+                    try {
+                        const d = new Date(ts);
+                        return d.toLocaleTimeString();
+                    } catch (e) {
+                        return ts;
+                    }
+                },
+
+                // helper initials
                 initials(name) {
                     if (!name) return '';
                     const parts = name.trim().split(' ');
@@ -331,131 +385,183 @@
                     return (parts[0][0] + (parts[1] ? parts[1][0] : '')).toUpperCase();
                 },
 
+                // memilih convo
                 openConversation(conv) {
                     this.currentConversation = conv;
                     this.messages = [];
-                    fetch(`/pesan/conversations/${conv.id}/messages?limit=200`, {
+
+                    fetch(`/pesan/conversations/${conv.id}/messages?limit=500`, {
                             headers: {
-                                'X-Requested-With': 'XMLHttpRequest'
+                                'X-Requested-With': 'XMLHttpRequest',
+                                'Accept': 'application/json'
                             }
                         })
                         .then(r => r.json())
                         .then(data => {
-                            this.messages = Array.isArray(data) ? data : (data.data || []);
+                            // API mungkin mengembalikan {data: [...]} atau array langsung
+                            let msgs = Array.isArray(data) ? data : (data.data || data.messages || []);
+                            // Pastikan urutan ASCENDING (lama -> baru)
+                            msgs.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+                            this.messages = msgs;
                             this.$nextTick(() => this.scrollToBottom());
+                        });
 
-                            if (window.Echo) {
+                    // Setup realtime listeners
+                    if (window.Echo) {
+                        try {
+                            // leave previous
+                            if (this._echoChannel) {
                                 try {
-                                    window.Echo.leavePrivate(`conversation.${conv.id}`);
+                                    window.Echo.leavePrivate(`conversation.${this._echoChannel}`);
                                 } catch (e) {}
-                                window.Echo.private(`conversation.${conv.id}`)
-                                    .listen('MessageSent', (e) => {
-                                        const incoming = {
-                                            id: e.id,
-                                            conversation_id: e.conversation_id,
-                                            sender: e.sender,
-                                            body: e.body,
-                                            attachment: e.attachment,
-                                            created_at: e.created_at
-                                        };
-                                        this.messages.push(incoming);
-                                        this.$nextTick(() => this.scrollToBottom());
-                                    });
                             }
-                        })
-                        .catch(err => console.error('Gagal load messages', err));
+                            this._echoChannel = conv.id;
+                            window.Echo.private(`conversation.${conv.id}`)
+                                .listen('MessageSent', (e) => {
+                                    const incoming = e.message ?? e;
+                                    // ensure created_at parsable
+                                    incoming.created_at = incoming.created_at ?? incoming.created_at;
+                                    this.messages.push(incoming);
+                                    this.$nextTick(() => this.scrollToBottom());
+                                })
+                                .listen('MessageUpdated', (e) => {
+                                    const updated = e.message ?? e;
+                                    const idx = this.messages.findIndex(m => m.id == updated.id);
+                                    if (idx !== -1) {
+                                        this.messages[idx] = Object.assign({}, this.messages[idx], updated);
+                                    }
+                                })
+                                .listen('MessageDeleted', (e) => {
+                                    const mid = e.message_id ?? e.messageId ?? null;
+                                    if (mid) {
+                                        this.messages = this.messages.filter(m => m.id != mid);
+                                    }
+                                });
+                        } catch (err) {
+                            console.error('Echo listen error', err);
+                        }
+                    }
+                },
+
+                scrollToBottom() {
+                    this.$nextTick(() => {
+                        const el = this.$refs.messagesBox;
+                        if (el) {
+                            el.scrollTop = el.scrollHeight;
+                        }
+                    });
+                },
+
+                async sendMessage() {
+                    if (!this.newMessage && !this.fileToSend) return;
+                    const form = new FormData();
+                    form.append('body', this.newMessage);
+                    if (this.fileToSend) form.append('attachment', this.fileToSend);
+
+                    const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                    const res = await fetch(`/pesan/conversations/${this.currentConversation.id}/messages`, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': token,
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'Accept': 'application/json'
+                        },
+                        body: form
+                    });
+                    const json = await res.json();
+                    if (res.ok) {
+                        // push the created message to end
+                        const created = json.message ?? json.data ?? json;
+                        this.messages.push(created);
+                        this.newMessage = '';
+                        this.fileToSend = null;
+                        if (this.$refs.file) this.$refs.file.value = null;
+                        this.$nextTick(() => this.scrollToBottom());
+                    } else {
+                        alert(json.message || 'Gagal mengirim pesan');
+                    }
                 },
 
                 onFileChange(e) {
                     const f = e.target.files[0];
-                    if (!f) return;
-                    this.fileToSend = f;
+                    if (f) this.fileToSend = f;
                 },
 
-                sendMessage() {
-                    if (!this.currentConversation) return;
-                    const form = new FormData();
-                    form.append('body', this.newMessage || '');
-                    if (this.fileToSend) form.append('attachment', this.fileToSend);
+                // EDIT flow
+                startEdit(msg) {
+                    this.messages = this.messages.map(m => {
+                        if (m.id === msg.id) {
+                            m._editing = true;
+                            m._originalBody = m.body;
+                        } else {
+                            m._editing = false;
+                        }
+                        return m;
+                    });
+                    this.$nextTick(() => {
+                        const ta = this.$root.querySelector(`#edit-textarea-${msg.id}`);
+                        if (ta) ta.focus();
+                    });
+                },
 
-                    fetch(`/pesan/conversations/${this.currentConversation.id}/messages`, {
-                            method: 'POST',
+                cancelEdit(msg) {
+                    const idx = this.messages.findIndex(m => m.id == msg.id);
+                    if (idx !== -1) {
+                        this.messages[idx].body = this.messages[idx]._originalBody ?? this.messages[idx].body;
+                        this.messages[idx]._editing = false;
+                        delete this.messages[idx]._originalBody;
+                    }
+                },
+
+                async saveEdit(msg) {
+                    const newBody = msg.body ?? '';
+                    const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                    const res = await fetch(
+                        `/pesan/conversations/${this.currentConversation.id}/messages/${msg.id}`, {
+                            method: 'PATCH',
                             headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': token,
                                 'X-Requested-With': 'XMLHttpRequest',
-                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute(
-                                    'content')
+                                'Accept': 'application/json'
                             },
-                            body: form
-                        })
-                        .then(r => r.json())
-                        .then(res => {
-                            const msg = res.message ?? res.data ?? res;
-                            if (msg) {
-                                this.messages.push(msg);
-                                this.newMessage = '';
-                                this.fileToSend = null;
-                                this.$refs.file.value = null;
-                                this.$nextTick(() => this.scrollToBottom());
+                            body: JSON.stringify({
+                                body: newBody
+                            })
+                        });
+                    const json = await res.json();
+                    if (res.ok) {
+                        // update local message (server broadcasts too)
+                        const idx = this.messages.findIndex(m => m.id == msg.id);
+                        if (idx !== -1) {
+                            this.messages[idx] = Object.assign({}, this.messages[idx], json.message ?? json);
+                            this.messages[idx]._editing = false;
+                        }
+                    } else {
+                        alert(json.message || 'Gagal edit pesan');
+                    }
+                },
+
+                // DELETE
+                async deleteMessage(msg) {
+                    if (!confirm('Hapus pesan ini?')) return;
+                    const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                    const res = await fetch(
+                        `/pesan/conversations/${this.currentConversation.id}/messages/${msg.id}`, {
+                            method: 'DELETE',
+                            headers: {
+                                'X-CSRF-TOKEN': token,
+                                'X-Requested-With': 'XMLHttpRequest',
+                                'Accept': 'application/json'
                             }
-                        })
-                        .catch(e => console.error('Gagal kirim pesan', e));
-                },
-
-                scrollToBottom() {
-                    const el = this.$refs.messagesBox;
-                    if (el) el.scrollTop = el.scrollHeight;
-                },
-
-                formatTime(dt) {
-                    try {
-                        const d = new Date(dt);
-                        const now = new Date();
-                        const diff = now - d;
-                        const minutes = Math.floor(diff / (1000 * 60));
-                        const hours = Math.floor(diff / (1000 * 60 * 60));
-                        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-
-                        if (minutes < 1) return 'Baru saja';
-                        if (minutes < 60) return `${minutes}m`;
-                        if (hours < 24) return `${hours}j`;
-                        if (days === 1) return 'Kemarin';
-                        if (days < 7) return `${days}h`;
-                        return d.toLocaleDateString('id-ID', {
-                            day: 'numeric',
-                            month: 'short'
                         });
-                    } catch (e) {
-                        return dt;
+                    if (res.ok) {
+                        // local remove (server broadcasts too)
+                        this.messages = this.messages.filter(m => m.id != msg.id);
+                    } else {
+                        const json = await res.json();
+                        alert(json.message || 'Gagal menghapus pesan');
                     }
-                },
-
-                formatMessageTime(dt) {
-                    try {
-                        const d = new Date(dt);
-                        return d.toLocaleTimeString('id-ID', {
-                            hour: '2-digit',
-                            minute: '2-digit'
-                        });
-                    } catch (e) {
-                        return dt;
-                    }
-                },
-
-                autoResize(e) {
-                    e.target.style.height = 'auto';
-                    e.target.style.height = e.target.scrollHeight + 'px';
-                },
-
-                openImage(url) {
-                    window.open(url, '_blank');
-                },
-
-                initOpenFromQuery() {
-                    const params = new URLSearchParams(window.location.search);
-                    const convId = params.get('conv');
-                    if (!convId) return;
-                    const found = this.conversations.find(c => String(c.id) === String(convId));
-                    if (found) this.openConversation(found);
                 }
             }
         }
@@ -467,11 +573,12 @@
         });
 
         document.addEventListener('alpine:init', () => {});
+        // Try to open conversation from query string after Alpine initialized
         setTimeout(() => {
             const el = document.querySelector('[x-data="pesanApp()"]');
-            if (el && el.__x) {
+            if (el && el.__x && el.__x.$data && typeof el.__x.$data.initOpenFromQuery === 'function') {
                 el.__x.$data.initOpenFromQuery();
             }
-        }, 200);
+        }, 300);
     </script>
 @endsection

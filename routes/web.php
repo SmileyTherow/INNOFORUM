@@ -29,6 +29,7 @@ use App\Http\Controllers\Pesan\ConversationController as PesanConversationContro
 use App\Http\Controllers\Pesan\MessageController as PesanMessageController;
 use App\Http\Controllers\UserSocialLinkController;
 use App\Http\Controllers\ProfileCompletionController;
+use App\Http\Controllers\Pesan\MessageController;
 
 
 // ===================== AUTH & REGISTER ===================== //
@@ -119,6 +120,13 @@ Route::middleware('auth')->group(function () {
     Route::post('/pesan/conversations/{conversation}/messages', [PesanMessageController::class, 'store'])->name('pesan.messages.store');
     Route::post('/pesan/conversations/{conversation}/read', [PesanMessageController::class, 'markRead'])->name('pesan.conversations.read');
 });
+// Update message (edit)
+Route::patch('/pesan/conversations/{conversation}/messages/{message}', [MessageController::class, 'update'])
+    ->name('pesan.messages.update')->middleware('auth');
+
+// Delete message
+Route::delete('/pesan/conversations/{conversation}/messages/{message}', [MessageController::class, 'destroy'])
+    ->name('pesan.messages.destroy')->middleware('auth');
 
 
 // ===================== ADMIN AREA ===================== //
