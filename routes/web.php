@@ -30,6 +30,7 @@ use App\Http\Controllers\Pesan\MessageController as PesanMessageController;
 use App\Http\Controllers\UserSocialLinkController;
 use App\Http\Controllers\ProfileCompletionController;
 use App\Http\Controllers\Pesan\MessageController;
+use App\Http\Controllers\Admin\AdminActivityController;
 
 
 // ===================== AUTH & REGISTER ===================== //
@@ -152,6 +153,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 });
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::resource('threads', App\Http\Controllers\Admin\AdminThreadController::class);
+});
+Route::prefix('admin/activities')->middleware(['auth','admin'])->group(function () {
+    Route::get('/', [AdminActivityController::class, 'index'])->name('admin.activities.index');
 });
 Route::patch('/admin/users/{id}/delete-fields', [AdminUserController::class, 'deleteFields'])->name('admin.users.deleteFields');
 Route::get('/admin/users/{id}/notify', [AdminUserController::class, 'notifyForm'])->name('admin.users.notify');
