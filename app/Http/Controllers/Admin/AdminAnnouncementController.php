@@ -35,7 +35,7 @@ class AdminAnnouncementController extends Controller
 
         $announcement = \App\Models\Announcement::create([
             'title' => $request->title,
-            'content' => $request->content,
+            'content' => $request->input('content'),
             'user_id' => Auth::id(),
         ]);
 
@@ -67,7 +67,7 @@ class AdminAnnouncementController extends Controller
         $announcement = Announcement::findOrFail($id);
         $announcement->update([
             'title' => $request->title,
-            'content' => $request->content
+            'content' => $request->input('content')
         ]);
         return redirect()->route('admin.announcements.index')->with('success', 'Pengumuman berhasil diupdate!');
     }

@@ -47,7 +47,7 @@ class CommentController extends Controller
         $comment = Comment::create([
             'question_id' => $request->question_id,
             'user_id' => Auth::id(),
-            'content' => $request->content,
+            'content' => $request->input('content'),
             'image' => $filename,
         ]);
 
@@ -123,7 +123,7 @@ class CommentController extends Controller
         }
 
         // === NOTIFIKASI MENTION ===
-        preg_match_all('/@([a-zA-Z0-9_]+)/', $request->content, $matches);
+        preg_match_all('/@([a-zA-Z0-9_]+)/', $request->input('content'), $matches);
         $usernames = $matches[1] ?? [];
         foreach ($usernames as $username) {
             $mentionedUser = \App\Models\User::where('username', $username)->first();
@@ -210,7 +210,7 @@ class CommentController extends Controller
             $comment->image = $filename;
         }
 
-        $comment->content = $request->content;
+        $comment->content = $request->input('content');
         $comment->save();
 
         return redirect()->route('questions.show', $comment->question_id)->with('success', 'Komentar berhasil diupdate.');

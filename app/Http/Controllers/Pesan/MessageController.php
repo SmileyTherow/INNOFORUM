@@ -59,28 +59,6 @@ class MessageController extends Controller
         $recipientUser = $conversation->users()->where('users.id', '!=', $user->id)->first();
 
         if ($recipientUser) {
-            // Simpan notifikasi yang konsisten ke tabel notifications
-            Notification::create([
-                'user_id' => $recipientUser->id,
-                'type' => 'private_message',
-                'data' => [
-                    'message' => [
-                        'id' => $message->id,
-                        'conversation_id' => $message->conversation_id,
-                        'sender' => [
-                            'id' => $message->sender->id ?? $user->id,
-                            'name' => $message->sender->name ?? $user->name,
-                        ],
-                        'body' => $message->body,
-                        'created_at' => $message->created_at?->toDateTimeString(),
-                    ],
-                    'text' => Str::limit($message->body ?? '', 100),
-                    'sender_id' => $message->sender_id,
-                    'conversation_id' => $message->conversation_id,
-                    'link' => route('pesan.index') . '?conv=' . $message->conversation_id,
-                ],
-                'is_read' => false,
-            ]);
 
             // Notify model-based (optional) untuk broadcast / mail jika ada
             try {

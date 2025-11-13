@@ -134,7 +134,7 @@ class QuestionController extends Controller
         $question = Question::create([
             'user_id' => Auth::id(),
             'title' => $request->title,
-            'content' => $request->content,
+            'content' => $request->input('content'),
             'category_id' => $request->category_id,
             'images' => $imagePaths,
         ]);
@@ -196,7 +196,7 @@ class QuestionController extends Controller
 
         $question->update([
             'title' => $request->title,
-            'content' => $request->content,
+            'content' => $request->input('content'),
             'images' => $imagePaths,
         ]);
         $question->hashtags()->sync($request->hashtags ?? []);

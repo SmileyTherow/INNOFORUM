@@ -42,6 +42,16 @@ class Notification extends Model
             if ($decoded !== null) $data = $decoded;
         }
 
+        if (
+            isset($data['type']) && $data['type'] === 'private_message' &&
+            !empty($data['message']) &&
+            is_array($data['message']) &&
+            !empty($data['message']['sender']['name']) &&
+            !empty($data['message']['body'])
+        ) {
+            return $data['message']['sender']['name'] . ': ' . $data['message']['body'];
+        }
+
         // Prioritas ambil teks:
         // 1) data['message']['body'] (payload private_message)
         // 2) data['text'] (kadang dipakai)
@@ -176,5 +186,10 @@ class Notification extends Model
         }
 
         return null;
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

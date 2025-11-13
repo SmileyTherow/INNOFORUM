@@ -194,9 +194,9 @@
                             </a>
                         </div>
                         <div class="col-md-6">
-                            <a href="{{ route('admin.categories.create') }}" class="btn btn-outline-success w-100 h-100 py-3 d-flex flex-column align-items-center justify-content-center">
+                            <a href="{{ route('admin.comments.reported') }}" class="btn btn-outline-success w-100 h-100 py-3 d-flex flex-column align-items-center justify-content-center">
                                 <i class="fas fa-folder-plus fa-2x mb-2"></i>
-                                <span>Tambah Kategori</span>
+                                <span>Komentar Dilaporkan</span>
                             </a>
                         </div>
                         <div class="col-md-6">

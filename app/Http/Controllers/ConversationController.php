@@ -16,7 +16,7 @@ class ConversationController extends Controller
         // load user's conversations with last message timestamp and participant info
         $conversations = $user->conversations()
             ->with(['users' => function ($q) use ($user) {
-                $q->select('users.id', 'name', 'email'); // adjust columns
+                $q->select('users.id', 'name', 'email');
             }, 'messages' => function ($q) {
                 $q->latest()->limit(1);
             }])
