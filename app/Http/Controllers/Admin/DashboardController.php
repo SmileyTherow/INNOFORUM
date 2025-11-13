@@ -20,6 +20,7 @@ class DashboardController extends Controller
         $totalCategories = Category::count();
         $totalComments = Comment::count();
         $totalAnnouncements = Announcement::count();
+        $recentActivities = \App\Models\AdminActivity::with('admin')->latest()->limit(3)->get();
 
         // 12 bulan terakhir untuk query & label grafik
         $monthsQuery = collect(range(0, 11))->map(function ($i) {
@@ -75,6 +76,7 @@ class DashboardController extends Controller
             'totalComments',
             'totalAnnouncements',
             'users',
+            'recentActivities',
             'monthsLabel',
             'usersPerMonth',
             'threadsPerMonth',

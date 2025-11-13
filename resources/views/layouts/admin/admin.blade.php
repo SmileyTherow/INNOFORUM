@@ -86,20 +86,34 @@
                             </nav>
                         </div>
 
-                        <!-- Pertanyaan & KOMENTAR -->
+                        <!-- PERTANYAAN -->
                         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-                            data-bs-target="#collapseForum" aria-expanded="false" aria-controls="collapseForum">
-                            <div class="sb-nav-link-icon"><i class="fas fa-comments"></i></div>
-                            Pertanyaan & Komentar
+                            data-bs-target="#collapseThreads" aria-expanded="false" aria-controls="collapseThreads">
+                            <div class="sb-nav-link-icon"><i class="fas fa-question-circle"></i></div>
+                            Pertanyaan
                             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
-                        <div class="collapse" id="collapseForum" aria-labelledby="headingForum"
+                        <div class="collapse" id="collapseThreads" aria-labelledby="headingThreads"
                             data-bs-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
                                 <a class="nav-link" href="{{ route('admin.threads.index') }}">Semua Pertanyaan</a>
-                                <a class="nav-link" href="{{ route('admin.comments.index') }}">Semua Komentar</a>
                                 <a class="nav-link" href="{{ route('admin.threads.reported') }}">Pertanyaan
                                     Dilaporkan</a>
+                            </nav>
+                        </div>
+
+                        <!-- KOMENTAR -->
+                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+                            data-bs-target="#collapseComments" aria-expanded="false"
+                            aria-controls="collapseComments">
+                            <div class="sb-nav-link-icon"><i class="fas fa-comment-dots"></i></div>
+                            Komentar
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                        </a>
+                        <div class="collapse" id="collapseComments" aria-labelledby="headingComments"
+                            data-bs-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav">
+                                <a class="nav-link" href="{{ route('admin.comments.index') }}">Semua Komentar</a>
                                 <a class="nav-link" href="{{ route('admin.comments.reported') }}">Komentar
                                     Dilaporkan</a>
                             </nav>
