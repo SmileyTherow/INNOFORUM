@@ -79,44 +79,64 @@ class AcademicEventController extends Controller
     // store method yang aman: hanya akan buat event jika model ada
     public function store(Request $request)
     {
-        $request->validate([
+        $rules = [
             'title' => 'required|string|max:255',
-            'start' => 'required|date',
-            'end' => 'nullable|date',
+            'start_date' => 'required|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
             'description' => 'nullable|string',
-        ]);
+            'color' => 'nullable|string|max:32',
+            'is_published' => 'nullable|boolean',
+        ];
 
+        $validated = $request->validate($rules);
+
+        // Pastikan model ada
         if (!class_exists(\App\Models\AcademicEvent::class)) {
-            // log bahwa admin mencoba membuat event tapi model tidak tersedia
             if (Auth::check() && Auth::user()->role === 'admin') {
                 AdminActivityLogger::log(
                     'create_event_failed',
-                    "Mencoba membuat event (model AcademicEvent tidak ditemukan): \"" . \Illuminate\Support\Str::limit($request->title,150) . "\"",
+                    "Mencoba membuat event (model AcademicEvent tidak ditemukan): \"" . \Illuminate\Support\Str::limit($validated['title'] ?? $request->title, 150) . "\"",
                     null,
-                    ['title' => $request->title]
+                    ['title' => $validated['title'] ?? $request->title]
                 );
             }
+
+            if ($request->wantsJson()) {
+                return response()->json(['success' => false, 'message' => 'Model AcademicEvent tidak tersedia. Hubungi dev.'], 500);
+            }
+
             return back()->with('error', 'Model AcademicEvent tidak tersedia. Hubungi dev.');
         }
 
-        $event = \App\Models\AcademicEvent::create([
-            'title' => $request->title,
-            'start' => $request->start,
-            'end' => $request->end,
-            'description' => $request->description,
+        // Simpan event (pakai start_date/end_date sesuai model)
+        $event = AcademicEvent::create([
+            'title' => $validated['title'],
+            'start_date' => $validated['start_date'],
+            'end_date' => $validated['end_date'] ?? $validated['start_date'],
+            'description' => $validated['description'] ?? null,
+            'color' => $validated['color'] ?? null,
+            'is_published' => $validated['is_published'] ?? true,
             'created_by' => Auth::id(),
         ]);
 
+        // Log aktivitas admin
         if (Auth::check() && Auth::user()->role === 'admin') {
             AdminActivityLogger::log(
                 'create_event',
-                "Membuat event kalender: \"" . \Illuminate\Support\Str::limit($request->title,150) . "\"",
-                ['type'=>'Event','id'=>$event->id],
-                ['start' => $request->start, 'end' => $request->end]
+                "Membuat event kalender: \"" . \Illuminate\Support\Str::limit($event->title, 150) . "\"",
+                ['type' => 'Event', 'id' => $event->id],
+                ['start_date' => $event->start_date, 'end_date' => $event->end_date]
             );
         }
 
-        return redirect()->route('events.index')->with('success', 'Event berhasil dibuat.');
+        if ($request->wantsJson() || $request->header('Accept') === 'application/json') {
+            return response()->json([
+                'success' => true,
+                'event' => $event->toCalendarArray()
+            ], 201);
+        }
+
+        return redirect()->route('admin.calendar.index')->with('success', 'Event berhasil dibuat.');
     }
 
     public function update(Request $request, AcademicEvent $academicEvent)

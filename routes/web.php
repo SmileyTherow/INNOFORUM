@@ -154,9 +154,6 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::resource('threads', App\Http\Controllers\Admin\AdminThreadController::class);
 });
-Route::prefix('admin/activities')->middleware(['auth','admin'])->group(function () {
-    Route::get('/', [AdminActivityController::class, 'index'])->name('admin.activities.index');
-});
 Route::patch('/admin/users/{id}/delete-fields', [AdminUserController::class, 'deleteFields'])->name('admin.users.deleteFields');
 Route::get('/admin/users/{id}/notify', [AdminUserController::class, 'notifyForm'])->name('admin.users.notify');
 Route::post('/admin/users/{id}/notify', [AdminUserController::class, 'sendNotification']);
@@ -284,6 +281,7 @@ Route::middleware(['auth','admin'])->prefix('admin')->group(function () {
     Route::post('/kalender', [App\Http\Controllers\AcademicEventController::class, 'store'])->name('admin.calendar.store');
     Route::put('/kalender/{academicEvent}', [App\Http\Controllers\AcademicEventController::class, 'update'])->name('admin.calendar.update');
     Route::delete('/kalender/{academicEvent}', [App\Http\Controllers\AcademicEventController::class, 'destroy'])->name('admin.calendar.destroy');
+    Route::get('activities', [AdminActivityController::class, 'index'])->name('admin.activities.index');
     // Admin API untuk fetch events
     Route::get('/kalender/api', [App\Http\Controllers\AcademicEventController::class, 'adminApiIndex'])->name('admin.calendar.api');
 });

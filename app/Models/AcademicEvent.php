@@ -43,20 +43,28 @@ class AcademicEvent extends Model
     public function toCalendarArray(): array
     {
         $start = $this->start_date ? $this->start_date->toDateString() : null;
-        $end = $this->end_date ? $this->end_date->toDateString() : $start;
+
+        // pastikan evaluasi ternary tersusun jelas
+        if ($this->end_date) {
+            $end = $this->end_date->toDateString();
+        } elseif ($this->start_date) {
+            $end = $this->start_date->toDateString();
+        } else {
+            $end = null;
+        }
 
         return [
             'id' => $this->id,
             'title' => $this->title,
-            'start' => $start,
-            'end' => $end,
+            'description' => $this->description,
             'start_date' => $start,
             'end_date' => $end,
-            'description' => $this->description,
+            'start' => $start,
+            'end' => $end,
             'color' => $this->color ?? 'blue',
-            'url' => url('/kalender/event/' . $this->id),
-            'created_by' => $this->created_by,
             'is_published' => (bool) $this->is_published,
+            'created_by' => $this->created_by,
+            'url' => url('/kalender/event/' . $this->id),
         ];
     }
 
