@@ -144,6 +144,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::post('/threads/notify', [AdminThreadController::class, 'notify'])->name('threads.notify');
     Route::get('/privacy-policy', [LegalController::class, 'adminPrivacyPolicy'])->name('privacy.policy');
     Route::get('/terms-conditions', [LegalController::class, 'adminTermsAndConditions'])->name('terms.conditions');
+    Route::resource('categories', AdminCategoryController::class);
+    Route::resource('announcements', AdminAnnouncementController::class);
 
     // Manajemen Pesan dari Contact Form
     Route::get('/messages', [\App\Http\Controllers\Admin\MessageController::class, 'index'])->name('messages.index');
@@ -170,8 +172,6 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/comments/latest', [AdminCommentController::class, 'latest'])->name('comments.latest');
 
     // Kategori Forum
-    Route::get('/categories', [AdminCategoryController::class, 'index'])->name('categories.index');
-    Route::get('/categories/create', [AdminCategoryController::class, 'create'])->name('categories.create');
 
     // Laporan & Moderasi
     Route::get('/reports', [AdminReportController::class, 'index'])->name('reports.index');
@@ -208,23 +208,6 @@ Route::post('/contact', [ContactController::class, 'send'])->name('contact.send'
 // ===================== DEBUG (OPSIONAL) ===================== //
 Route::get('/debug-kernel', fn() => app()->make(\Illuminate\Contracts\Http\Kernel::class)::class);
 
-Route::prefix('admin/categories')->middleware(['auth', 'admin'])->group(function() {
-    Route::get('/', [AdminCategoryController::class, 'index'])->name('admin.categories.index');
-    Route::get('/create', [AdminCategoryController::class, 'create'])->name('admin.categories.create');
-    Route::post('/store', [AdminCategoryController::class, 'store'])->name('admin.categories.store');
-    Route::get('/{id}/edit', [AdminCategoryController::class, 'edit'])->name('admin.categories.edit');
-    Route::post('/{id}/update', [AdminCategoryController::class, 'update'])->name('admin.categories.update');
-    Route::delete('/{id}', [AdminCategoryController::class, 'destroy'])->name('admin.categories.destroy');
-});
-
-Route::prefix('admin/announcements')->middleware(['auth', 'admin'])->group(function() {
-    Route::get('/', [AdminAnnouncementController::class, 'index'])->name('admin.announcements.index');
-    Route::get('/create', [AdminAnnouncementController::class, 'create'])->name('admin.announcements.create');
-    Route::post('/store', [AdminAnnouncementController::class, 'store'])->name('admin.announcements.store');
-    Route::get('/{id}/edit', [AdminAnnouncementController::class, 'edit'])->name('admin.announcements.edit');
-    Route::post('/{id}/update', [AdminAnnouncementController::class, 'update'])->name('admin.announcements.update');
-    Route::delete('/{id}', [AdminAnnouncementController::class, 'destroy'])->name('admin.announcements.destroy');
-});
 
 Route::post('/contact/send', [ContactController::class, 'send'])->name('contact.send');
 Route::post('/admin/users/add-username', [AdminUserController::class, 'addUsername'])->name('admin.users.addUsername');
