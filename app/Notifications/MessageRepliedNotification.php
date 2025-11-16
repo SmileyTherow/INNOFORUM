@@ -21,8 +21,7 @@ class MessageRepliedNotification extends Notification
 
     public function via($notifiable)
     {
-        // kirim ke database (in-app) dan email
-        return ['database', 'mail'];
+        return ['database',];
     }
 
     public function toDatabase($notifiable)
