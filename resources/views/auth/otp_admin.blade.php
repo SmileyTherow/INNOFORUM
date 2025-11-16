@@ -76,11 +76,6 @@
                 Verify
             </button>
         </form>
-
-        <!-- Resend Link -->
-        <div class="text-center mt-5 text-sm text-gray-600">
-            Didn't receive code? <a href="#" class="text-blue-600 font-semibold hover:underline">Resend</a>
-        </div>
     </div>
 
     <script>
