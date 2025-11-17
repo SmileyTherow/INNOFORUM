@@ -42,9 +42,9 @@
                     <div class="flex justify-between items-start">
                         <div class="flex-1">
                             @php
-                                $data = is_array($notif->data) ? $notif->data : json_decode($notif->data, true) ?? [];
-                                $url = $data['url'] ?? route('notifications.index');
-                                $text = $data['message'] ?? ($data['title'] ?? 'Notifikasi baru');
+                                $url = $notif->link ?? route('notifications.index');
+                                $text = $notif->safe_message ?? ($notif->clean_message ?? 'Notifikasi baru');
+                                $text = is_string($text) ? $text : json_encode($text);
                             @endphp
                             <a href="{{ $url }}"
                                 class="text-gray-200 hover:text-blue-300 hover:underline block mb-2">
