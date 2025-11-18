@@ -95,32 +95,15 @@ class CommentController extends Controller
         if (Auth::check() && Auth::user()->role === 'admin') {
             AdminActivityLogger::log(
                 'admin_comment',
-                "Membuat komentar pada pertanyaan #{$comment->question_id}: \"" . Str::limit($comment->content,150) . "\"",
-                ['type'=>'Question','id'=>$comment->question_id],
+                "Membuat komentar pada pertanyaan #{$comment->question_id}: \"" . Str::limit($comment->content, 150) . "\"",
+                ['type' => 'Question', 'id' => $comment->question_id],
                 ['comment_id' => $comment->id]
             );
         }
 
         // === Penambahan Poin dan Badge (tetap seperti sebelumnya) ===
-        $user = \App\Models\User::find(Auth::id());
-        if ($user) {
-            $user->increment('points', 5); // Tambah 5 poin untuk komentar
-
-            if ($user->comments()->count() >= 50) {
-                $badge = \App\Models\Badge::where('name', 'Active Commenter')->first();
-                if ($badge && !$user->badges->contains($badge->id)) {
-                    $user->badges()->attach($badge->id, ['awarded_at' => now()]);
-                }
-            }
-
-            $likeCount = $user->comments()->withCount('likes')->get()->sum('likes_count');
-            if ($likeCount >= 100) {
-                $badge = \App\Models\Badge::where('name', 'Top Contributor')->first();
-                if ($badge && !$user->badges->contains($badge->id)) {
-                    $user->badges()->attach($badge->id, ['awarded_at' => now()]);
-                }
-            }
-        }
+        $badgeService = app(\App\Services\BadgeService::class);
+        $badgeService->updateUserPointsAndBadges($comment->user_id);
 
         // === NOTIFIKASI MENTION ===
         preg_match_all('/@([a-zA-Z0-9_]+)/', $request->input('content'), $matches);
@@ -158,6 +141,7 @@ class CommentController extends Controller
         }
 
         $comment->likes()->attach($user->id);
+        app(\App\Services\BadgeService::class)->updateUserPointsAndBadges($comment->user_id);
 
         // Notifikasi ke author komentar jika bukan dirinya sendiri
         if ($comment->user_id !== $user->id) {
@@ -228,7 +212,10 @@ class CommentController extends Controller
             Storage::delete('public/comment_images/' . $comment->image);
         }
 
+        $ownerId = $comment->user_id;
         $comment->delete();
+        app(\App\Services\BadgeService::class)->updateUserPointsAndBadges($ownerId);
+
         return back()->with('success', 'Komentar berhasil dihapus.');
     }
 
@@ -240,15 +227,15 @@ class CommentController extends Controller
         // Fitur pencarian
         if ($request->has('q')) {
             $search = $request->q;
-            $query->where(function($q) use ($search) {
-                $q->where('content', 'like', '%'.$search.'%')
-                ->orWhereHas('user', function($q) use ($search) {
-                    $q->where('name', 'like', '%'.$search.'%');
-                })
-                ->orWhereHas('question', function($q) use ($search) {
-                    $q->where('title', 'like', '%'.$search.'%')
-                        ->orWhere('content', 'like', '%'.$search.'%');
-                });
+            $query->where(function ($q) use ($search) {
+                $q->where('content', 'like', '%' . $search . '%')
+                    ->orWhereHas('user', function ($q) use ($search) {
+                        $q->where('name', 'like', '%' . $search . '%');
+                    })
+                    ->orWhereHas('question', function ($q) use ($search) {
+                        $q->where('title', 'like', '%' . $search . '%')
+                            ->orWhere('content', 'like', '%' . $search . '%');
+                    });
             });
         }
 

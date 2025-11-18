@@ -141,4 +141,21 @@ class User extends Authenticatable
             $q->where('visible', true)->orderBy('order');
         }]);
     }
+
+    public function getTotalLikesAttribute()
+    {
+        $userId = $this->id;
+
+        $questionLikes = DB::table('question_likes')
+            ->join('questions', 'questions.id', '=', 'question_likes.question_id')
+            ->where('questions.user_id', $userId)
+            ->count();
+
+        $commentLikes = DB::table('comment_likes')
+            ->join('comments', 'comments.id', '=', 'comment_likes.comment_id')
+            ->where('comments.user_id', $userId)
+            ->count();
+
+        return $questionLikes + $commentLikes;
+    }
 }

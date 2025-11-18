@@ -152,13 +152,17 @@
                             <!-- Badge Display -->
                             <div class="w-full mb-6">
                                 <h3 class="text-sm font-semibold text-gray-300 mb-3 text-center">🏆 Pencapaian</h3>
+
                                 <div class="flex flex-wrap justify-center gap-3 mb-3">
                                     @forelse ($user->badges as $badge)
                                         <div class="badge-item group relative" title="{{ $badge->description }}">
                                             <div
                                                 class="bg-gradient-to-br from-yellow-500/30 to-amber-500/30 text-yellow-300 rounded-full p-3 cursor-pointer transform transition-all duration-300 hover:scale-110 hover:rotate-12 border border-yellow-500/30 shadow-lg">
-                                                @if ($badge->icon)
-                                                    <img src="{{ asset('storage/badges/' . $badge->icon) }}"
+                                                @if (!empty($badge->icon))
+                                                    <img src="{{ asset('images/badges/' . $badge->icon) }}"
+                                                        alt="{{ $badge->name }}" class="w-6 h-6">
+                                                @elseif (!empty($badge->image))
+                                                    <img src="{{ asset('images/badges/' . $badge->image) }}"
                                                         alt="{{ $badge->name }}" class="w-6 h-6">
                                                 @else
                                                     <i class="fas fa-trophy text-lg"></i>
@@ -167,9 +171,6 @@
                                             <div
                                                 class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-1 bg-dark-800 text-xs text-white rounded-lg opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-300 z-10 whitespace-nowrap border border-dark-600 shadow-lg">
                                                 {{ $badge->name }}
-                                                <div
-                                                    class="absolute top-full left-1/2 transform -translate-x-1/2 border-4 border-transparent border-t-dark-800">
-                                                </div>
                                             </div>
                                         </div>
                                     @empty
@@ -178,6 +179,24 @@
                                             Belum ada badge
                                         </div>
                                     @endforelse
+                                </div>
+
+                                <div class="flex justify-center gap-6 mt-3">
+                                    @if (!empty($responderFile))
+                                        <div class="text-center">
+                                            <img src="{{ asset('images/badges/' . $responderFile) }}" alt="Penjawab Badge"
+                                                class="w-20 h-20 object-contain mx-auto">
+                                            <div class="text-xs text-gray-400 mt-2">Menjawab Terbanyak</div>
+                                        </div>
+                                    @endif
+
+                                    @if (!empty($likeFile))
+                                        <div class="text-center">
+                                            <img src="{{ asset('images/badges/' . $likeFile) }}" alt="Pencerah Badge"
+                                                class="w-20 h-20 object-contain mx-auto">
+                                            <div class="text-xs text-gray-400 mt-2">Like Terbanyak</div>
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
 
@@ -467,28 +486,28 @@
             }
 
             @media (prefers-color-scheme: light) {
-            body {
-                background-color: #111827 !important;
-                color: #e5e7eb !important;
-            }
+                body {
+                    background-color: #111827 !important;
+                    color: #e5e7eb !important;
+                }
 
-            .bg-white {
-                background-color: #1f2937 !important;
-            }
+                .bg-white {
+                    background-color: #1f2937 !important;
+                }
 
-            input,
-            textarea,
-            select {
-                background-color: #374151 !important;
-                color: #e5e7eb !important;
-                border-color: #4b5563 !important;
-            }
+                input,
+                textarea,
+                select {
+                    background-color: #374151 !important;
+                    color: #e5e7eb !important;
+                    border-color: #4b5563 !important;
+                }
 
-            input::placeholder,
-            textarea::placeholder {
-                color: #9ca3af !important;
+                input::placeholder,
+                textarea::placeholder {
+                    color: #9ca3af !important;
+                }
             }
-        }
 
             .animate-float {
                 animation: float 3s ease-in-out infinite;

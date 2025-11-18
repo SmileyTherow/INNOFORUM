@@ -7,11 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
-
-// HAPUS BARIS INI ↓
-// Log::info('Pesan log kamu');
-// Log::error('Pesan error');
-// HAPUS BARIS INI ↑
+use Illuminate\Support\Facades\DB;
+use App\Services\BadgeService;
 
 class UserController extends Controller
 {
@@ -26,7 +23,19 @@ class UserController extends Controller
         // Statistik
         $threadCount = $user->questions()->count();
         $commentCount = $user->comments()->count();
-        $likeCount = 0;
+
+        // Hitungan like: termasuk like pada questions dan like pada comments milik user
+        $totalQuestionLikes = DB::table('question_likes')
+            ->join('questions', 'questions.id', '=', 'question_likes.question_id')
+            ->where('questions.user_id', $id)
+            ->count();
+
+        $totalCommentLikes = DB::table('comment_likes')
+            ->join('comments', 'comments.id', '=', 'comment_likes.comment_id')
+            ->where('comments.user_id', $id)
+            ->count();
+
+        $likeCount = $totalQuestionLikes + $totalCommentLikes;
 
         return view('profile.edit', compact('user', 'threadCount', 'commentCount', 'likeCount'));
     }
@@ -159,9 +168,28 @@ class UserController extends Controller
         $comments = $user->comments()->latest()->get();
         $threadCount = $user->questions_count ?? $user->questions()->count();
         $commentCount = $user->comments_count ?? $user->comments()->count();
-        $likeCount = $user->comments()->withCount('likes')->get()->sum('likes_count');
 
-        return view('users.profile', compact('user', 'threads', 'comments', 'threadCount', 'commentCount', 'likeCount'));
+        // Hitungan like: masukkan likes pada questions dan likes pada comments milik user
+        $totalQuestionLikes = DB::table('question_likes')
+            ->join('questions', 'questions.id', '=', 'question_likes.question_id')
+            ->where('questions.user_id', $id)
+            ->count();
+
+        $totalCommentLikes = DB::table('comment_likes')
+            ->join('comments', 'comments.id', '=', 'comment_likes.comment_id')
+            ->where('comments.user_id', $id)
+            ->count();
+
+        $likeCount = $totalQuestionLikes + $totalCommentLikes;
+
+        $badgeService = app(BadgeService::class);
+        $responderFile = $badgeService->determineBadgeFilename('responder', $user->answer_points ?? 0);
+        $likeFile = $badgeService->determineBadgeFilename('like', $user->like_points ?? 0);
+
+        return view('users.profile', compact('user', 'threads', 'comments', 'threadCount', 'commentCount', 'likeCount'))->with([
+            'responderFile' => $responderFile,
+            'likeFile' => $likeFile,
+        ]);
     }
 
     // ========== LENGKAPI PROFIL (SETELAH OTP, SEBELUM LOGIN) ==========
