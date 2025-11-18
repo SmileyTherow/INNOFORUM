@@ -13,11 +13,12 @@ class MessageUpdated implements ShouldBroadcast
 {
     use InteractsWithSockets, SerializesModels;
 
+    // Menyimpan instance pesan yang di-update
     public $message;
 
     public function __construct(ChatMessage $message)
     {
-        $this->message = $message;
+        $this->message = $message; // Simpan pesan yang telah di-update
     }
 
     public function broadcastOn()
@@ -29,13 +30,16 @@ class MessageUpdated implements ShouldBroadcast
     {
         return [
             'action' => 'updated',
+            // Data pesan yang diperbarui
             'message' => [
                 'id' => $this->message->id,
                 'conversation_id' => $this->message->conversation_id,
+                // Informasi pengirim
                 'sender' => [
                     'id' => $this->message->sender->id ?? $this->message->sender_id,
                     'name' => $this->message->sender->name ?? null,
                 ],
+                // Isi pesan yang sudah di-update
                 'body' => $this->message->body,
                 'attachment' => $this->message->attachment ? asset('storage/' . $this->message->attachment) : null,
                 'attachment_type' => $this->message->attachment_type,

@@ -9,6 +9,6 @@ class EmailVerificationNotificationController extends Controller
 {
     public function store(Request $request)
     {
-        // Implement your logic here
+        
     }
 }

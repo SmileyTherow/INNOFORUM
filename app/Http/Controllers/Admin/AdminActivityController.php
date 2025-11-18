@@ -16,48 +16,44 @@ class AdminActivityController extends Controller
 
     public function index(Request $request)
     {
-        // Per-page optional (default 25, max 100)
         $perPage = (int) $request->get('per_page', 25);
         $perPage = $perPage <= 0 ? 25 : min(100, $perPage);
 
-        // Basic query, eager load relasi admin
+        // Query dasar: ambil data aktivitas admin, sertakan relasi 'admin', urutkan terbaru terlebih dahulu
         $query = AdminActivity::with('admin')->orderByDesc('created_at');
 
-        // Filter by admin
+        // Filter berdasarkan admin tertentu
         if ($request->filled('admin_id')) {
             $query->where('admin_id', $request->admin_id);
         }
 
-        // Filter by action
+        // Filter berdasarkan aksi tertentu (create, update, delete, dll.)
         if ($request->filled('action')) {
             $query->where('action', $request->action);
         }
 
-        // Filter by target_type (sesuaikan nama kolom kalau beda)
+        // Filter berdasarkan tipe target (model yang dipengaruhi)
         if ($request->filled('target_type')) {
             $query->where('target_type', $request->target_type);
         }
 
-        // Global search q: description, admin_name, ip_address, metadata (fallback LIKE)
+         // Filter pencarian global (mencari pada description, admin_name, ip_address, metadata)
         if ($request->filled('q')) {
             $q = $request->q;
             $query->where(function ($qr) use ($q) {
                 $qr->where('description', 'like', "%{$q}%")
-                   ->orWhere('admin_name', 'like', "%{$q}%")
-                   ->orWhere('ip_address', 'like', "%{$q}%")
-                   // Metadata: jika kolom metadata adalah JSON, and gunakan DB JSON functions kalau perlu.
-                   // Di banyak kasus, melakukan LIKE pada kolom JSON bekerja juga (tergantung driver).
-                   ->orWhere('metadata', 'like', "%{$q}%");
+                    ->orWhere('admin_name', 'like', "%{$q}%")
+                    ->orWhere('ip_address', 'like', "%{$q}%")
+                    ->orWhere('metadata', 'like', "%{$q}%");
             });
         }
 
-        // Paginate with query string so filter params persist
         $activities = $query->paginate($perPage)->withQueryString();
 
-        // Ambil list admin untuk dropdown filter (asumsi role field 'admin')
+        // Ambil list admin untuk dropdown filter di view
         $admins = User::where('role', 'admin')->orderBy('name')->get();
 
-        // Ambil daftar action unik (exclude null)
+        // Ambil daftar action unik untuk dropdown filter di view
         $actions = AdminActivity::whereNotNull('action')->distinct()->orderBy('action')->pluck('action');
 
         return view('admin.activities.index', compact('activities', 'admins', 'actions'));

@@ -23,6 +23,7 @@ class AdminThreadController extends Controller
         return view('admin.threads.index', compact('threads'));
     }
 
+    // Menampilkan daftar thread yang dilaporkan user
     public function reported() {
         $reportedThreads = \App\Models\Question::with(['user', 'reports.reporter'])
             ->whereHas('reports')
@@ -61,6 +62,7 @@ class AdminThreadController extends Controller
         return redirect()->route('admin.threads.index')->with('success', 'Thread dihapus.');
     }
 
+    // Admin memberi notifikasi peringatan ke pemilik thread
     public function notify(Request $request)
     {
         $request->validate([
@@ -85,7 +87,7 @@ class AdminThreadController extends Controller
             'is_read' => false,
         ]);
 
-        // Log activity
+        // Log activity admin
         if (Auth::check() && Auth::user()->role === 'admin') {
             AdminActivityLogger::log(
                 'admin_warn_thread',

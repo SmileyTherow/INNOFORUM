@@ -13,13 +13,13 @@ use Illuminate\Support\Facades\Log;
 
 class ForgotPasswordController extends Controller
 {
-    // show form
+    // tampilkan form
     public function show()
     {
         return view('auth.passwords.forgot');
     }
 
-    // process send code
+    // proses kirim kode
     public function send(Request $request)
     {
         $request->validate([
@@ -30,13 +30,13 @@ class ForgotPasswordController extends Controller
         $cacheLastKey = "pw_reset_last_sent:{$email}";
         $cacheCountKey = "pw_reset_sent_count_hour:{$email}";
 
-        // Minimal interval between sends (60s)
+        // Interval minimal antara pengiriman (60 detik)
         $lastSentTimestamp = Cache::get($cacheLastKey, 0);
         if ($lastSentTimestamp && (time() - (int)$lastSentTimestamp) < 60) {
             return back()->with('status', __('passwords.sent_generic'));
         }
 
-        // Max per hour (5)
+        // Maksimal pengiriman per jam (5)
         $sentCount = Cache::get($cacheCountKey, 0);
         if ($sentCount >= 5) {
             return back()->with('status', __('passwords.sent_generic'));
@@ -44,29 +44,29 @@ class ForgotPasswordController extends Controller
 
         $user = User::where('email', $email)->first();
 
-        // Always show same message to avoid account enumeration
+        // Selalu tampilkan pesan yang sama untuk menghindari enumerasi akun
         $genericResponse = redirect()->route('password.verify')->with('status', __('passwords.sent_generic'));
 
-        // If user not found, still update counters to prevent abuse, then respond generic
+        // Jika pengguna tidak ditemukan, tetap perbarui penghitung untuk mencegah penyalahgunaan, lalu respon dengan pesan umum
         if (! $user) {
             Cache::put($cacheLastKey, time(), 3600);
             Cache::put($cacheCountKey, $sentCount + 1, 3600);
             return $genericResponse;
         }
 
-        // generate 6-digit code
+        // generate kode 6-digit
         try {
             $code = (string) random_int(100000, 999999);
         } catch (\Throwable $e) {
             $code = str_pad((string) mt_rand(0, 999999), 6, '0', STR_PAD_LEFT);
         }
 
-        // Hash token before storing
+        // Hash token sebelum menyimpan
         $hash = Hash::make($code);
         $ttlMinutes = 10;
         $expiresAt = now()->addMinutes($ttlMinutes);
 
-        // Store new reset code (multiple allowed, verify will use latest valid)
+        // Simpan kode reset baru (boleh lebih dari satu, verifikasi akan menggunakan yang terbaru yang valid)
         PasswordResetCode::create([
             'email' => $email,
             'token_hash' => $hash,
@@ -75,17 +75,17 @@ class ForgotPasswordController extends Controller
             'locked_until' => null,
         ]);
 
-        // update cache counters BEFORE returning
+        // perbarui penghitung cache SEBELUM mengembalikan
         Cache::put($cacheLastKey, time(), 3600);
         Cache::put($cacheCountKey, $sentCount + 1, 3600);
 
-        // debug log (temporary - hapus di production)
+        // debug log (sementara - hapus di produksi)
         Log::info("DEBUG PW-RESET: code={$code} email={$email}");
 
-        // queue notification (if queue connection is database, worker must run)
+        // antrian notifikasi (jika koneksi antrian adalah database, worker harus berjalan)
         $user->notify(new PasswordResetCodeNotification($code, $ttlMinutes));
 
-        // Redirect to verify page so user tahu langkah selanjutnya
+        // Redirect ke halaman verifikasi agar pengguna tahu langkah selanjutnya
         return redirect()->route('password.verify')->with('status', __('passwords.sent_generic'));
     }
 }

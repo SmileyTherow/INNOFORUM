@@ -15,12 +15,12 @@ class DashboardController extends Controller
 {
     public function index(Request $request)
     {
-        $totalUsers = User::where('role', '!=', 'admin')->count();
-        $totalThreads = Question::count();
-        $totalCategories = Category::count();
-        $totalComments = Comment::count();
-        $totalAnnouncements = Announcement::count();
-        $recentActivities = \App\Models\AdminActivity::with('admin')->latest()->limit(3)->get();
+        $totalUsers = User::where('role', '!=', 'admin')->count(); // Total user non-admin
+        $totalThreads = Question::count(); // Total seluruh thread yang dibuat
+        $totalCategories = Category::count(); // Total kategori yang ada
+        $totalComments = Comment::count(); // Total komentar di seluruh thread
+        $totalAnnouncements = Announcement::count(); // Total pengumuman yang dibuat admin
+        $recentActivities = \App\Models\AdminActivity::with('admin')->latest()->limit(3)->get(); // Aktivitas admin terbaru (limit 3)
 
         // 12 bulan terakhir untuk query & label grafik
         $monthsQuery = collect(range(0, 11))->map(function ($i) {
@@ -31,6 +31,7 @@ class DashboardController extends Controller
             return now()->subMonths($i)->isoFormat('MMM Y');
         })->reverse()->values();
 
+        // Jumlah user baru per bulan (non-admin)
         $usersPerMonth = $monthsQuery->map(function ($month) {
             return User::where('role', '!=', 'admin')
                 ->whereBetween('created_at', [
@@ -39,6 +40,7 @@ class DashboardController extends Controller
                 ])->count();
         });
 
+        // Jumlah thread baru per bulan
         $threadsPerMonth = $monthsQuery->map(function ($month) {
             return Question::whereBetween('created_at', [
                 Carbon::parse($month . '-01')->startOfMonth(),
@@ -46,6 +48,7 @@ class DashboardController extends Controller
             ])->count();
         });
 
+        // Jumlah komentar baru per bulan
         $commentsPerMonth = $monthsQuery->map(function ($month) {
             return Comment::whereBetween('created_at', [
                 Carbon::parse($month . '-01')->startOfMonth(),

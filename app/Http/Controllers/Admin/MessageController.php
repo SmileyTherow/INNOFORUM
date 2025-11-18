@@ -13,12 +13,14 @@ use App\Notifications\MessageRepliedNotification;
 
 class MessageController extends Controller
 {
+    // Tampilkan daftar pesan yang masuk (contact form)
     public function index()
     {
         $messages = Message::latest()->paginate(20);
         return view('admin.messages.index', compact('messages'));
     }
 
+    // Tampilkan detail pesan + semua balasan admin
     public function show($id)
     {
         $message = Message::with('replies.author')->findOrFail($id);
@@ -30,6 +32,7 @@ class MessageController extends Controller
         return view('admin.messages.show', compact('message'));
     }
 
+    // Balas pesan dari admin (via email + notifikasi in-app)
     public function reply(Request $request, $id)
     {
         $request->validate([
@@ -60,7 +63,7 @@ class MessageController extends Controller
     public function destroy($id)
     {
         $message = Message::findOrFail($id);
-        $message->delete(); // soft delete
+        $message->delete();
         return redirect()->route('admin.messages.index')->with('success', 'Pesan dihapus.');
     }
 }

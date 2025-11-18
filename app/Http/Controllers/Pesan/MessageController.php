@@ -47,10 +47,9 @@ class MessageController extends Controller
             'attachment_type'  => $attachmentType,
         ]);
 
-        // update last_message_at safely
+        // perbarui last_message_at dengan aman
         $conversation->update(['last_message_at' => $message->created_at]);
 
-        // load sender relation if available
         if (method_exists($message, 'sender')) {
             $message->load('sender');
         }
@@ -60,15 +59,12 @@ class MessageController extends Controller
 
         if ($recipientUser) {
 
-            // Notify model-based (optional) untuk broadcast / mail jika ada
             try {
                 $recipientUser->notify(new PrivateMessageReceived($message));
             } catch (\Throwable $e) {
-                // jangan crash jika notifikasi class bermasalah
             }
         }
 
-        // Jika pengirim adalah admin, catat aktivitas (tanpa menyimpan isi penuh)
         if (Auth::check() && Auth::user()->role === 'admin') {
             $summary = Str::limit($message->body ?? '', 100);
             AdminActivityLogger::log(
@@ -79,14 +75,11 @@ class MessageController extends Controller
             );
         }
 
-        // Broadcast realtime ke channel conversation (jika konfigured)
         try {
             broadcast(new MessageSent($message))->toOthers();
         } catch (\Throwable $e) {
-            // ignore broadcast errors in controller
         }
 
-        // Prepare payload for response
         $payload = [
             'id' => $message->id,
             'conversation_id' => $message->conversation_id,
@@ -109,7 +102,7 @@ class MessageController extends Controller
     {
         $user = $request->user();
 
-        // authorization checks
+        // pemeriksaan otorisasi
         if ($message->conversation_id != $conversation->id) {
             abort(404);
         }
@@ -125,17 +118,15 @@ class MessageController extends Controller
         $message->body = $validated['body'] ?? $message->body;
         $message->save();
 
-        // load sender for payload
         if (method_exists($message, 'sender')) {
             $message->load('sender');
         }
 
-        // broadcast event so other participant updates UI
         try {
             broadcast(new MessageUpdated($message))->toOthers();
         } catch (\Throwable $e) {}
 
-        // if admin edited, log activity
+        // jika admin mengedit, catat aktivitas
         if (Auth::check() && Auth::user()->role === 'admin') {
             AdminActivityLogger::log(
                 'edit_private_message',
@@ -148,7 +139,7 @@ class MessageController extends Controller
         return response()->json(['message' => $message], 200);
     }
 
-    // Delete message
+    // Hapus message
     public function destroy(Request $request, Conversation $conversation, ChatMessage $message)
     {
         $user = $request->user();
@@ -160,16 +151,15 @@ class MessageController extends Controller
             abort(403);
         }
 
-        // hard delete (atau gunakan soft delete jika model mendukung)
+        // hard delete
         $messageId = $message->id;
         $message->delete();
 
-        // broadcast event so other participant removes message
         try {
             broadcast(new MessageDeleted($conversation->id, $messageId))->toOthers();
         } catch (\Throwable $e) {}
 
-        // if admin deleted, log activity
+        // jika admin menghapus, catat aktivitas
         if (Auth::check() && Auth::user()->role === 'admin') {
             AdminActivityLogger::log(
                 'delete_private_message',

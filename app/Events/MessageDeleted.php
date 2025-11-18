@@ -16,8 +16,8 @@ class MessageDeleted implements ShouldBroadcast
 
     public function __construct($conversationId, $messageId)
     {
-        $this->conversationId = $conversationId;
-        $this->messageId = $messageId;
+        $this->conversationId = $conversationId; // simpan ID percakapan
+        $this->messageId = $messageId; // simpan ID pesan yg di hapus
     }
 
     public function broadcastOn()

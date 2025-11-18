@@ -15,6 +15,7 @@ class AdminCommentController extends Controller
 
     public function index()
     {
+        // Ambil komentar beserta relasi user + pertanyaannya
         $comments = Comment::with(['question', 'user'])->latest()->paginate(20);
         return view('admin.comments.index', compact('comments'));
     }
@@ -26,6 +27,7 @@ class AdminCommentController extends Controller
             'message' => 'required|string|max:500'
         ]);
 
+        // Ambil komentar berdasarkan ID
         $comment = Comment::find($request->comment_id);
         $user = $comment->user;
 
@@ -42,6 +44,7 @@ class AdminCommentController extends Controller
             $link = null;
         }
 
+        // Buat notifikasi untuk user
         Notification::create([
             'user_id' => $user->id,
             'type' => 'admin_report',
@@ -55,7 +58,7 @@ class AdminCommentController extends Controller
             'is_read' => false,
         ]);
 
-        // log admin activity (hanya jika current user adalah admin)
+        // log admin activity
         if (Auth::check() && Auth::user()->role === 'admin') {
             AdminActivityLogger::log(
                 'admin_warn_comment',
@@ -75,6 +78,8 @@ class AdminCommentController extends Controller
 
         // Log activity if admin removed it
         if (Auth::check() && Auth::user()->role === 'admin') {
+
+            // Simpan log aktivitas admin
             AdminActivityLogger::log(
                 'delete_comment',
                 "Menghapus komentar #{$id}",
@@ -88,6 +93,7 @@ class AdminCommentController extends Controller
 
     public function reported()
     {
+        // Ambil komentar yang memiliki laporan
         $reportedComments = Comment::with(['user', 'reports', 'question'])
             ->whereHas('reports')
             ->paginate(20);

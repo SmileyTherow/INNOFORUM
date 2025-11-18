@@ -13,11 +13,12 @@ class MessageSent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+     // Menyimpan instance pesan yang dikirim
     public $message;
 
     public function __construct(ChatMessage $message)
     {
-        $this->message = $message;
+        $this->message = $message; // Simpan pesan agar bisa dibroadcast
     }
 
     public function broadcastOn()
@@ -28,15 +29,18 @@ class MessageSent implements ShouldBroadcast
     public function broadcastWith()
     {
         return [
-            'id' => $this->message->id,
-            'conversation_id' => $this->message->conversation_id,
+            'id' => $this->message->id, // ID pesan
+            'conversation_id' => $this->message->conversation_id, // ID percakapan
+
+            // informasi pengirim
             'sender' => [
                 'id' => $this->message->sender->id ?? $this->message->sender_id,
                 'name' => $this->message->sender->name ?? null,
             ],
+
+            // isi pesan
             'body' => $this->message->body,
             'attachment' => $this->message->attachment ? asset('storage/' . $this->message->attachment) : null,
-            // send ISO8601 string so JS Date parsing works cross-browser
             'created_at' => $this->message->created_at?->toIso8601String(),
         ];
     }

@@ -12,6 +12,7 @@ class AdminUserController extends Controller
 {
     public function index(Request $request)
     {
+        // Fitur pencarian user berdasarkan nama, email atau username
         $query = User::query();
         if ($request->q) {
             $query->where(function ($q) use ($request) {
@@ -21,7 +22,7 @@ class AdminUserController extends Controller
             });
         }
 
-        $query->where('role', '!=', 'admin');
+        $query->where('role', '!=', 'admin'); // Admin tidak ditampilkan dalam daftar user
 
         $users = $query->whereNull('deleted_at')->orderBy('created_at', 'desc')->paginate(20);
         return view('admin.users.index', compact('users'));
@@ -34,6 +35,7 @@ class AdminUserController extends Controller
 
     public function store(Request $request)
     {
+        // Validasi input
         $validatedData = $request->validate([
             'username' => 'required|string|max:255|unique:users',
             'name'     => 'required|string|max:255',
@@ -41,6 +43,8 @@ class AdminUserController extends Controller
             'role'     => 'required|in:admin,mahasiswa,dosen',
             'password' => 'required|string|min:6|confirmed',
         ]);
+
+        // Simpan user ke database
         $user = User::create([
             'username' => $validatedData['username'],
             'name'     => $validatedData['name'],
@@ -49,7 +53,7 @@ class AdminUserController extends Controller
             'password' => bcrypt($validatedData['password']),
         ]);
 
-        // Log creation by admin
+        // Log activity admin
         if (Auth::check() && Auth::user()->role === 'admin') {
             AdminActivityLogger::log(
                 'create_user',
@@ -62,7 +66,7 @@ class AdminUserController extends Controller
         return redirect()->route('admin.users.index')->with('success', 'User berhasil ditambahkan.');
     }
 
-    // ADMIN: Detail user
+    // ADMIN: Detail user tertentu
     public function show($id)
     {
         $user = User::findOrFail($id);
@@ -77,10 +81,10 @@ class AdminUserController extends Controller
     }
 
     // ADMIN: Update user
-    // other methods unchanged; ensure Auth:: used where needed (update/destroy)
     public function update(Request $request, $id)
     {
         $user = User::findOrFail($id);
+        // Validasi input update
         $validatedData = $request->validate([
             'username' => 'required|string|max:255|unique:users,username,' . $id,
             'name'     => 'required|string|max:255',
@@ -88,6 +92,8 @@ class AdminUserController extends Controller
             'role'     => 'required|in:admin,mahasiswa,dosen',
             'password' => 'nullable|string|min:6|confirmed'
         ]);
+
+        // Update data user
         $user->username = $validatedData['username'];
         $user->name     = $validatedData['name'];
         $user->email    = $validatedData['email'];
@@ -97,7 +103,7 @@ class AdminUserController extends Controller
         }
         $user->save();
 
-        // log update
+        // log aktifitas admin update
         if (Auth::check() && Auth::user()->role === 'admin') {
             AdminActivityLogger::log(
                 'update_user',
@@ -115,6 +121,7 @@ class AdminUserController extends Controller
         $user = User::findOrFail($id);
         $user->delete();
 
+        // Log aktivitas admin saat menghapus user
         if (Auth::check() && Auth::user()->role === 'admin') {
             AdminActivityLogger::log(
                 'delete_user',
@@ -134,6 +141,7 @@ class AdminUserController extends Controller
     // Hapus nama & email (tidak hapus user di database)
     public function deleteFields($id)
     {
+        // Set semua data pribadi menjadi null
         $user = User::findOrFail($id);
         $user->name = null;
         $user->email = null;
@@ -159,7 +167,6 @@ class AdminUserController extends Controller
         $request->validate(['message' => 'required|string|max:255']);
         $user = User::findOrFail($id);
 
-        // Asumsikan kamu punya model Notification
         \App\Models\Notification::create([
             'user_id' => $user->id,
             'type' => 'admin_message',
@@ -179,7 +186,6 @@ class AdminUserController extends Controller
 
         $user = new \App\Models\User();
         $user->username = $request->username;
-        // field lain biarkan null
         $user->save();
 
         return back()->with('success', 'Username berhasil ditambahkan!');

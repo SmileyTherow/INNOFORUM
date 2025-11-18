@@ -8,6 +8,6 @@ class EmailVerificationPromptController extends Controller
 {
     public function __invoke()
     {
-        // Implement your logic here
+        
     }
 }

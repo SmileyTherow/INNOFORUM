@@ -12,34 +12,36 @@ class AdminAnnouncementController extends Controller
 {
     public function index()
     {
-        $announcements = Announcement::latest()->paginate(10);
+        $announcements = Announcement::latest()->paginate(10); // Ambil semua pengumuman terbaru, paginasi 10 per halaman
         return view('admin.announcements.index', compact('announcements'));
     }
 
     public function create()
     {
-        return view('admin.announcements.create');
+        return view('admin.announcements.create'); // Tampilkan form untuk membuat pengumuman baru
     }
 
     public function store(Request $request)
     {
+        // Validasi input dari form
         $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|string',
         ]);
 
-        // cek apakah model Announcement ada
+        // cek apakah model Announcement ada (antisipasi error sistem)
         if (!class_exists(\App\Models\Announcement::class)) {
             return back()->with('error', 'Model Announcement tidak ditemukan. Hubungi dev.');
         }
 
+        // Simpan data pengumuman ke database
         $announcement = \App\Models\Announcement::create([
             'title' => $request->title,
             'content' => $request->input('content'),
             'user_id' => Auth::id(),
         ]);
 
-        // log activity oleh admin
+        // Mencatat aktivitas admin setelah membuat pengumuman
         if (Auth::check() && Auth::user()->role === 'admin') {
             AdminActivityLogger::log(
                 'create_announcement',
@@ -64,7 +66,8 @@ class AdminAnnouncementController extends Controller
             'title' => 'required|max:255',
             'content' => 'required'
         ]);
-        $announcement = Announcement::findOrFail($id);
+        $announcement = Announcement::findOrFail($id); // Ambil pengumuman terkait
+        // Update data pengumuman
         $announcement->update([
             'title' => $request->title,
             'content' => $request->input('content')
@@ -74,8 +77,11 @@ class AdminAnnouncementController extends Controller
 
     public function destroy($id)
     {
+        // Cari pengumuman dan hapus
         $announcement = Announcement::findOrFail($id);
         $announcement->delete();
+
+        // Hapus notifikasi terkait pengumuman tersebut
         \App\Models\Notification::where('type', 'announcement')
             ->where('data->announcement_id', $id)
             ->delete();
@@ -91,10 +97,12 @@ class AdminAnnouncementController extends Controller
 
     public function notifyAll(Request $request)
     {
+         // Validasi input notifikasi
         $request->validate([
             'title' => 'required|string|max:100',
             'message' => 'required|string|max:500',
         ]);
+
         // Kirim notifikasi ke semua user (kecuali admin)
         $users = \App\Models\User::where('role', '!=', 'admin')->get();
         foreach ($users as $user) {

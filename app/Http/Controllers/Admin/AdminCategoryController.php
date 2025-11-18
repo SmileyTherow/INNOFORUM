@@ -25,7 +25,8 @@ class AdminCategoryController extends Controller
             'name' => 'required|max:100',
             'description' => 'nullable|max:255'
         ]);
-        Category::create($request->only('name', 'description'));
+
+        Category::create($request->only('name', 'description')); // Simpan kategori baru ke database
         return redirect()->route('admin.categories.index')->with('success', 'Kategori berhasil ditambahkan!');
     }
 
@@ -41,8 +42,8 @@ class AdminCategoryController extends Controller
             'name' => 'required|max:100',
             'description' => 'nullable|max:255'
         ]);
-        $category = Category::findOrFail($id);
-        $category->update($request->only('name', 'description'));
+        $category = Category::findOrFail($id); // Ambil kategori berdasarkan ID
+        $category->update($request->only('name', 'description')); // Update data kategori di database
         return redirect()->route('admin.categories.index')->with('success', 'Kategori berhasil diupdate!');
     }
 
