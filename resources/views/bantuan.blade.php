@@ -77,8 +77,8 @@
                                 <span class="text-xs bg-purple-500/20 text-purple-300 px-2 py-1 rounded-full">Memulai Topik</span>
                             </h2>
                             <p class="text-gray-300 leading-relaxed">
-                                Klik tombol <span class="bg-purple-500/20 text-purple-300 px-2 py-1 rounded-md font-medium">Buat Diskusi Baru</span>
-                                di halaman utama atau dalam kategori tertentu, tulis judul dan konten yang jelas,
+                                Klik tombol <span class="bg-purple-500/20 text-purple-300 px-2 py-1 rounded-md font-medium">Tanya</span>
+                                di halaman utama, tulis judul dan konten yang jelas,
                                 lalu pilih kategori yang sesuai sebelum submit.
                             </p>
                         </div>
@@ -169,8 +169,8 @@
                             </h2>
                             <p class="text-gray-300 leading-relaxed">
                                 Jika membutuhkan bantuan teknis atau memiliki pertanyaan, hubungi admin melalui
-                                <span class="text-teal-300 font-medium">admin@innoforum.ac.id</span> atau
-                                kirim pesan langsung ke admin melalui fitur DM di forum.
+                                <span class="text-teal-300 font-medium">fortech.forumteknologi@gmail.com</span> atau
+                                kirim pesan langsung ke admin melalui fitur Contact us di forum.
                             </p>
                         </div>
                     </div>

@@ -12,7 +12,6 @@ class BadgesTableSeeder extends Seeder
         DB::table('badges')->insert([
             ['name' => 'Problem Solver', 'description' => 'Menyelesaikan 10 thread', 'icon' => null],
             ['name' => 'Active Helper', 'description' => 'Memberi 50 komentar', 'icon' => null],
-            // Tambah badge lain sesuai kebutuhan
         ]);
     }
 }

@@ -13,7 +13,6 @@ class ConversationController extends Controller
     {
         $user = Auth::user();
 
-        // load user's conversations with last message timestamp and participant info
         $conversations = $user->conversations()
             ->with(['users' => function ($q) use ($user) {
                 $q->select('users.id', 'name', 'email');
@@ -26,7 +25,6 @@ class ConversationController extends Controller
         return view('pesan.index', compact('conversations'));
     }
 
-    // Create or return existing 1-on-1 conversation between auth user and target user
     public function store(Request $request)
     {
         $request->validate([
@@ -45,12 +43,10 @@ class ConversationController extends Controller
         return response()->json(['conversation' => $conversation], 200);
     }
 
-    // API to fetch messages (paginated)
     public function messages(Request $request, Conversation $conversation)
     {
         $user = $request->user();
 
-        // authorization: ensure user is participant
         if (!$conversation->users()->where('users.id', $user->id)->exists()) {
             abort(403);
         }

@@ -24,9 +24,6 @@ class UserSocialLink extends Model
         'order' => 'integer',
     ];
 
-    /**
-     * Relationship ke User
-     */
     public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(User::class);

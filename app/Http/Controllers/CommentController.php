@@ -51,10 +51,9 @@ class CommentController extends Controller
             'image' => $filename,
         ]);
 
-        // pastikan relations tersedia
         $comment->load('question', 'user');
 
-        // notifikasi ke owner question (jika commenter bukan owner)
+        // === NOTIFIKASI KOMENTAR BARU ===
         $question = $comment->question;
         if ($question && $question->user_id && $question->user_id != $comment->user_id) {
             \App\Models\Notification::create([
@@ -71,7 +70,7 @@ class CommentController extends Controller
             ]);
         }
 
-        // jika ini balasan ke comment tertentu dan pemilik komentar berbeda, notifikasi ke pemilik komentar
+        // notifikasi ke owner comment yang di-reply (jika ada dan bukan dirinya sendiri)
         $replyToId = $request->input('reply_to_comment_id') ?? null;
         if ($replyToId) {
             $parentComment = Comment::find($replyToId);
@@ -101,7 +100,7 @@ class CommentController extends Controller
             );
         }
 
-        // === Penambahan Poin dan Badge (tetap seperti sebelumnya) ===
+        // === Penambahan Poin dan Badge ===
         $badgeService = app(\App\Services\BadgeService::class);
         $badgeService->updateUserPointsAndBadges($comment->user_id);
 
@@ -182,7 +181,7 @@ class CommentController extends Controller
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
-        // Optional: handle image update
+        // Handle image upload
         if ($request->hasFile('image')) {
             // delete old image
             if ($comment->image && Storage::exists('public/comment_images/' . $comment->image)) {

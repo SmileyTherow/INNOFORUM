@@ -12,9 +12,6 @@ class BadgeSeeder extends Seeder
     {
         $now = Carbon::now();
 
-        // Gunakan nama & kolom 'icon' (atau 'image' jika schema beda) sesuai schema yang nampak pada repo Anda.
-        // Jika badges table Anda pakai kolom 'icon' (dari kode view sebelumnya ada $badge->icon),
-        // seeder ini akan mengisi kolom 'icon'.
         $badges = [
             // like badges (Pencerah)
             ['name' => 'Pencerah Bronze', 'icon' => 'like_bronze.jpg', 'description' => 'Like terbanyak 100+'],
@@ -28,8 +25,6 @@ class BadgeSeeder extends Seeder
         ];
 
         foreach ($badges as $b) {
-            // Sesuaikan kolom-kolom di updateOrInsert sesuai schema badges Anda.
-            // Saya pakai 'icon' karena di view Anda sebelumnya ada $badge->icon
             DB::table('badges')->updateOrInsert(
                 ['name' => $b['name']],
                 [

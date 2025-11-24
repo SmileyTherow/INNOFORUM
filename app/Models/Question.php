@@ -18,7 +18,7 @@ class Question extends Model
     ];
 
     protected $casts = [
-        'images' => 'array', // tambahkan ini
+        'images' => 'array',
     ];
 
     // Relasi user pembuat pertanyaan

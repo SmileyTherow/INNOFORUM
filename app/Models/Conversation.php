@@ -18,14 +18,10 @@ class Conversation extends Model
         'last_message_at',
     ];
 
-    // Pastikan casting datetime agar ->diffForHumans() aman
     protected $casts = [
         'last_message_at' => 'datetime',
     ];
 
-    /**
-     * Users relation (pivot conversation_user)
-     */
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(\App\Models\User::class, 'conversation_user')
@@ -33,25 +29,16 @@ class Conversation extends Model
             ->withPivot('last_read_at', 'muted');
     }
 
-    /**
-     * Messages relation (ChatMessage)
-     */
     public function messages(): HasMany
     {
         return $this->hasMany(ChatMessage::class)->orderBy('created_at', 'asc');
     }
 
-    /**
-     * latestMessage helper (optional)
-     */
     public function latestMessage(): HasOne
     {
         return $this->hasOne(ChatMessage::class)->latest('created_at');
     }
 
-    /**
-     * Ensure unique 1-on-1 conversation per pair (order-insensitive)
-     */
     public static function findOrCreateOneOnOne(int $a, int $b): self
     {
         if ($a === $b) {

@@ -8,12 +8,6 @@ use Illuminate\Support\Facades\Auth;
 
 class EnsureUserIsAdmin
 {
-    /**
-     * Handle an incoming request.
-     * Memeriksa beberapa kemungkinan struktur role tanpa memanggil method yang tidak ada.
-     * - Jika users.role adalah string: cek 'admin'
-     * - Jika users.role adalah relasi object (Role model): cek ->name == 'admin'
-     */
     public function handle(Request $request, Closure $next)
     {
         $user = Auth::user();

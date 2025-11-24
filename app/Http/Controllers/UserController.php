@@ -17,7 +17,6 @@ class UserController extends Controller
     {
         if (Auth::id() != $id) abort(403);
 
-        // Pastikan relasi profile sudah dimuat
         $user = User::with('profile')->findOrFail($id);
 
         // Statistik
@@ -91,7 +90,7 @@ class UserController extends Controller
         // Simpan perubahan user
         $user->save();
 
-        // Update/buat profil user (angkatan, bio, prodi jika ingin di profile, tapi default di user)
+        // Update/buat profil user
         $user->profile()->updateOrCreate(
             ['user_id' => $user->id],
             [
@@ -100,7 +99,6 @@ class UserController extends Controller
             ]
         );
 
-        // ===== TAMBAHKAN INI UNTUK PROCESS SOCIAL LINKS =====
         $links = $request->input('links', []);
 
         Log::info('Update Profile - Social Links Input:', $links); // Debug
@@ -227,7 +225,6 @@ class UserController extends Controller
             ]
         );
 
-        // ===== TAMBAHKAN INI UNTUK PROCESS SOCIAL LINKS =====
         $links = $request->input('links', []);
 
         Log::info('Complete Profile - Social Links Input:', $links); // Debug

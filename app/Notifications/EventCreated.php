@@ -13,26 +13,16 @@ class EventCreated extends Notification
 
     protected $event;
 
-    /**
-     * Create a new notification instance.
-     */
     public function __construct(AcademicEvent $event)
     {
         $this->event = $event;
     }
 
-    /**
-     * Get the notification's delivery channels.
-     */
     public function via($notifiable)
     {
-        // DB channel stores notification in notifications table
         return ['database'];
     }
 
-    /**
-     * Data stored in the notifications table.
-     */
     public function toDatabase($notifiable)
     {
         return [

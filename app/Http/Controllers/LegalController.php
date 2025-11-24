@@ -4,9 +4,6 @@ namespace App\Http\Controllers;
 
 class LegalController extends Controller
 {
-    /**
-     * Display Privacy Policy page for users
-     */
     public function privacyPolicy()
     {
         $data = [
@@ -50,9 +47,6 @@ class LegalController extends Controller
         return view('legal.privacy-policy', ['data' => $data]);
     }
 
-    /**
-     * Display Terms & Conditions page for users
-     */
     public function termsAndConditions()
     {
         $data = [
@@ -96,9 +90,6 @@ class LegalController extends Controller
         return view('legal.terms-conditions', ['data' => $data]);
     }
 
-    /**
-     * Display Privacy Policy page for admin
-     */
     public function adminPrivacyPolicy()
     {
         $data = [
@@ -142,9 +133,6 @@ class LegalController extends Controller
         return view('legal.admin-privacy-policy', ['data' => $data]);
     }
 
-    /**
-     * Display Terms & Conditions page for admin
-     */
     public function adminTermsAndConditions()
     {
         $data = [

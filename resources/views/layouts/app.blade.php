@@ -288,9 +288,9 @@
                     <ul class="space-y-2 text-gray-300 text-sm">
                         <li class="flex items-start">
                             <span class="material-icons mr-2 text-blue-400">location_on</span>
-                            <a href="https://maps.app.goo.gl/PeGXMvXmxSU6maAC8" class="hover:underline"
+                            <a href="https://maps.app.goo.gl/89NGmtueysAZA2GMA" class="hover:underline"
                                 target="_blank" rel="noopener noreferrer">
-                                STTI NIIT I-TECH, Jl. Asem II No.22, Cipete Selatan, Jakarta Selatan
+                                Birkenwaldstraße 38, 63179 Obertshausen, Germany
                             </a>
                         </li>
                         <li class="flex items-center">

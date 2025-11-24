@@ -44,7 +44,6 @@ class AcademicEvent extends Model
     {
         $start = $this->start_date ? $this->start_date->toDateString() : null;
 
-        // pastikan evaluasi ternary tersusun jelas
         if ($this->end_date) {
             $end = $this->end_date->toDateString();
         } elseif ($this->start_date) {

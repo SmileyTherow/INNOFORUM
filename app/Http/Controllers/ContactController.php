@@ -11,6 +11,7 @@ class ContactController extends Controller
 {
     public function send(Request $request)
     {
+        // Validasi input
         $validated = $request->validate([
             'name'    => 'required|string|max:100',
             'email'   => 'required|email',
@@ -44,11 +45,9 @@ class ContactController extends Controller
         return back()->with('success', 'Pesan berhasil dikirim!');
     }
 
-    /**
-     * Handle guest message (from pre-login help/contact modal)
-     */
     public function guestSend(Request $request)
     {
+        // Validasi input
         $validated = $request->validate([
             'name'      => 'required|string|max:100',
             'email'     => 'required|email|max:150',
@@ -69,7 +68,7 @@ class ContactController extends Controller
             'reference' => $validated['reference'] ?? null,
         ]);
 
-        // Kirim email ke admin (re-use view emails.contact untuk kesederhanaan)
+        // Kirim email ke admin tentang pesan guest
         Mail::send('emails.contact', [
             'name'  => $validated['name'],
             'email' => $validated['email'],
@@ -81,7 +80,7 @@ class ContactController extends Controller
                 ->replyTo($validated['email'], $validated['name']);
         });
 
-        // kembali ke halaman (modal akan menutup manual), tampilkan flash
+        // Kembali dengan pesan sukses
         return back()->with('success', 'Pesan Anda telah dikirim. Admin akan menghubungi melalui email.');
     }
 }

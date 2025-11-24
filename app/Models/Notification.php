@@ -32,12 +32,6 @@ class Notification extends Model
         return $this->belongsTo(Comment::class);
     }
 
-    /**
-     * Kembalikan data ter-decode sebagai array associative.
-     * Jika data sudah array, kembalikan apa adanya.
-     * Jika string JSON, decode.
-     * Jika string bukan JSON, kembalikan array dengan key 'raw'.
-     */
     protected function decodedData(): array
     {
         $data = $this->data;
@@ -52,16 +46,12 @@ class Notification extends Model
                 return $decoded;
             }
 
-            // bukan JSON, simpan sebagai raw
             return ['raw' => $data];
         }
 
         return [];
     }
 
-    /**
-     * Get a cleaned message string for display (prioritize private message sender + body).
-     */
     public function getCleanMessageAttribute()
     {
         $data = $this->decodedData();
@@ -72,7 +62,6 @@ class Notification extends Model
             (isset($data['message']) && is_array($data['message']) && (isset($data['message']['type']) && $data['message']['type'] === 'private_message'))
         ) {
             $message = is_array($data['message']) ? $data['message'] : [];
-            // message might be nested with sender and body
             $senderName = null;
             if (!empty($message['sender'])) {
                 if (is_string($message['sender'])) {
@@ -81,7 +70,6 @@ class Notification extends Model
                     $senderName = $message['sender']['name'];
                 }
             } elseif (!empty($data['sender'])) {
-                // fallback: top-level sender
                 if (is_string($data['sender'])) $senderName = $data['sender'];
                 elseif (is_array($data['sender']) && !empty($data['sender']['name'])) $senderName = $data['sender']['name'];
             }
@@ -150,10 +138,6 @@ class Notification extends Model
         return 'Notifikasi baru';
     }
 
-    /**
-     * Similar to clean message, but ensures returned value is always a string
-     * (use this in views).
-     */
     public function getSafeMessageAttribute()
     {
         $text = $this->clean_message ?? null;

@@ -21,7 +21,6 @@ class AdminActivityLogger
     {
         $user = $admin ?? Auth::user();
         if (!$user) {
-            // jika tidak ada admin terautentikasi, kita tidak log
             return null;
         }
 

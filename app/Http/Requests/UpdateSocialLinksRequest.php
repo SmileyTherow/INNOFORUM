@@ -9,14 +9,11 @@ class UpdateSocialLinksRequest extends FormRequest
 {
     public function authorize()
     {
-        // Pastikan user terautentikasi dan sedang mengubah profil miliknya sendiri.
-        // Jika kamu memanggil request ini tanpa route model binding, ini cukup:
         return Auth::check() && Auth::id() === $this->user()->id;
     }
 
     protected function prepareForValidation()
     {
-        // Normalisasi URL: tambahkan scheme jika tidak ada supaya rule 'url' Laravel valid
         $links = $this->input('links', []);
 
         foreach ($links as $i => $link) {

@@ -7,10 +7,7 @@ use App\Models\User;
 
 class ProfileCompletionController extends Controller
 {
-    /**
-     * Tampilkan form lengkapi profil.
-     * Tidak memakai middleware auth di sini karena user belum login — kita mengidentifikasi user via session('register_user_id').
-     */
+    // Tampilkan form pelengkapan profil dasar dan social links
     public function show()
     {
         $userId = session('register_user_id');
@@ -32,10 +29,7 @@ class ProfileCompletionController extends Controller
         return view('profile.complete', compact('user'));
     }
 
-    /**
-     * Simpan profil dasar (bio, program studi/angkatan/matkul bila ada) dan social links.
-     * Setelah berhasil disimpan, hapus session('register_user_id') dan arahkan user ke halaman login.
-     */
+    // Proses penyimpanan profil dasar dan social links
     public function update(Request $request)
     {
         $userId = session('register_user_id');
@@ -99,9 +93,7 @@ class ProfileCompletionController extends Controller
         return redirect()->route('login')->with('status', 'Profil disimpan. Silakan login untuk melanjutkan.');
     }
 
-    /**
-     * Deteksi tipe social media dari URL
-     */
+    // Deteksi tipe social media dari URL
     private function detectSocialMediaType($url): string
     {
         $url = strtolower($url);
