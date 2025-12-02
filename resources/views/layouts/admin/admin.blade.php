@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -15,29 +16,36 @@
     @livewireStyles
     @stack('head')
 </head>
+
 <body class="sb-nav-fixed">
     <!-- Navbar -->
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
         <!-- Navbar Brand-->
         <a class="navbar-brand ps-3" href="{{ route('admin.dashboard') }}">INNOFORUM</a>
         <!-- Sidebar Toggle-->
-        <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button>
+        <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#"><i
+                class="fas fa-bars"></i></button>
         <!-- Navbar Search-->
         <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
             <div class="input-group">
-                <input class="form-control" type="text" placeholder="Search for..." aria-label="Search for..." aria-describedby="btnNavbarSearch" />
-                <button class="btn btn-primary" id="btnNavbarSearch" type="button"><i class="fas fa-search"></i></button>
+                <input class="form-control" type="text" placeholder="Search for..." aria-label="Search for..."
+                    aria-describedby="btnNavbarSearch" />
+                <button class="btn btn-primary" id="btnNavbarSearch" type="button"><i
+                        class="fas fa-search"></i></button>
             </div>
         </form>
         <!-- Navbar User Menu-->
         <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
+                    data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="fas fa-user fa-fw"></i>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                     <li><a class="dropdown-item" href="{{ route('admin.settings.show') }}">Settings</a></li>
-                    <li><hr class="dropdown-divider" /></li>
+                    <li>
+                        <hr class="dropdown-divider" />
+                    </li>
                     <li>
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
@@ -57,36 +65,57 @@
                     <div class="nav">
                         <!-- DASHBOARD -->
                         <div class="sb-sidenav-menu-heading">Dashboard</div>
-                        <a class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}" href="{{ route('admin.dashboard') }}">
+                        <a class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}"
+                            href="{{ route('admin.dashboard') }}">
                             <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                             Dashboard
                         </a>
 
                         <!-- MANAJEMEN PENGGUNA -->
                         <div class="sb-sidenav-menu-heading">Manajemen</div>
-                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseUser" aria-expanded="false" aria-controls="collapseUser">
+                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+                            data-bs-target="#collapseUser" aria-expanded="false" aria-controls="collapseUser">
                             <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
                             Manajemen Pengguna
                             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
-                        <div class="collapse" id="collapseUser" aria-labelledby="headingUser" data-bs-parent="#sidenavAccordion">
+                        <div class="collapse" id="collapseUser" aria-labelledby="headingUser"
+                            data-bs-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
                                 <a class="nav-link" href="{{ route('admin.users.index') }}">Semua Pengguna</a>
                             </nav>
                         </div>
 
-                        <!-- Pertanyaan & KOMENTAR -->
-                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseForum" aria-expanded="false" aria-controls="collapseForum">
-                            <div class="sb-nav-link-icon"><i class="fas fa-comments"></i></div>
-                            Pertanyaan & Komentar
+                        <!-- PERTANYAAN -->
+                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+                            data-bs-target="#collapseThreads" aria-expanded="false" aria-controls="collapseThreads">
+                            <div class="sb-nav-link-icon"><i class="fas fa-question-circle"></i></div>
+                            Pertanyaan
                             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
-                        <div class="collapse" id="collapseForum" aria-labelledby="headingForum" data-bs-parent="#sidenavAccordion">
+                        <div class="collapse" id="collapseThreads" aria-labelledby="headingThreads"
+                            data-bs-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
                                 <a class="nav-link" href="{{ route('admin.threads.index') }}">Semua Pertanyaan</a>
+                                <a class="nav-link" href="{{ route('admin.threads.reported') }}">Pertanyaan
+                                    Dilaporkan</a>
+                            </nav>
+                        </div>
+
+                        <!-- KOMENTAR -->
+                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+                            data-bs-target="#collapseComments" aria-expanded="false"
+                            aria-controls="collapseComments">
+                            <div class="sb-nav-link-icon"><i class="fas fa-comment-dots"></i></div>
+                            Komentar
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                        </a>
+                        <div class="collapse" id="collapseComments" aria-labelledby="headingComments"
+                            data-bs-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav">
                                 <a class="nav-link" href="{{ route('admin.comments.index') }}">Semua Komentar</a>
-                                <a class="nav-link" href="{{ route('admin.threads.reported') }}">Pertanyaan Dilaporkan</a>
-                                <a class="nav-link" href="{{ route('admin.comments.reported') }}">Komentar Dilaporkan</a>
+                                <a class="nav-link" href="{{ route('admin.comments.reported') }}">Komentar
+                                    Dilaporkan</a>
                             </nav>
                         </div>
 
@@ -98,7 +127,7 @@
 
                         <!-- STATISTIK FORUM -->
                         <a class="nav-link" href="{{ route('admin.stats.index') }}">
-                            <div class="sb-nav-link-icon"><i class="fas fa-chart-bar"></i></div>
+                            <div class="sb-nav-link-icon"><i class="fas fa-chart-line"></i></div>
                             Statistik Forum
                         </a>
 
@@ -119,9 +148,15 @@
                             <div class="sb-nav-link-icon"><i class="fas fa-envelope"></i></div>
                             Pusat Bantuan
                             @php $unread = \App\Models\Message::where('is_read', false)->count(); @endphp
-                            @if($unread)
+                            @if ($unread)
                                 <span class="badge badge-danger ml-2">{{ $unread }}</span>
                             @endif
+                        </a>
+
+                        <!-- Activity Admin -->
+                        <a class="nav-link" href="{{ route('admin.activities.index') }}">
+                            <div class="sb-nav-link-icon"><i class="fas fa-history"></i></div>
+                            Aktivitas Admin
                         </a>
                     </div>
                 </div>
@@ -151,11 +186,14 @@
         </div>
     </div>
     <!-- JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous">
+    </script>
     <script src="{{ asset('admin/js/scripts.js') }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js"
+        crossorigin="anonymous"></script>
     <script src="{{ asset('admin/js/datatables-simple-demo.js') }}"></script>
     @livewireScripts
     @stack('scripts')
 </body>
+
 </html>

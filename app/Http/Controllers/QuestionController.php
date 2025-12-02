@@ -134,7 +134,7 @@ class QuestionController extends Controller
         $question = Question::create([
             'user_id' => Auth::id(),
             'title' => $request->title,
-            'content' => $request->content,
+            'content' => $request->input('content'),
             'category_id' => $request->category_id,
             'images' => $imagePaths,
         ]);
@@ -142,9 +142,6 @@ class QuestionController extends Controller
 
         // === Penambahan Poin dan Badge ===
         $user = \App\Models\User::find(Auth::id());
-        $user->increment('points', 10); // Tambah 10 poin untuk buat thread
-        // Cek & kasih badge jika ada pencapaian
-        // Contoh: Thread Starter (10 thread)
         if ($user->questions()->count() >= 10) {
             $badge = \App\Models\Badge::where('name', 'Thread Starter')->first();
             if ($badge && !$user->badges->contains($badge->id)) {
@@ -196,7 +193,7 @@ class QuestionController extends Controller
 
         $question->update([
             'title' => $request->title,
-            'content' => $request->content,
+            'content' => $request->input('content'),
             'images' => $imagePaths,
         ]);
         $question->hashtags()->sync($request->hashtags ?? []);
@@ -278,6 +275,7 @@ class QuestionController extends Controller
         }
 
         $question->likes()->attach($user->id);
+        app(\App\Services\BadgeService::class)->updateUserPointsAndBadges($question->user_id);
         if ($question->user_id !== $user->id) {
             \App\Models\Notification::create([
                 'user_id' => $question->user_id,

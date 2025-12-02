@@ -11,17 +11,13 @@ use Illuminate\View\View;
 
 class ConfirmablePasswordController extends Controller
 {
-    /**
-     * Show the confirm password view.
-     */
+    // tampilan konfirmasi kata sandi.
     public function show(): View
     {
         return view('auth.confirm-password');
     }
 
-    /**
-     * Confirm the user's password.
-     */
+    // Konfirmasi kata sandi pengguna.
     public function store(Request $request): RedirectResponse
     {
         if (! Auth::guard('web')->validate([

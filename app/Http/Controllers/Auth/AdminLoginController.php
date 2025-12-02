@@ -10,17 +10,13 @@ use App\Models\User;
 
 class AdminLoginController extends Controller
 {
-    /**
-     * Tampilkan form OTP admin
-     */
+    // Tampilkan form OTP admin
     public function showOtpForm()
     {
         return view('auth.otp_admin');
     }
 
-    /**
-     * Verifikasi OTP admin dari database (tabel users kolom otp_code)
-     */
+    //Verifikasi OTP admin dari database (tabel users kolom otp_code)
     public function verifyOtp(Request $request)
     {
         $request->validate([
@@ -41,9 +37,7 @@ class AdminLoginController extends Controller
         return back()->with('error', 'OTP salah atau tidak valid');
     }
 
-    /**
-     * Tampilkan form login admin
-     */
+    // Tampilkan form login admin
     public function showLoginForm()
     {
         if (!session('otp_validated')) {
@@ -52,9 +46,7 @@ class AdminLoginController extends Controller
         return view('auth.login_admin');
     }
 
-    /**
-     * Proses login admin
-     */
+    // Proses login admin
     public function login(Request $request)
     {
         $request->validate([
@@ -77,9 +69,7 @@ class AdminLoginController extends Controller
         return back()->with('error', 'Username atau password salah');
     }
 
-    /**
-     * Logout admin
-     */
+    // Logout admin
     public function logout()
     {
         Auth::logout();

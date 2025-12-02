@@ -7,20 +7,13 @@ use Illuminate\Http\Request;
 
 class OtpController extends Controller
 {
-    /**
-     * Menampilkan form OTP.
-     */
+    // Menampilkan form input OTP
     public function showForm()
     {
         return view('auth.otp');
     }
 
-    /**
-     * Memproses verifikasi OTP.
-     * Tidak melakukan Auth::login() — user tetap belum login.
-     * Setelah OTP valid, redirect ke halaman lengkapi profil (complete-profile).
-     * Mengandalkan session('register_user_id') yang disimpan waktu registrasi.
-     */
+    // Memverifikasi kode OTP
     public function verify(Request $request)
     {
         $request->validate([
@@ -38,7 +31,6 @@ class OtpController extends Controller
         $userId = session('register_user_id');
 
         if (!$userId) {
-            // fallback: jika email dikirim di form, coba cari user berdasarkan email
             if ($request->filled('email')) {
                 $user = \App\Models\User::where('email', $request->input('email'))->first();
                 if ($user) {

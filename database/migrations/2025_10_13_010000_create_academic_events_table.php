@@ -6,19 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * Fields:
-     * - id
-     * - title
-     * - description (nullable)
-     * - start_date, end_date (date)
-     * - color (string) - untuk tampilan (blue, green, red, ...)
-     * - created_by (user id) - admin user yang membuat
-     * - is_published (bool) - publish / draft
-     * - timestamps
-     */
     public function up(): void
     {
         Schema::create('academic_events', function (Blueprint $table) {

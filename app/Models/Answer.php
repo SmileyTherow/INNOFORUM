@@ -15,19 +15,11 @@ class Answer extends Model
         'content',
     ];
 
-    /**
-     * Relasi ke User
-     * Satu jawaban dimiliki oleh satu user
-     */
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    /**
-     * Relasi ke Pertanyaan
-     * Satu jawaban terkait dengan satu pertanyaan
-     */
     public function question()
     {
         return $this->belongsTo(Question::class);

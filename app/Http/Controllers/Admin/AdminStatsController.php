@@ -13,7 +13,7 @@ class AdminStatsController extends Controller
 {
     public function index()
     {
-        // Data statistik sama dengan dashboard, atau kembangkan sesuai kebutuhan
+        // Data statistik
         $monthsQuery = collect(range(0, 11))->map(fn($i) => now()->subMonths($i)->format('Y-m'))->reverse()->values();
         $monthsLabel = collect(range(0, 11))->map(fn($i) => now()->subMonths($i)->isoFormat('MMM Y'))->reverse()->values();
 

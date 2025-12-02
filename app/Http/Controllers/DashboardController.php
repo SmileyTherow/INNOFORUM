@@ -40,7 +40,7 @@ class DashboardController extends Controller
             ->sortByDesc('points')
             ->take(5);
 
-        // (Opsional) search
+        // search
         if ($request->has('search') && trim($request->search) !== '') {
             $search = $request->search;
             $query->where(function($q) use ($search) {
@@ -52,7 +52,7 @@ class DashboardController extends Controller
         // PAGINATE!
         $questions = $query->paginate(10);
 
-        // (Opsional) popular tags dummy
+        // popular tags dummy
         $popularTags = ['laravel','tailwind','php','javascript','react','vue','css','html','mysql','api','auth','livewire'];
 
         // === Tambahkan: Ambil notifikasi terbaru (10) untuk user login ===
@@ -72,9 +72,6 @@ class DashboardController extends Controller
         return view('dashboard', compact('questions', 'popularTags', 'notifications', 'global_notifications', 'topUsers'));
     }
 
-    /**
-     * Tampilkan dashboard untuk admin.
-     */
     public function adminDashboard(Request $request)
     {
         return view('admin.dashboard');

@@ -12,23 +12,75 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.10/dist/cdn.min.js" defer></script>
     <style>
-        body { font-family: 'Inter', sans-serif; }
-        .bg-navy { background-color: #0f172a; }
-        .text-navy { color: #0f172a; }
-        .bg-navy-light { background-color: #334155; }
-        .bg-blue-accent { background-color: #2563eb; }
-        .text-blue-accent { color: #2563eb; }
-        .bg-footer { background-color: #0f172a; }
-        .footer-social a { color: #fff; }
-        .footer-social a:hover { color: #60a5fa;}
-        .notif-item-unread { background-color: rgba(59, 130, 246, 0.1) !important; }
-        .notif-item-read { background-color: #374151 !important; }
-        .notif-text { color: #d1d5db !important; }
-        .notif-time { color: #9ca3af !important; }
-        .notif-container { background-color: #1f2937 !important; border-color: #374151 !important; }
-        .notif-header { color: #60a5fa !important; border-color: #374151 !important; }
-        .notif-empty { color: #9ca3af !important; }
-        .notif-border { border-color: #374151 !important; }
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .bg-navy {
+            background-color: #0f172a;
+        }
+
+        .text-navy {
+            color: #0f172a;
+        }
+
+        .bg-navy-light {
+            background-color: #334155;
+        }
+
+        .bg-blue-accent {
+            background-color: #2563eb;
+        }
+
+        .text-blue-accent {
+            color: #2563eb;
+        }
+
+        .bg-footer {
+            background-color: #0f172a;
+        }
+
+        .footer-social a {
+            color: #fff;
+        }
+
+        .footer-social a:hover {
+            color: #60a5fa;
+        }
+
+        .notif-item-unread {
+            background-color: rgba(59, 130, 246, 0.1) !important;
+        }
+
+        .notif-item-read {
+            background-color: #374151 !important;
+        }
+
+        .notif-text {
+            color: #d1d5db !important;
+        }
+
+        .notif-time {
+            color: #9ca3af !important;
+        }
+
+        .notif-container {
+            background-color: #1f2937 !important;
+            border-color: #374151 !important;
+        }
+
+        .notif-header {
+            color: #60a5fa !important;
+            border-color: #374151 !important;
+        }
+
+        .notif-empty {
+            color: #9ca3af !important;
+        }
+
+        .notif-border {
+            border-color: #374151 !important;
+        }
     </style>
 </head>
 
@@ -82,38 +134,27 @@
                                         class="px-4 py-3 border-b notif-border text-sm {{ !$notif->is_read ? 'notif-item-unread' : 'notif-item-read' }}">
                                         <div>
                                             @php
-                                                $text =
-                                                    $notif->data['excerpt'] ??
-                                                    ($notif->data['message'] ?? ($notif->data['title'] ?? null));
-                                                $messageId = $notif->data['message_id'] ?? null;
+                                                $displayText = trim($notif->clean_message ?? '');
+                                                $isAdmin = $notif->is_from_admin ?? false;
+                                                $link = $notif->link ?? null;
+                                                if ($isAdmin && $displayText) {
+                                                    $displayText = 'Admin: ' . $displayText;
+                                                }
+                                                if (!$displayText) {
+                                                    $displayText = 'Notifikasi baru';
+                                                }
                                             @endphp
 
-                                            @if ($text)
-                                                @if ($messageId && auth()->check() && auth()->user()->role === 'admin')
-                                                    <a href="{{ route('admin.messages.show', $messageId) }}"
-                                                        class="text-sm notif-text hover:text-blue-300 hover:underline inline-block">
-                                                        @if(is_string($text))
-                                                            {!! nl2br(e(\Illuminate\Support\Str::limit($text, 200))) !!}
-                                                        @else
-                                                            {!! nl2br(e('Notifikasi baru')) !!}
-                                                        @endif
-                                                    </a>
-                                                @else
-                                                    <a href="{{ route('notifications.index') }}"
-                                                        class="text-sm notif-text hover:text-blue-300 hover:underline inline-block">
-                                                        @if(is_string($text))
-                                                            {!! nl2br(e(\Illuminate\Support\Str::limit($text, 200))) !!}
-                                                        @else
-                                                            {!! nl2br(e('Notifikasi baru')) !!}
-                                                        @endif
-                                                    </a>
-                                                @endif
-                                            @elseif(is_array($notif->data))
-                                                <div class="text-sm notif-text">
-                                                    {!! nl2br(e(\Illuminate\Support\Str::limit(json_encode($notif->data), 200))) !!}</div>
+                                            @if ($link)
+                                                <a href="{{ $link }}"
+                                                    class="text-sm notif-text hover:text-blue-300 hover:underline inline-block">
+                                                    {!! nl2br(e(\Illuminate\Support\Str::limit($displayText, 200))) !!}
+                                                </a>
                                             @else
-                                                <div class="text-sm notif-text">
-                                                    {!! nl2br(e($notif->data)) !!}</div>
+                                                <a href="{{ route('notifications.index') }}"
+                                                    class="text-sm notif-text hover:text-blue-300 hover:underline inline-block">
+                                                    {!! nl2br(e(\Illuminate\Support\Str::limit($displayText, 200))) !!}
+                                                </a>
                                             @endif
 
                                             <div class="flex justify-between items-center mt-1">
@@ -247,7 +288,10 @@
                     <ul class="space-y-2 text-gray-300 text-sm">
                         <li class="flex items-start">
                             <span class="material-icons mr-2 text-blue-400">location_on</span>
-                            STTI NIIT I-TECH, Jl. Asem II No.22, Cipete Selatan, Jakarta Selatan
+                            <a href="https://maps.app.goo.gl/89NGmtueysAZA2GMA" class="hover:underline"
+                                target="_blank" rel="noopener noreferrer">
+                                Birkenwaldstraße 38, 63179 Obertshausen, Germany
+                            </a>
                         </li>
                         <li class="flex items-center">
                             <span class="material-icons mr-2 text-blue-400">phone</span>
@@ -310,19 +354,55 @@
     <!-- Animasi muncul -->
     <style>
         @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
-        .animate-fadeIn { animation: fadeIn 0.25s ease-out; }
+
+        .animate-fadeIn {
+            animation: fadeIn 0.25s ease-out;
+        }
+
         @media (prefers-color-scheme: light) {
-            .notif-item-unread { background-color: rgba(59, 130, 246, 0.1) !important; }
-            .notif-item-read { background-color: #1f2937 !important; }
-            .notif-text { color: #d1d5db !important; }
-            .notif-time { color: #9ca3af !important; }
-            .notif-container { background-color: #1f2937 !important; border-color: #374151 !important; }
-            .notif-header { color: #60a5fa !important; border-color: #374151 !important; }
-            .notif-empty { color: #9ca3af !important; }
-            .notif-border { border-color: #374151 !important; }
+            .notif-item-unread {
+                background-color: rgba(59, 130, 246, 0.1) !important;
+            }
+
+            .notif-item-read {
+                background-color: #1f2937 !important;
+            }
+
+            .notif-text {
+                color: #d1d5db !important;
+            }
+
+            .notif-time {
+                color: #9ca3af !important;
+            }
+
+            .notif-container {
+                background-color: #1f2937 !important;
+                border-color: #374151 !important;
+            }
+
+            .notif-header {
+                color: #60a5fa !important;
+                border-color: #374151 !important;
+            }
+
+            .notif-empty {
+                color: #9ca3af !important;
+            }
+
+            .notif-border {
+                border-color: #374151 !important;
+            }
         }
     </style>
 
@@ -391,31 +471,31 @@
         };
 
         document.addEventListener('DOMContentLoaded', function() {
-        if (!window.Echo) return;
+            if (!window.Echo) return;
 
-        const myId = {{ auth()->id() ?? 'null' }};
+            const myId = {{ auth()->id() ?? 'null' }};
 
-        if (myId) {
-            try {
-                window.Echo.private(`App.Models.User.${myId}`)
-                    .notification((notification) => {
-                        console.log('Got notification', notification);
-                        const badge = document.querySelector('#notif-badge');
-                        if (badge) {
-                            let val = parseInt(badge.innerText || '0') || 0;
-                            badge.innerText = val + 1;
-                            badge.classList.remove('hidden');
-                        }
-                        if (notification?.data) {
-                            const text = notification.data.text || 'Pesan baru';
-                            alert('Notifikasi: ' + text);
-                        }
-                    });
-            } catch (e) {
-                console.error('Echo listen user channel error', e);
+            if (myId) {
+                try {
+                    window.Echo.private(`App.Models.User.${myId}`)
+                        .notification((notification) => {
+                            console.log('Got notification', notification);
+                            const badge = document.querySelector('#notif-badge');
+                            if (badge) {
+                                let val = parseInt(badge.innerText || '0') || 0;
+                                badge.innerText = val + 1;
+                                badge.classList.remove('hidden');
+                            }
+                            if (notification?.data) {
+                                const text = notification.data.text || 'Pesan baru';
+                                alert('Notifikasi: ' + text);
+                            }
+                        });
+                } catch (e) {
+                    console.error('Echo listen user channel error', e);
+                }
             }
-        }
-    });
+        });
     </script>
 
 </body>

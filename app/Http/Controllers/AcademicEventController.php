@@ -5,33 +5,28 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\AcademicEvent;
 use App\Models\User;
+use App\Models\Notification;
 use App\Notifications\EventCreated;
-use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Notification as FacadesNotification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use App\Services\AdminActivityLogger;
 
 class AcademicEventController extends Controller
 {
     public function __construct()
     {
-        // Pastikan route admin memakai middleware auth + admin
+        $this->middleware('auth')->except(['index', 'apiIndex', 'show']);
     }
 
-    /**
-     * Public calendar view (user-facing).
-     */
     public function index()
     {
         return view('calendar.index');
     }
 
-    /**
-     * Public API: get events
-     */
     public function apiIndex(Request $request)
     {
-        $month = $request->get('month'); // format yyyy-mm
-
+        $month = $request->get('month');
         if ($month) {
             if (!preg_match('/^\d{4}-\d{2}$/', $month)) {
                 return response()->json(['error' => 'Format month harus yyyy-mm'], 422);
@@ -42,26 +37,17 @@ class AcademicEventController extends Controller
             if ($m < 1 || $m > 12) {
                 return response()->json(['error' => 'Bulan tidak valid'], 422);
             }
-            $events = AcademicEvent::inMonth($year, $m)
-                ->where('is_published', true)
-                ->get();
+            $events = AcademicEvent::inMonth($year, $m)->where('is_published', true)->get();
         } else {
             $now = now();
-            $events = AcademicEvent::inMonth($now->year, $now->month)
-                ->where('is_published', true)
-                ->get();
+            $events = AcademicEvent::inMonth($now->year, $now->month)->where('is_published', true)->get();
         }
-
         return response()->json($events->map->toCalendarArray()->values());
     }
 
-    /**
-     * Admin API: return events for admin
-     */
     public function adminApiIndex(Request $request)
     {
         $month = $request->get('month');
-
         if ($month && preg_match('/^\d{4}-\d{2}$/', $month)) {
             [$year, $m] = explode('-', $month);
             $year = (int)$year;
@@ -74,56 +60,89 @@ class AcademicEventController extends Controller
             $now = now();
             $events = AcademicEvent::inMonth($now->year, $now->month)->orderBy('start_date')->get();
         }
-
         return response()->json($events->map->toCalendarArray()->values());
     }
 
-    /**
-     * Admin calendar view (CRUD UI)
-     */
     public function adminIndex()
     {
         $events = AcademicEvent::orderBy('start_date', 'asc')->paginate(25);
         return view('admin.academic_events.index', compact('events'));
     }
 
-    /**
-     * Store new event (admin)
-     */
     public function store(Request $request)
     {
-        $data = $request->validate([
+        $rules = [
             'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
             'start_date' => 'required|date',
             'end_date' => 'nullable|date|after_or_equal:start_date',
+            'description' => 'nullable|string',
             'color' => 'nullable|string|max:32',
             'is_published' => 'nullable|boolean',
-        ]);
+        ];
 
-        $data['created_by'] = Auth::id();
-        $data['color'] = $data['color'] ?? 'blue';
-        $data['is_published'] = true;
+        $validated = $request->validate($rules);
 
-        $event = AcademicEvent::create($data);
+        if (!class_exists(\App\Models\AcademicEvent::class)) {
+            if (Auth::check() && Auth::user()->role === 'admin') {
+                AdminActivityLogger::log(
+                    'create_event_failed',
+                    "Mencoba membuat event (model AcademicEvent tidak ditemukan): \"" . \Illuminate\Support\Str::limit($validated['title'] ?? $request->title, 150) . "\"",
+                    null,
+                    ['title' => $validated['title'] ?? $request->title]
+                );
+            }
 
-        try {
-            $users = User::all();
-            Notification::send($users, new EventCreated($event));
-        } catch (\Throwable $e) {
-            Log::error('Gagal kirim notifikasi event: ' . $e->getMessage());
+            if ($request->wantsJson()) {
+                return response()->json(['success' => false, 'message' => 'Model AcademicEvent tidak tersedia. Hubungi dev.'], 500);
+            }
+
+            return back()->with('error', 'Model AcademicEvent tidak tersedia. Hubungi dev.');
         }
 
-        return response()->json([
-            'success' => true,
-            'event' => $event->toCalendarArray(),
-            'message' => 'Event created and notifications queued/sent.'
-        ], 201);
+        $event = AcademicEvent::create([
+            'title' => $validated['title'],
+            'start_date' => $validated['start_date'],
+            'end_date' => $validated['end_date'] ?? $validated['start_date'],
+            'description' => $validated['description'] ?? null,
+            'color' => $validated['color'] ?? null,
+            'is_published' => $validated['is_published'] ?? true,
+            'created_by' => Auth::id(),
+        ]);
+
+        // --- NOTIFIKASI KE SELURUH USER! --- //
+        $users = User::where('id', '!=', Auth::id())->get(); // kecuali admin pembuat
+        foreach ($users as $user) {
+            Notification::create([
+                'user_id' => $user->id,
+                'data' => [
+                    'title' => 'Acara Baru: ' . $event->title,
+                    'excerpt' => $event->description,
+                ],
+                'is_read' => false,
+            ]);
+        }
+        // --- END NOTIFIKASI --- //
+
+        // Log aktivitas admin
+        if (Auth::check() && Auth::user()->role === 'admin') {
+            AdminActivityLogger::log(
+                'create_event',
+                "Membuat event kalender: \"" . \Illuminate\Support\Str::limit($event->title, 150) . "\"",
+                ['type' => 'Event', 'id' => $event->id],
+                ['start_date' => $event->start_date, 'end_date' => $event->end_date]
+            );
+        }
+
+        if ($request->wantsJson() || $request->header('Accept') === 'application/json') {
+            return response()->json([
+                'success' => true,
+                'event' => $event->toCalendarArray()
+            ], 201);
+        }
+
+        return redirect()->route('admin.calendar.index')->with('success', 'Event berhasil dibuat.');
     }
 
-    /**
-     * Update event (admin)
-     */
     public function update(Request $request, AcademicEvent $academicEvent)
     {
         $data = $request->validate([
@@ -145,9 +164,6 @@ class AcademicEventController extends Controller
         ]);
     }
 
-    /**
-     * Delete event (admin)
-     */
     public function destroy(AcademicEvent $academicEvent)
     {
         $academicEvent->delete();
@@ -155,13 +171,9 @@ class AcademicEventController extends Controller
         return response()->json(['success' => true]);
     }
 
-    /**
-     * Show single event (public detail page).
-     */
     public function show($id)
     {
         $event = AcademicEvent::findOrFail($id);
-
         return view('calendar.show', ['event' => $event]);
     }
 }

@@ -11,7 +11,7 @@ class CreatePasswordResetCodesTable extends Migration
         Schema::create('password_reset_codes', function (Blueprint $table) {
             $table->id();
             $table->string('email')->index();
-            $table->string('token_hash'); // hashed 6-digit code
+            $table->string('token_hash');
             $table->timestamp('expires_at')->nullable();
             $table->unsignedTinyInteger('attempts')->default(0);
             $table->timestamp('locked_until')->nullable();

@@ -3,38 +3,39 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+use App\Services\AdminActivityLogger;
 
 class AdminUserController extends Controller
 {
-    // ADMIN: List user (tanpa soft deleted)
     public function index(Request $request)
     {
-        $query = \App\Models\User::query();
+        // Fitur pencarian user berdasarkan nama, email atau username
+        $query = User::query();
         if ($request->q) {
-            $query->where(function($q) use ($request) {
+            $query->where(function ($q) use ($request) {
                 $q->where('name', 'like', '%' . $request->q . '%')
-                ->orWhere('email', 'like', '%' . $request->q . '%')
-                ->orWhere('username', 'like', '%' . $request->q . '%');
+                    ->orWhere('email', 'like', '%' . $request->q . '%')
+                    ->orWhere('username', 'like', '%' . $request->q . '%');
             });
         }
 
-        $query->where('role', '!=', 'admin');
+        $query->where('role', '!=', 'admin'); // Admin tidak ditampilkan dalam daftar user
 
         $users = $query->whereNull('deleted_at')->orderBy('created_at', 'desc')->paginate(20);
         return view('admin.users.index', compact('users'));
     }
 
-    // ADMIN: Form tambah user
     public function create()
     {
         return view('admin.users.create');
     }
 
-    // ADMIN: Simpan user baru
     public function store(Request $request)
     {
+        // Validasi input
         $validatedData = $request->validate([
             'username' => 'required|string|max:255|unique:users',
             'name'     => 'required|string|max:255',
@@ -42,17 +43,30 @@ class AdminUserController extends Controller
             'role'     => 'required|in:admin,mahasiswa,dosen',
             'password' => 'required|string|min:6|confirmed',
         ]);
-        User::create([
+
+        // Simpan user ke database
+        $user = User::create([
             'username' => $validatedData['username'],
             'name'     => $validatedData['name'],
             'email'    => $validatedData['email'],
             'role'     => $validatedData['role'],
             'password' => bcrypt($validatedData['password']),
         ]);
+
+        // Log activity admin
+        if (Auth::check() && Auth::user()->role === 'admin') {
+            AdminActivityLogger::log(
+                'create_user',
+                "Membuat user #{$user->id}",
+                ['type'=>'User','id'=>$user->id],
+                []
+            );
+        }
+
         return redirect()->route('admin.users.index')->with('success', 'User berhasil ditambahkan.');
     }
 
-    // ADMIN: Detail user
+    // ADMIN: Detail user tertentu
     public function show($id)
     {
         $user = User::findOrFail($id);
@@ -70,6 +84,7 @@ class AdminUserController extends Controller
     public function update(Request $request, $id)
     {
         $user = User::findOrFail($id);
+        // Validasi input update
         $validatedData = $request->validate([
             'username' => 'required|string|max:255|unique:users,username,' . $id,
             'name'     => 'required|string|max:255',
@@ -77,6 +92,8 @@ class AdminUserController extends Controller
             'role'     => 'required|in:admin,mahasiswa,dosen',
             'password' => 'nullable|string|min:6|confirmed'
         ]);
+
+        // Update data user
         $user->username = $validatedData['username'];
         $user->name     = $validatedData['name'];
         $user->email    = $validatedData['email'];
@@ -85,14 +102,35 @@ class AdminUserController extends Controller
             $user->password = bcrypt($validatedData['password']);
         }
         $user->save();
+
+        // log aktifitas admin update
+        if (Auth::check() && Auth::user()->role === 'admin') {
+            AdminActivityLogger::log(
+                'update_user',
+                "Mengupdate data user #{$user->id}",
+                ['type'=>'User','id'=>$user->id],
+                ['changes' => array_keys($validatedData)]
+            );
+        }
+
         return redirect()->route('admin.users.index')->with('success', 'User berhasil diupdate.');
     }
 
-    // ADMIN: Soft delete user
     public function destroy($id)
     {
         $user = User::findOrFail($id);
         $user->delete();
+
+        // Log aktivitas admin saat menghapus user
+        if (Auth::check() && Auth::user()->role === 'admin') {
+            AdminActivityLogger::log(
+                'delete_user',
+                "Menghapus user #{$id}",
+                ['type'=>'User','id'=>$id],
+                []
+            );
+        }
+
         return redirect()->route('admin.users.index')->with('success', 'User berhasil dihapus (soft delete).');
     }
 
@@ -103,6 +141,7 @@ class AdminUserController extends Controller
     // Hapus nama & email (tidak hapus user di database)
     public function deleteFields($id)
     {
+        // Set semua data pribadi menjadi null
         $user = User::findOrFail($id);
         $user->name = null;
         $user->email = null;
@@ -128,7 +167,6 @@ class AdminUserController extends Controller
         $request->validate(['message' => 'required|string|max:255']);
         $user = User::findOrFail($id);
 
-        // Asumsikan kamu punya model Notification
         \App\Models\Notification::create([
             'user_id' => $user->id,
             'type' => 'admin_message',
@@ -148,7 +186,6 @@ class AdminUserController extends Controller
 
         $user = new \App\Models\User();
         $user->username = $request->username;
-        // field lain biarkan null
         $user->save();
 
         return back()->with('success', 'Username berhasil ditambahkan!');

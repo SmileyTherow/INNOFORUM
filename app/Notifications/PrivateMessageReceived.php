@@ -12,9 +12,6 @@ class PrivateMessageReceived extends Notification
 
     protected $payload;
 
-    /**
-     * $message can be ChatMessage model or array payload.
-     */
     public function __construct($message)
     {
         if (is_object($message) && isset($message->id)) {

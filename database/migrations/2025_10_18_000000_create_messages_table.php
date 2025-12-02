@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->string('title');
             $table->text('body');
             $table->boolean('is_read')->default(false);
-            $table->string('status')->default('open'); // open, closed, archived
+            $table->string('status')->default('open');
             $table->timestamps();
             $table->softDeletes();
         });

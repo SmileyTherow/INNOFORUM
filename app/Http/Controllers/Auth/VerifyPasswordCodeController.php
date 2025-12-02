@@ -24,7 +24,6 @@ class VerifyPasswordCodeController extends Controller
         $email = strtolower($request->email);
         $inputCode = $request->code;
 
-        // Find latest code for that email
         $record = PasswordResetCode::where('email', $email)
             ->orderByDesc('created_at')
             ->first();
@@ -33,22 +32,20 @@ class VerifyPasswordCodeController extends Controller
             return back()->withErrors(['code' => __('passwords.invalid_or_expired')]);
         }
 
-        // Check locked
         if ($record->isLocked()) {
             return back()->withErrors(['code' => __('passwords.too_many_attempts_locked', ['minutes' => $record->locked_until->diffInMinutes(now())])]);
         }
 
-        // Check expired
+        // Cek kadaluarsa
         if ($record->isExpired()) {
             return back()->withErrors(['code' => __('passwords.invalid_or_expired')]);
         }
 
-        // Verify hashed code
+        // Verifikasi kode yang di-hash
         if (! Hash::check($inputCode, $record->token_hash)) {
-            // increment attempts
             $record->attempts = $record->attempts + 1;
             if ($record->attempts >= 3) {
-                // lock for 15 minutes
+                // kunci selama 15 menit
                 $record->locked_until = now()->addMinutes(15);
             }
             $record->save();
@@ -56,7 +53,7 @@ class VerifyPasswordCodeController extends Controller
             return back()->withErrors(['code' => __('passwords.invalid_or_expired')]);
         }
 
-        // success — mark session and allow reset
+        // success — tandai session dan izinkan reset
         session([
             'password_reset_verified' => true,
             'password_reset_email' => $email,

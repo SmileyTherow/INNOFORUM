@@ -1,475 +1,273 @@
-<!doctype html>
-<html lang="en">
-
+<!DOCTYPE html>
+<html lang="id">
 <head>
-    <title>Tailwind Starter Template</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>503 - Service Unavailable</title>
     <style>
-        html {
-            line-height: 1.15;
-            -ms-text-size-adjust: 100%;
-            -webkit-text-size-adjust: 100%;
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
         body {
-            margin: 0;
-        }
-
-        header,
-        nav,
-        section {
-            display: block;
-        }
-
-        figcaption,
-        main {
-            display: block;
-        }
-
-        a {
-            background-color: transparent;
-            -webkit-text-decoration-skip: objects;
-        }
-
-        strong {
-            font-weight: inherit;
-        }
-
-        strong {
-            font-weight: bolder;
-        }
-
-        code {
-            font-family: monospace, monospace;
-            font-size: 1em;
-        }
-
-        dfn {
-            font-style: italic;
-        }
-
-        svg:not(:root) {
-            overflow: hidden;
-        }
-
-        button,
-        input {
-            font-family: sans-serif;
-            font-size: 100%;
-            line-height: 1.15;
-            margin: 0;
-        }
-
-        button,
-        input {
-            overflow: visible;
-        }
-
-        button {
-            text-transform: none;
-        }
-
-        button,
-        html [type="button"],
-        [type="reset"],
-        [type="submit"] {
-            -webkit-appearance: button;
-        }
-
-        button::-moz-focus-inner,
-        [type="button"]::-moz-focus-inner,
-        [type="reset"]::-moz-focus-inner,
-        [type="submit"]::-moz-focus-inner {
-            border-style: none;
-            padding: 0;
-        }
-
-        button:-moz-focusring,
-        [type="button"]:-moz-focusring,
-        [type="reset"]:-moz-focusring,
-        [type="submit"]:-moz-focusring {
-            outline: 1px dotted ButtonText;
-        }
-
-        legend {
-            -webkit-box-sizing: border-box;
-            box-sizing: border-box;
-            color: inherit;
-            display: table;
-            max-width: 100%;
-            padding: 0;
-            white-space: normal;
-        }
-
-        [type="checkbox"],
-        [type="radio"] {
-            -webkit-box-sizing: border-box;
-            box-sizing: border-box;
-            padding: 0;
-        }
-
-        [type="number"]::-webkit-inner-spin-button,
-        [type="number"]::-webkit-outer-spin-button {
-            height: auto;
-        }
-
-        [type="search"] {
-            -webkit-appearance: textfield;
-            outline-offset: -2px;
-        }
-
-        [type="search"]::-webkit-search-cancel-button,
-        [type="search"]::-webkit-search-decoration {
-            -webkit-appearance: none;
-        }
-
-        ::-webkit-file-upload-button {
-            -webkit-appearance: button;
-            font: inherit;
-        }
-
-        menu {
-            display: block;
-        }
-
-        canvas {
-            display: inline-block;
-        }
-
-        template {
-            display: none;
-        }
-
-        [hidden] {
-            display: none;
-        }
-
-        html {
-            -webkit-box-sizing: border-box;
-            box-sizing: border-box;
-            font-family: sans-serif;
-        }
-
-        *,
-        *::before,
-        *::after {
-            -webkit-box-sizing: inherit;
-            box-sizing: inherit;
-        }
-
-        p {
-            margin: 0;
-        }
-
-        button {
-            background: transparent;
-            padding: 0;
-        }
-
-        button:focus {
-            outline: 1px dotted;
-            outline: 5px auto -webkit-focus-ring-color;
-        }
-
-        *,
-        *::before,
-        *::after {
-            border-width: 0;
-            border-style: solid;
-            border-color: #dae1e7;
-        }
-
-        button,
-        [type="button"],
-        [type="reset"],
-        [type="submit"] {
-            border-radius: 0;
-        }
-
-        button,
-        input {
-            font-family: inherit;
-        }
-
-        input::-webkit-input-placeholder {
-            color: inherit;
-            opacity: .5;
-        }
-
-        input:-ms-input-placeholder {
-            color: inherit;
-            opacity: .5;
-        }
-
-        input::-ms-input-placeholder {
-            color: inherit;
-            opacity: .5;
-        }
-
-        input::placeholder {
-            color: inherit;
-            opacity: .5;
-        }
-
-        button,
-        [role=button] {
-            cursor: pointer;
-        }
-
-        .bg-transparent {
-            background-color: transparent;
-        }
-
-        .bg-white {
-            background-color: #fff;
-        }
-
-        .bg-teal-light {
-            background-color: #64d5ca;
-        }
-
-        .bg-blue-dark {
-            background-color: #2779bd;
-        }
-
-        .bg-indigo-light {
-            background-color: #7886d7;
-        }
-
-        .bg-purple-light {
-            background-color: #a779e9;
-        }
-
-        .bg-no-repeat {
-            background-repeat: no-repeat;
-        }
-
-        .bg-cover {
-            background-size: cover;
-        }
-
-        .border-grey-light {
-            border-color: #dae1e7;
-        }
-
-        .hover\:border-grey:hover {
-            border-color: #b8c2cc;
-        }
-
-        .rounded-lg {
-            border-radius: .5rem;
-        }
-
-        .border-2 {
-            border-width: 2px;
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        .flex {
-            display: -webkit-box;
-            display: -ms-flexbox;
-            display: flex;
-        }
-
-        .items-center {
-            -webkit-box-align: center;
-            -ms-flex-align: center;
-            align-items: center;
-        }
-
-        .justify-center {
-            -webkit-box-pack: center;
-            -ms-flex-pack: center;
-            justify-content: center;
-        }
-
-        .font-sans {
-            font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-        }
-
-        .font-light {
-            font-weight: 300;
-        }
-
-        .font-bold {
-            font-weight: 700;
-        }
-
-        .font-black {
-            font-weight: 900;
-        }
-
-        .h-1 {
-            height: .25rem;
-        }
-
-        .leading-normal {
-            line-height: 1.5;
-        }
-
-        .m-8 {
-            margin: 2rem;
-        }
-
-        .my-3 {
-            margin-top: .75rem;
-            margin-bottom: .75rem;
-        }
-
-        .mb-8 {
-            margin-bottom: 2rem;
-        }
-
-        .max-w-sm {
-            max-width: 30rem;
-        }
-
-        .min-h-screen {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
             min-height: 100vh;
-        }
-
-        .py-3 {
-            padding-top: .75rem;
-            padding-bottom: .75rem;
-        }
-
-        .px-6 {
-            padding-left: 1.5rem;
-            padding-right: 1.5rem;
-        }
-
-        .pb-full {
-            padding-bottom: 100%;
-        }
-
-        .absolute {
-            position: absolute;
-        }
-
-        .relative {
+            overflow: hidden;
             position: relative;
         }
 
-        .pin {
+        .construction-bg {
+            position: absolute;
             top: 0;
-            right: 0;
-            bottom: 0;
             left: 0;
-        }
-
-        .text-black {
-            color: #22292f;
-        }
-
-        .text-grey-darkest {
-            color: #3d4852;
-        }
-
-        .text-grey-darker {
-            color: #606f7b;
-        }
-
-        .text-2xl {
-            font-size: 1.5rem;
-        }
-
-        .text-5xl {
-            font-size: 3rem;
-        }
-
-        .uppercase {
-            text-transform: uppercase;
-        }
-
-        .antialiased {
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
-
-        .tracking-wide {
-            letter-spacing: .05em;
-        }
-
-        .w-16 {
-            width: 4rem;
-        }
-
-        .w-full {
             width: 100%;
+            height: 100%;
+            background:
+                repeating-linear-gradient(
+                    45deg,
+                    transparent,
+                    transparent 10px,
+                    rgba(255, 255, 255, 0.1) 10px,
+                    rgba(255, 255, 255, 0.1) 20px
+                );
+            z-index: -1;
         }
 
-        @media (min-width: 768px) {
-            .md\:bg-left {
-                background-position: left;
-            }
+        .tools {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
 
-            .md\:bg-right {
-                background-position: right;
-            }
+        .tool {
+            position: absolute;
+            font-size: 2rem;
+            animation: floatTool 6s ease-in-out infinite;
+        }
 
-            .md\:flex {
-                display: -webkit-box;
-                display: -ms-flexbox;
-                display: flex;
+        @keyframes floatTool {
+            0%, 100% {
+                transform: translateY(0px) rotate(0deg);
             }
-
-            .md\:my-6 {
-                margin-top: 1.5rem;
-                margin-bottom: 1.5rem;
-            }
-
-            .md\:min-h-screen {
-                min-height: 100vh;
-            }
-
-            .md\:pb-0 {
-                padding-bottom: 0;
-            }
-
-            .md\:text-3xl {
-                font-size: 1.875rem;
-            }
-
-            .md\:text-15xl {
-                font-size: 9rem;
-            }
-
-            .md\:w-1\/2 {
-                width: 50%;
+            50% {
+                transform: translateY(-20px) rotate(10deg);
             }
         }
 
-        @media (min-width: 992px) {
-            .lg\:bg-center {
-                background-position: center;
-            }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .maintenance-icon {
+            font-size: 8rem;
+            margin-bottom: 2rem;
+            animation: hammerHit 2s ease-in-out infinite;
+        }
+
+        @keyframes hammerHit {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-30deg); }
+            50% { transform: rotate(0deg); }
+            75% { transform: rotate(10deg); }
+        }
+
+        .error-code {
+            font-size: 6rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .error-title {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .error-message {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            max-width: 500px;
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+
+        .maintenance-notice {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
+            border-left: 4px solid #ffa726;
+        }
+
+        .progress-container {
+            width: 100%;
+            max-width: 400px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 3px;
+            margin-bottom: 2rem;
+        }
+
+        .progress-bar {
+            height: 20px;
+            background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+            border-radius: 8px;
+            width: 65%;
+            animation: progressPulse 2s ease-in-out infinite;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes progressPulse {
+            0%, 100% { transform: scaleX(1); }
+            50% { transform: scaleX(1.02); }
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: white;
+            color: #667eea;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .status-update {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-top: 1rem;
         }
     </style>
 </head>
+<body>
+    <div class="construction-bg"></div>
+    <div class="tools" id="tools"></div>
 
-<body class="antialiased font-sans">
-    <div class="md:flex min-h-screen">
-        <div class="w-full md:w-1/2 bg-white flex items-center justify-center ">
-            <div class="max-w-sm m-8">
-                <div class="text-black text-5xl md:text-15xl font-black">503</div>
-                <div class="w-16 h-1 bg-indigo-light my-3 md:my-6"></div>
-                <p class="text-grey-darker text-2xl md:text-3xl font-light mb-8 leading-normal">Sorry, the page you are
-                    looking for could not be found.</p>
-                <button
-                    class="bg-transparent text-grey-darkest font-bold uppercase tracking-wide py-3 px-6 border-2 border-grey-light hover:border-grey rounded-lg">Go
-                    Home</button>
-            </div>
+    <div class="container">
+        <div class="maintenance-icon">🔧</div>
+        <div class="error-code">503</div>
+        <h1 class="error-title">Sedang Dalam Pemeliharaan</h1>
+
+        <div class="maintenance-notice">
+            <strong>📢 Pemberitahuan Pemeliharaan</strong>
+            <p style="margin-top: 0.5rem;">
+                Forum sedang dalam proses pemeliharaan untuk pengalaman yang lebih baik.
+                Kami akan segera kembali!
+            </p>
         </div>
-        <div class="relative pb-full md:flex md:pb-0 md:min-h-screen w-full md:w-1/2">
-            <div style="background-image: url('src/svg/503-illustration.svg');"
-                class="absolute pin bg-cover bg-no-repeat md:bg-left lg:bg-center">
-            </div>
+
+        <div class="progress-container">
+            <div class="progress-bar"></div>
+        </div>
+
+        <p class="error-message">
+            Tim kami sedang bekerja keras untuk menyelesaikan pemeliharaan.
+            Perkiraan waktu selesai: <strong>30 menit lagi</strong>
+        </p>
+
+        <div class="btn-group">
+            <button onclick="window.location.reload()" class="btn btn-primary">
+                🔄 Cek Status
+            </button>
+            <a href="{{ url('/') }}" class="btn btn-secondary">🏠 Halaman Utama</a>
+        </div>
+
+        <div class="status-update">
+            🔨 Terakhir diperbarui: {{ now()->format('H:i') }}
         </div>
     </div>
-</body>
 
+    <script>
+        // Create floating tools
+        function createTools() {
+            const toolsContainer = document.getElementById('tools');
+            const tools = ['⚒️', '🛠️', '🔨', '⛏️', '🪚', '🔧', '🧰'];
+            const toolCount = 8;
+
+            for (let i = 0; i < toolCount; i++) {
+                const tool = document.createElement('div');
+                tool.className = 'tool';
+                tool.innerHTML = tools[Math.floor(Math.random() * tools.length)];
+
+                tool.style.left = `${Math.random() * 100}%`;
+                tool.style.top = `${Math.random() * 100}%`;
+                tool.style.animationDelay = `${Math.random() * 6}s`;
+                tool.style.animationDuration = `${Math.random() * 3 + 4}s`;
+
+                toolsContainer.appendChild(tool);
+            }
+        }
+
+        createTools();
+
+        // Simulate progress updates
+        let progress = 65;
+        const progressBar = document.querySelector('.progress-bar');
+
+        setInterval(() => {
+            progress += Math.random() * 2;
+            if (progress > 95) progress = 65;
+            progressBar.style.width = `${progress}%`;
+        }, 5000);
+    </script>
+</body>
 </html>

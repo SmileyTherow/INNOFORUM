@@ -12,7 +12,7 @@ class CreateBadgesTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('description')->nullable();
-            $table->string('icon')->nullable(); // path gambar badge
+            $table->string('icon')->nullable();
             $table->timestamps();
         });
     }

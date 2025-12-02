@@ -1,0 +1,46 @@
+name: Endpoints
+description: ''
+endpoints:
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/events
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '[{"id":2,"title":"test","description":"test aja","start_date":"2025-11-01","end_date":"2025-11-07","start":"2025-11-01","end":"2025-11-07","color":"red","is_published":true,"created_by":101,"url":"http:\/\/localhost:8000\/kalender\/event\/2"},{"id":3,"title":"test","description":"tes","start_date":"2025-11-16","end_date":"2025-11-18","start":"2025-11-16","end":"2025-11-18","color":"yellow","is_published":true,"created_by":101,"url":"http:\/\/localhost:8000\/kalender\/event\/3"},{"id":6,"title":"rest","description":"rest","start_date":"2025-11-13","end_date":"2025-11-14","start":"2025-11-13","end":"2025-11-14","color":"green","is_published":true,"created_by":101,"url":"http:\/\/localhost:8000\/kalender\/event\/6"},{"id":12,"title":"ping","description":"test","start_date":"2025-11-21","end_date":"2025-11-22","start":"2025-11-21","end":"2025-11-22","color":"purple","is_published":true,"created_by":101,"url":"http:\/\/localhost:8000\/kalender\/event\/12"},{"id":13,"title":"test","description":"set sistem","start_date":"2025-11-10","end_date":"2025-11-11","start":"2025-11-10","end":"2025-11-11","color":"purple","is_published":true,"created_by":101,"url":"http:\/\/localhost:8000\/kalender\/event\/13"},{"id":19,"title":"tes sistem kalender","description":"test","start_date":"2025-11-25","end_date":"2025-11-25","start":"2025-11-25","end":"2025-11-25","color":"blue","is_published":true,"created_by":101,"url":"http:\/\/localhost:8000\/kalender\/event\/19"},{"id":20,"title":"tes sistem kalender","description":null,"start_date":"2025-11-27","end_date":"2025-11-28","start":"2025-11-27","end":"2025-11-28","color":"red","is_published":true,"created_by":101,"url":"http:\/\/localhost:8000\/kalender\/event\/20"}]'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-ratelimit-limit: '60'
+          x-ratelimit-remaining: '59'
+          access-control-allow-origin: '*'
+          set-cookie: 'XSRF-TOKEN=eyJpdiI6IkM5bHI3cGxselFVcm9tdU5MU2Jaa0E9PSIsInZhbHVlIjoiMGk4L3VXT3ZOQVJyd3ZEeisvTnRNOE5SWFhrbnRRaS9GbkdtTHdYUGVBM3VHamJZYW1xRXloaUJqY3dZMnhXaFhxLzZpa0VMTjhBOE91OEV5SURuOTFqWHBBeUZFYWJTK1V0dWJsUFdqZHIwaVAwbEt0L0x5cHNiZmpYVnNkdUIiLCJtYWMiOiI0NWFlNDJiZjM1YzdlYzdlZmVmODE5Y2E4MmE3OGJhODViZGEzYTBiNTc2MzhjYTA3YzljYjhhY2Q4ZDc3NGFjIiwidGFnIjoiIn0%3D; expires=Thu, 13 Nov 2025 07:39:12 GMT; Max-Age=600; path=/; samesite=lax; laravel_session=eyJpdiI6ImtwNEx5enlISjFwQ1BDajdzMnNvSlE9PSIsInZhbHVlIjoiMzZBNi9wcFlzNHNJZTdQU0FmRFFnUnhrWjFuSXBhVm1LeU41NnNWa3k4L0liTEVoOFB1QTR6NlJ6ZmtpWlRkUDFRVXdvbSt6RFFuaTVVUktxWmh6L1lHd2F0OFZmTzJRL3BnQjBrSnpMbG43MVpRUXVhcFpMZTNMQzgwMTNYbDkiLCJtYWMiOiIwNjM0NGU0YTNiYWEzYzBhMTAzMjNjMmRmM2M0NzA3YzFhYWIxNGMxYmYwMDlhOWE0ODhlM2MxMjU0M2MzNGJmIiwidGFnIjoiIn0%3D; path=/; httponly; samesite=lax'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null

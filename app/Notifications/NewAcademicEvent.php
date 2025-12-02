@@ -19,7 +19,7 @@ class NewAcademicEvent extends Notification
 
     public function via($notifiable)
     {
-        return ['database']; // Bisa tambahkan 'broadcast', 'mail' jika mau
+        return ['database'];
     }
 
     public function toDatabase($notifiable)

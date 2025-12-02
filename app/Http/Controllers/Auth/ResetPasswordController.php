@@ -12,7 +12,7 @@ class ResetPasswordController extends Controller
 {
     public function show(Request $request)
     {
-        // Require prior verification
+        // Memerlukan verifikasi sebelumnya
         if (! session('password_reset_verified') || ! session('password_reset_email')) {
             return redirect()->route('password.forgot')->withErrors(['email' => __('passwords.please_request')]);
         }
@@ -46,17 +46,16 @@ class ResetPasswordController extends Controller
 
         $user = User::where('email', $email)->first();
         if (! $user) {
-            // Should not happen, but handle gracefully
             return redirect()->route('password.forgot')->withErrors(['email' => __('passwords.invalid_or_expired')]);
         }
 
         $user->password = Hash::make($request->password);
         $user->save();
 
-        // remove all reset records for this email
+        // hapus semua catatan reset untuk email ini
         PasswordResetCode::where('email', $email)->delete();
 
-        // clear session flags
+        // bersihkan flag session
         session()->forget(['password_reset_verified','password_reset_email','password_reset_id','password_reset_verified_at']);
 
         return redirect()->route('login')->with('status', __('passwords.reset_success'));
