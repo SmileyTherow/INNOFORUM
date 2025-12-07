@@ -75,6 +75,11 @@
                                 <th>Nama</th>
                                 <th>Username</th>
                                 <th>Email</th>
+                                <th>Gender</th>
+                                <th>Prodi</th>
+                                <th>Point</th>
+                                <th>Answer Point</th>
+                                <th>Like Points</th>
                                 <th>Tanggal Daftar</th>
                                 <th>Operation</th>
                             </tr>
@@ -85,6 +90,19 @@
                                     <td>{{ $user->name }}</td>
                                     <td>{{ $user->username }}</td>
                                     <td>{{ $user->email }}</td>
+                                    <td>{{ $user->gender ?? '-' }}</td>
+                                    <td>{{ $user->prodi ?? '-' }}</td>
+                                    <td class="text-center">
+                                        {{ $user->point ?? $user->points ?? $user->score ?? 0 }}
+                                    </td>
+
+                                    <td class="text-center">
+                                        {{ $user->answer_points ?? $user->answer_point ?? $user->answers_points ?? 0 }}
+                                    </td>
+
+                                    <td class="text-center">
+                                        {{ $user->like_points ?? $user->like_point ?? $user->likes ?? $user->total_likes ?? 0 }}
+                                    </td>
                                     <td>{{ $user->created_at->format('d-m-Y') }}</td>
                                     <td>
                                         <!-- Tombol Hapus Data User -->
@@ -106,7 +124,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="3" class="text-center py-4">Tidak ada user ditemukan</td>
+                                    <td colspan="10" class="text-center py-4">Tidak ada user ditemukan</td>
                                 </tr>
                             @endforelse
                         </tbody>
