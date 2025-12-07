@@ -13,7 +13,7 @@
 <div class="flex flex-col items-center w-full mb-16">
     {{-- Google Maps - DIPERBESAR --}}
     <div class="w-full mb-8 rounded-xl overflow-hidden shadow-lg">
-        <<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d640.1356841736974!2d8.872870700041018!3d50.07612463717358!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47bd14096022af2b%3A0x9b5b7e1cc76549de!2sInnoforum%20GmbH!5e0!3m2!1sen!2sid!4v1763947103289!5m2!1sen!2sid"
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d640.1356841736974!2d8.872870700041018!3d50.07612463717358!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47bd14096022af2b%3A0x9b5b7e1cc76549de!2sInnoforum%20GmbH!5e0!3m2!1sen!2sid!4v1763947103289!5m2!1sen!2sid"
                 width="100%"
                 height="500"
                 style="border:0;"

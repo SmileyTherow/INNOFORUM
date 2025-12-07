@@ -219,7 +219,7 @@
         display: block;
         margin-bottom: 5px;
         font-weight: 600;
-        color: #333;
+        color: #fff;
     }
 </style>
 
