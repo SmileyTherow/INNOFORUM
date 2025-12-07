@@ -25,6 +25,20 @@ class AdminActivity extends Model
 
     public function admin()
     {
-        return $this->belongsTo(User::class, 'admin_id');
+        return $this->belongsTo(\App\Models\User::class, 'admin_id');
+    }
+
+    public function subject()
+    {
+        if ($this->subject_type && $this->subject_id) {
+            try {
+                $class = $this->subject_type;
+                if (class_exists($class)) {
+                    return $this->belongsTo($class, 'subject_id');
+                }
+            } catch (\Throwable $e) {
+            }
+        }
+        return null;
     }
 }

@@ -146,6 +146,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/terms-conditions', [LegalController::class, 'adminTermsAndConditions'])->name('terms.conditions');
     Route::resource('categories', AdminCategoryController::class);
     Route::resource('announcements', AdminAnnouncementController::class);
+    Route::patch('/users/{user}/toggle-active', [UserController::class, 'toggleActive'])->name('users.toggle-active');
 
     // Manajemen Pesan dari Contact Form
     Route::get('/messages', [\App\Http\Controllers\Admin\MessageController::class, 'index'])->name('messages.index');

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -70,6 +71,7 @@
                 opacity: 0;
                 transform: translate(-50%, -40%);
             }
+
             to {
                 opacity: 1;
                 transform: translate(-50%, -50%);
@@ -169,7 +171,8 @@
         }
 
         /* Form Controls */
-        .form-control, .form-select {
+        .form-control,
+        .form-select {
             width: 100%;
             padding: 12px 15px;
             border: 2px solid #e5e7eb;
@@ -180,7 +183,8 @@
             box-sizing: border-box;
         }
 
-        .form-control:focus, .form-select:focus {
+        .form-control:focus,
+        .form-select:focus {
             outline: none;
             border-color: #3b82f6;
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
@@ -283,7 +287,16 @@
         }
     </style>
 </head>
+
 <body>
+    {{-- Tampilkan popup jika admin sudah menonaktifkan akun --}}
+    @if(session('account_disabled'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                alert('Akun Anda telah dinonaktifkan oleh admin.');
+            });
+        </script>
+    @endif
     <div id="logo">
         <h1><i>innoforum</i></h1>
         <p class="subtitle">Forum Diskusi Teknologi, Inspirasi Tiada Henti</p>
@@ -294,7 +307,8 @@
             @csrf
             <div id="fade-box">
                 <p class="welcome-text">Selamat Datang</p>
-                <input type="text" name="nim_or_nigm" id="nim_or_nigm" placeholder="NIM/NIDN" required class="@error('nim_or_nigm') invalid @enderror">
+                <input type="text" name="nim_or_nigm" id="nim_or_nigm" placeholder="NIM/NIDN" required
+                    class="@error('nim_or_nigm') invalid @enderror">
                 @error('nim_or_nigm')
                     <p class="error-text">{{ $message }}</p>
                 @enderror
@@ -393,4 +407,5 @@
     <!-- Hubungkan ke file JS -->
     <script src="/js/nim_or_nigm.js"></script>
 </body>
+
 </html>

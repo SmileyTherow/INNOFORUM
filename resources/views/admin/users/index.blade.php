@@ -81,6 +81,7 @@
                                 <th>Answer Point</th>
                                 <th>Like Points</th>
                                 <th>Tanggal Daftar</th>
+                                <th>Status</th>
                                 <th>Operation</th>
                             </tr>
                         </thead>
@@ -93,23 +94,86 @@
                                     <td>{{ $user->gender ?? '-' }}</td>
                                     <td>{{ $user->prodi ?? '-' }}</td>
                                     <td class="text-center">
-                                        {{ $user->point ?? $user->points ?? $user->score ?? 0 }}
+                                        {{ $user->point ?? ($user->points ?? ($user->score ?? 0)) }}
                                     </td>
 
                                     <td class="text-center">
-                                        {{ $user->answer_points ?? $user->answer_point ?? $user->answers_points ?? 0 }}
+                                        {{ $user->answer_points ?? ($user->answer_point ?? ($user->answers_points ?? 0)) }}
                                     </td>
 
                                     <td class="text-center">
-                                        {{ $user->like_points ?? $user->like_point ?? $user->likes ?? $user->total_likes ?? 0 }}
+                                        {{ $user->like_points ?? ($user->like_point ?? ($user->likes ?? ($user->total_likes ?? 0))) }}
                                     </td>
                                     <td>{{ $user->created_at->format('d-m-Y') }}</td>
+
+                                    <!-- STATUS BADGE -->
+                                    <td class="text-center" style="min-width:120px;">
+                                        @if ($user->is_active)
+                                            <span class="user-status-badge active" title="Akun aktif" aria-label="Aktif">
+                                                <i class="fas fa-user-check" aria-hidden="true"></i>
+                                                <span>Aktif</span>
+                                            </span>
+                                        @else
+                                            <span class="user-status-badge inactive" title="Akun dinonaktifkan"
+                                                aria-label="Nonaktif">
+                                                <i class="fas fa-user-slash" aria-hidden="true"></i>
+                                                <span>Nonaktif</span>
+                                            </span>
+                                        @endif
+                                    </td>
+
                                     <td>
-                                        <!-- Tombol Hapus Data User -->
+                                        <!-- Tombol KIRIM PESAN -->
                                         <a href="{{ route('admin.users.notify', $user->id) }}" class="btn btn-sm btn-info"
                                             data-toggle="tooltip" title="Kirim Pesan">
                                             <i class="fas fa-paper-plane"></i>
                                         </a>
+
+                                        <!-- TOGGLE AKTIF / NONAKTIF -->
+                                        @php
+                                            // Gunakan pengecekan role sesuai implementasi aplikasi
+                                            $canToggle = false;
+                                            // Jika model memiliki helper isAdmin/isActive atau hasRole, sesuaikan
+                                            if (method_exists($user, 'isAdmin')) {
+                                                $canToggle = !$user->isAdmin();
+                                            } else {
+                                                // Fallback: cek role string/relasi
+                                                $roleName = is_string($user->role)
+                                                    ? $user->role
+                                                    : (is_object($user->role)
+                                                        ? $user->role->name ?? ''
+                                                        : '');
+                                                $roleName = strtolower($roleName ?? '');
+                                                $canToggle = in_array($roleName, [
+                                                    'mahasiswa',
+                                                    'dosen',
+                                                    'student',
+                                                    'lecturer',
+                                                ]);
+                                            }
+                                        @endphp
+
+                                        @if ($canToggle)
+                                            <form action="{{ route('admin.users.toggle-active', $user->id) }}"
+                                                method="POST" style="display:inline"
+                                                onsubmit="return confirm('Yakin ingin {{ $user->is_active ? 'nonaktifkan' : 'aktifkan' }} akun ini?')">
+                                                @csrf
+                                                @method('PATCH')
+                                                @if ($user->is_active)
+                                                    <button type="submit" class="btn btn-sm btn-danger"
+                                                        data-toggle="tooltip" title="Nonaktifkan">
+                                                        <i class="fas fa-user-slash"></i>
+                                                    </button>
+                                                @else
+                                                    <button type="submit" class="btn btn-sm btn-success"
+                                                        data-toggle="tooltip" title="Aktifkan">
+                                                        <i class="fas fa-user-check"></i>
+                                                    </button>
+                                                @endif
+                                            </form>
+                                        @endif
+
+                                        <!-- Tombol Hapus Nama & Email -->
                                         <form action="{{ route('admin.users.deleteFields', $user->id) }}" method="POST"
                                             style="display:inline"
                                             onsubmit="return confirm('Yakin ingin menghapus nama & email user ini?')">
@@ -124,7 +188,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="10" class="text-center py-4">Tidak ada user ditemukan</td>
+                                    <td colspan="11" class="text-center py-4">Tidak ada user ditemukan</td>
                                 </tr>
                             @endforelse
                         </tbody>
@@ -210,6 +274,37 @@
 
         .input-group-text {
             border: 1px solid #ced4da;
+        }
+
+        .user-status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            font-weight: 700;
+            font-size: .90rem;
+            color: #ffffff !important;
+            user-select: none;
+            box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06);
+            vertical-align: middle;
+        }
+
+        .user-status-badge i {
+            font-size: 0.95rem;
+            opacity: 0.95;
+        }
+
+        .user-status-badge.active {
+            background: #28a745;
+        }
+
+        .user-status-badge.inactive {
+            background: #dc3545;
+        }
+
+        .table td .user-status-badge {
+            white-space: nowrap;
         }
     </style>
 
