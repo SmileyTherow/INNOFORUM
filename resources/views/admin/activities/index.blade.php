@@ -36,8 +36,6 @@
                                 <th width="5%">#</th>
                                 <th width="20%">Admin</th>
                                 <th width="30%">Aktivitas</th>
-                                <th width="15%">Target</th>
-                                <th width="15%">IP Address</th>
                                 <th width="15%">Waktu</th>
                             </tr>
                         </thead>
@@ -84,28 +82,6 @@
                                             {{ $activity->note }}
                                         </div>
                                     @endif
-                                </td>
-                                <td>
-                                    @if ($activity->target_type || $activity->target_id)
-                                        <div class="d-flex flex-wrap gap-1">
-                                            <span class="badge bg-primary">
-                                                {{ class_basename($activity->target_type ?? '') }}
-                                            </span>
-                                            @if ($activity->target_id)
-                                                <span class="badge bg-info">
-                                                    #{{ $activity->target_id }}
-                                                </span>
-                                            @endif
-                                        </div>
-                                    @else
-                                        <span class="text-muted fst-italic">—</span>
-                                    @endif
-                                </td>
-                                <td>
-                                    <span class="badge bg-secondary">
-                                        <i class="fas fa-wifi me-1"></i>
-                                        {{ $activity->ip_address ?? '—' }}
-                                    </span>
                                 </td>
                                 <td>
                                     <div class="fw-bold text-gray-800">

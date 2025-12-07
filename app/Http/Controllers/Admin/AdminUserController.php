@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Services\AdminActivityLogger;
+use Illuminate\Support\Facades\Log;
 
 class AdminUserController extends Controller
 {
@@ -23,6 +24,11 @@ class AdminUserController extends Controller
         }
 
         $query->where('role', '!=', 'admin'); // Admin tidak ditampilkan dalam daftar user
+
+        if (app()->environment('local')) {
+            Log::info('DEBUG - sample user attributes: ', $query->first() ? $query->first()->toArray() : []);
+        }
+
 
         $users = $query->whereNull('deleted_at')->orderBy('created_at', 'desc')->paginate(20);
         return view('admin.users.index', compact('users'));

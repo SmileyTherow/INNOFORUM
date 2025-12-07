@@ -7,13 +7,44 @@ use App\Models\Question;
 use App\Models\Notification;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Models\Category;
+use Illuminate\Support\Facades\Schema;
 
 class DashboardController extends Controller
 {
     public function index(Request $request)
     {
+        $categorySlug = $request->query('category');
+
+        $categories = Category::withCount('questions')
+            ->orderByDesc('questions_count')
+            ->get();
+
+        // Siapkan top 5 dan sisa kategori untuk partial
+        $topCategories = $categories->take(5);
+        $remainingCategories = $categories->slice(5);
+
+        $selectedCategory = null;
+        if ($categorySlug) {
+            if (is_numeric($categorySlug)) {
+                $selectedCategory = Category::find((int) $categorySlug);
+            } else {
+                if (Schema::hasColumn('categories', 'slug')) {
+                    $selectedCategory = Category::where('slug', $categorySlug)->first();
+                }
+                if (!$selectedCategory) {
+                    if (is_numeric($categorySlug)) {
+                        $selectedCategory = Category::find((int) $categorySlug);
+                    } else {
+                        // tetap null jika tidak ditemukan
+                        $selectedCategory = null;
+                    }
+                }
+            }
+        }
+
         // Ambil filter atau search jika ada
-        $query = Question::with(['user', 'hashtags'])
+        $query = Question::with(['user', 'hashtags', 'category'])
             ->withCount(['comments', 'likes']);
 
         // (Opsional) filter berdasarkan tab/filter jika ada (terbaru, terbanyak, dsb)
@@ -49,8 +80,12 @@ class DashboardController extends Controller
             });
         }
 
-        // PAGINATE!
-        $questions = $query->paginate(10);
+        if ($selectedCategory) {
+            $query->where('category_id', $selectedCategory->id);
+        }
+
+        // PAGINATE dan pertahankan query string
+        $questions = $query->paginate(10)->appends($request->only(['filter','search','category']));
 
         // popular tags dummy
         $popularTags = ['laravel','tailwind','php','javascript','react','vue','css','html','mysql','api','auth','livewire'];
@@ -69,7 +104,16 @@ class DashboardController extends Controller
             $notifications = [];
             $global_notifications = [];
         }
-        return view('dashboard', compact('questions', 'popularTags', 'notifications', 'global_notifications', 'topUsers'));
+        return view('dashboard', compact(
+            'questions',
+            'popularTags',
+            'notifications',
+            'global_notifications',
+            'topUsers',
+            'topCategories',
+            'remainingCategories',
+            'selectedCategory'
+        ));
     }
 
     public function adminDashboard(Request $request)

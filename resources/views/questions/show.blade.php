@@ -181,33 +181,212 @@
         </div>
     </div>
 
-    <!-- Modal Form Laporan -->
-    <div id="reportModal"
-        style="display:none; position:fixed; left:0; top:0; width:100vw; height:100vh; background:rgba(0,0,0,0.5); z-index:999;">
-        <div
-            style="margin:10vh auto; background:#1f2937; max-width:400px; border-radius:8px; padding:24px; position:relative; border: 1px solid #374151;">
-            <form method="POST" action="{{ route('report.store') }}">
-                @csrf
-                <input type="hidden" name="question_id" id="modal-question-id">
-                <input type="hidden" name="comment_id" id="modal-comment-id">
-                <div class="mb-4">
-                    <label class="font-semibold text-white">Alasan Laporan</label>
-                    <input type="text" name="reason"
-                        class="w-full border border-gray-600 px-3 py-2 rounded bg-gray-700 text-white mt-1" required>
-                </div>
-                <div class="mb-4">
-                    <label class="text-white">Deskripsi (Opsional)</label>
-                    <textarea name="description" class="w-full border border-gray-600 px-3 py-2 rounded bg-gray-700 text-white mt-1"></textarea>
-                </div>
-                <div class="flex justify-end gap-2 mt-4">
+    <!-- Modal Form Laporan Sidebar Modern, Selalu di Atas Navbar -->
+    <div id="reportModal" class="hidden z-[9999]">
+        <!-- Sidebar Modal -->
+        <div class="fixed right-0 top-0 h-screen max-w-md w-full bg-gray-900 shadow-2xl border-l border-gray-700 flex flex-col overflow-y-auto"
+            style="z-index:9999;">
+            <!-- Sticky Header -->
+            <div class="sticky top-0 z-10 bg-gray-900 border-b border-gray-700 px-6 py-5">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-xl font-bold text-white flex items-center">
+                            <svg class="w-5 h-5 mr-2 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                            Laporkan Konten
+                        </h3>
+                        <p class="mt-1 text-sm text-gray-400">Bantu kami menjaga komunitas tetap aman</p>
+                    </div>
                     <button type="button" onclick="closeReportModal()"
-                        class="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-500 transition">Batal</button>
-                    <button type="submit"
-                        class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-500 transition">Kirim</button>
+                        class="rounded-lg p-2 text-gray-400 hover:bg-gray-800 hover:text-white transition-colors">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
                 </div>
-            </form>
+            </div>
+            <!-- Form Content -->
+            <div class="p-6 flex-1">
+                <form method="POST" action="{{ route('report.store') }}" id="reportForm">
+                    @csrf
+                    <input type="hidden" name="question_id" id="modal-question-id">
+                    <input type="hidden" name="comment_id" id="modal-comment-id">
+
+                    <!-- Reason Selection -->
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Alasan Laporan <span
+                                class="text-red-500">*</span></label>
+                        <select name="reason" id="reasonSelect" required
+                            class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition">
+                            <option value="" selected disabled>Pilih alasan pelaporan</option>
+                            <option value="spam">Spam atau Iklan</option>
+                            <option value="harassment">Kata-kata Kasar atau Pelecehan</option>
+                            <option value="misinformation">Informasi Palsu atau Menyesatkan</option>
+                            <option value="inappropriate">Konten Tidak Pantas</option>
+                            <option value="copyright">Pelanggaran Hak Cipta</option>
+                            <option value="other">Lainnya</option>
+                        </select>
+                        <p class="mt-2 text-xs text-gray-400">Pilih alasan utama untuk melaporkan konten ini</p>
+                    </div>
+                    <!-- Custom Reason (Hidden by default) -->
+                    <div id="customReasonContainer" class="mb-6 hidden">
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Jelaskan alasan Anda <span
+                                class="text-red-500">*</span></label>
+                        <input type="text" name="custom_reason" id="custom_reason"
+                            class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition"
+                            placeholder="Tuliskan alasan pelaporan...">
+                    </div>
+                    <!-- Description -->
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Deskripsi Tambahan <span
+                                class="text-xs text-gray-400 font-normal">(Opsional)</span></label>
+                        <textarea name="description" rows="4" id="descriptionTextarea"
+                            class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition resize-none"
+                            placeholder="Jelaskan secara detail mengapa konten ini perlu dilaporkan..."></textarea>
+                        <div class="flex justify-between mt-2">
+                            <p class="text-xs text-gray-400">Maksimal 500 karakter</p>
+                            <span id="charCount" class="text-xs text-gray-400">0/500</span>
+                        </div>
+                    </div>
+                    <!-- Confirmation Checkbox -->
+                    <div class="mb-6 p-4 rounded-lg bg-gray-800 border border-gray-700">
+                        <label class="flex items-start">
+                            <input type="checkbox" name="confirm_report" id="confirmCheckbox" required
+                                class="mt-1 h-5 w-5 rounded border-gray-600 bg-gray-800 text-red-500 focus:ring-red-500">
+                            <span class="ml-3 text-sm text-gray-300">
+                                Saya yakin konten ini melanggar pedoman komunitas.
+                                <span class="block text-xs text-gray-400 mt-1">Laporan yang tidak benar dapat berakibat
+                                    sanksi.</span>
+                            </span>
+                        </label>
+                    </div>
+                    <!-- Footer Buttons -->
+                    <div class="sticky bottom-0 bg-gray-900 pt-6 pb-4 border-t border-gray-700">
+                        <div class="flex gap-3">
+                            <button type="button" onclick="closeReportModal()"
+                                class="flex-1 px-4 py-3 rounded-lg border border-gray-700 text-gray-300 hover:bg-gray-800 hover:text-white transition-colors font-medium">
+                                Batal
+                            </button>
+                            <button type="submit" id="submitReportBtn"
+                                class="flex-1 px-4 py-3 rounded-lg bg-red-600 text-white hover:bg-red-700 transition-all font-medium shadow-lg shadow-red-900/30 disabled:opacity-50 disabled:cursor-not-allowed"
+                                disabled>
+                                <span class="flex items-center justify-center">
+                                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                                    </svg>
+                                    Kirim Laporan
+                                </span>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
+    <script>
+        // Fungsi untuk membuka modal
+        function showReportModal(type, id) {
+            const modal = document.getElementById('reportModal');
+            if (type === 'question') {
+                document.getElementById('modal-question-id').value = id;
+                document.getElementById('modal-comment-id').value = '';
+            } else {
+                document.getElementById('modal-question-id').value = '';
+                document.getElementById('modal-comment-id').value = id;
+            }
+            // Reset form
+            const form = document.getElementById('reportForm');
+            if (form) form.reset();
+            // Reset UI states
+            document.getElementById('customReasonContainer').classList.add('hidden');
+            document.getElementById('submitReportBtn').disabled = true;
+            document.getElementById('charCount').textContent = '0/500';
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            document.addEventListener('keydown', handleEscapeKey);
+        }
+
+        function closeReportModal() {
+            const modal = document.getElementById('reportModal');
+            modal.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+            document.removeEventListener('keydown', handleEscapeKey);
+        }
+
+        function handleEscapeKey(event) {
+            if (event.key === 'Escape') closeReportModal();
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            const textarea = document.getElementById('descriptionTextarea');
+            const charCount = document.getElementById('charCount');
+            const reasonSelect = document.getElementById('reasonSelect');
+            const customReasonContainer = document.getElementById('customReasonContainer');
+            const customReasonInput = document.getElementById('custom_reason');
+            const submitBtn = document.getElementById('submitReportBtn');
+            const confirmCheckbox = document.getElementById('confirmCheckbox');
+            const form = document.getElementById('reportForm');
+            // Character counter
+            if (textarea && charCount) {
+                textarea.addEventListener('input', function() {
+                    const length = this.value.length;
+                    charCount.textContent = `${length}/500`;
+                    if (length > 500) {
+                        charCount.classList.add('text-red-500');
+                        this.classList.add('border-red-500');
+                    } else {
+                        charCount.classList.remove('text-red-500');
+                        this.classList.remove('border-red-500');
+                    }
+                    validateForm();
+                });
+            }
+            // Toggle custom reason input
+            if (reasonSelect) {
+                reasonSelect.addEventListener('change', function() {
+                    if (this.value === 'other') {
+                        customReasonContainer.classList.remove('hidden');
+                        customReasonInput.required = true;
+                    } else {
+                        customReasonContainer.classList.add('hidden');
+                        customReasonInput.required = false;
+                    }
+                    validateForm();
+                });
+            }
+            if (customReasonInput) customReasonInput.addEventListener('input', validateForm);
+
+            function validateForm() {
+                let isValid = !!reasonSelect.value;
+                if (reasonSelect.value === 'other' && !customReasonInput.value.trim()) isValid = false;
+                if (!confirmCheckbox.checked) isValid = false;
+                submitBtn.disabled = !isValid;
+                return isValid;
+            }
+            if (confirmCheckbox) confirmCheckbox.addEventListener('change', validateForm);
+            if (form) form.addEventListener('submit', function(e) {
+                if (!validateForm()) {
+                    e.preventDefault();
+                    return;
+                }
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = `<span class="flex items-center justify-center">
+                <svg class="animate-spin w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Mengirim...
+            </span>`;
+                setTimeout(() => {
+                    form.submit();
+                }, 300);
+            });
+        });
+    </script>
 
     <script>
         function showReportModal(type, id) {
