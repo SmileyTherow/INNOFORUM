@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Mail\UserOtpMail;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Schema;
 
 class AuthController extends Controller
 {
@@ -26,18 +27,34 @@ class AuthController extends Controller
             'nim_or_nigm' => ['required', 'string', 'max:20'],
         ]);
 
-        if ($request->nim_or_nigm == '404039582') {
+        // Shortcut admin username (tetap seperti sebelumnya)
+        if ($request->nim_or_nigm == '404039582' || $request->nim_or_nigm == '285930404') {
             return redirect('/admin/login');
         }
 
-        if ($request->nim_or_nigm == '285930404') {
-            return redirect('/admin/login');
+        $nim = $request->nim_or_nigm;
+
+        // Bangun query secara defensif: tambahkan orWhere nim/nidn hanya jika kolom ada
+        $query = User::where('username', $nim);
+
+        if (Schema::hasColumn('users', 'nim')) {
+            $query->orWhere('nim', $nim);
         }
 
-        $user = User::where('username', $request->nim_or_nigm)->first();
+        if (Schema::hasColumn('users', 'nidn')) {
+            $query->orWhere('nidn', $nim);
+        }
+
+        $user = $query->first();
 
         if ($user) {
+            // Jika user dinonaktifkan -> kembalikan flag supaya view menampilkan popup
+            if (isset($user->is_active) && ! $user->is_active) {
+                return back()->with('account_disabled', true);
+            }
+
             session(['validated_nim' => $user->username, 'username' => $user->username]);
+
             if ($user->name && $user->email && $user->password) {
                 return redirect()->route('login')->with('success', 'Akun ditemukan, silakan login.');
             } else {
@@ -50,6 +67,7 @@ class AuthController extends Controller
                 }
             }
         }
+
         return back()->withErrors(['nim_or_nigm' => 'NIM/NIDM tidak ditemukan di sistem.']);
     }
 

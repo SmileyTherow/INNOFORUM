@@ -286,4 +286,74 @@ class UserController extends Controller
 
         return 'other';
     }
+
+    /* Toggle active/inactive user (hanya mahasiswa/dosen). */
+    public function toggleActive(Request $request, User $user)
+    {
+        $auth = Auth::user();
+
+        // Larang menonaktifkan diri sendiri
+        if ($auth && $user->id === $auth->id) {
+            return redirect()->back()->with('error', 'Anda tidak dapat menonaktifkan diri sendiri.');
+        }
+
+        // Cek apakah target adalah admin -> larang
+        if ($this->isAdmin($user)) {
+            return redirect()->back()->with('error', 'Tidak diperbolehkan menonaktifkan admin lain.');
+        }
+
+        // Pastikan target adalah mahasiswa atau dosen (cek beberapa kemungkinan implementasi role)
+        if (! $this->isStudentOrLecturer($user)) {
+            return redirect()->back()->with('error', 'Hanya akun mahasiswa atau dosen yang bisa dinonaktifkan.');
+        }
+
+        $user->is_active = ! $user->is_active;
+        $user->save();
+
+        $message = $user->is_active ? 'Akun berhasil diaktifkan.' : 'Akun berhasil dinonaktifkan.';
+        return redirect()->back()->with('success', $message);
+    }
+
+    /* Deteksi apakah user adalah admin (kompatibel dengan spatie/role string/relasi). */
+    protected function isAdmin(User $user): bool
+    {
+        // Spatie hasRole
+        if (method_exists($user, 'hasRole')) {
+            return $user->hasRole('admin') || $user->hasRole('super-admin');
+        }
+
+        // Jika ada kolom role (string)
+        if (isset($user->role) && is_string($user->role)) {
+            return strtolower($user->role) === 'admin';
+        }
+
+        // Jika ada relasi role->name
+        if (isset($user->role) && is_object($user->role)) {
+            $name = strtolower($user->role->name ?? '');
+            return $name === 'admin';
+        }
+
+        return false;
+    }
+
+    /* Cek apakah user adalah mahasiswa/dosen */
+    protected function isStudentOrLecturer(User $user): bool
+    {
+        if (method_exists($user, 'hasRole')) {
+            return $user->hasRole('mahasiswa') || $user->hasRole('dosen')
+                || $user->hasRole('student') || $user->hasRole('lecturer');
+        }
+
+        if (isset($user->role) && is_string($user->role)) {
+            $name = strtolower($user->role);
+            return in_array($name, ['mahasiswa', 'dosen', 'student', 'lecturer']);
+        }
+
+        if (isset($user->role) && is_object($user->role)) {
+            $name = strtolower($user->role->name ?? '');
+            return in_array($name, ['mahasiswa', 'dosen', 'student', 'lecturer']);
+        }
+
+        return false;
+    }
 }

@@ -32,6 +32,10 @@ class User extends Authenticatable
         'email_verified_at',
         'otp_code',
         'otp_expired_at',
+        'point',
+        'points',
+        'answer_points',
+        'like_points',
     ];
 
     protected $hidden = [
@@ -45,6 +49,14 @@ class User extends Authenticatable
         'deleted_at'        => 'datetime',
         'created_at'        => 'datetime',
         'updated_at'        => 'datetime',
+        'point' => 'integer',
+        'points' => 'integer',
+        'answer_point' => 'integer',
+        'answer_points' => 'integer',
+        'like_point' => 'integer',
+        'like_points' => 'integer',
+        'email_verified_at' => 'datetime',
+        'is_active' => 'boolean',
     ];
 
     public function questions()
@@ -157,5 +169,17 @@ class User extends Authenticatable
             ->count();
 
         return $questionLikes + $commentLikes;
+    }
+
+    /* Helper: apakah user aktif */
+    public function isActive(): bool
+    {
+        return (bool) ($this->is_active ?? true);
+    }
+
+    /* Scope untuk query user aktif */
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
     }
 }
