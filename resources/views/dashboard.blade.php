@@ -121,6 +121,9 @@
             <a href="{{ route('leaderboard') }}" class="block text-center text-xs text-blue-400 hover:text-blue-300 hover:underline mt-2">Lihat semua &raquo;</a>
         </div>
 
+        {{-- Kategori Forum --}}
+        @include('partials.forum_categories', [ 'topCategories' => $topCategories ?? collect(),'remainingCategories' => $remainingCategories ?? collect(),'selectedCategory' => $selectedCategory ?? null])
+
         {{-- Kalender sidebar --}}
         @include('partials.calendar-sidebar')
     </div>
