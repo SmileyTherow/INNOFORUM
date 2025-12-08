@@ -14,9 +14,9 @@ class BadgeSeeder extends Seeder
 
         $badges = [
             // like badges (Pencerah)
-            ['name' => 'Pencerah Bronze', 'icon' => 'like_bronze.jpg', 'description' => 'Like terbanyak 100+'],
-            ['name' => 'Pencerah Silver', 'icon' => 'like_silver.jpg', 'description' => 'Like terbanyak 500+'],
-            ['name' => 'Pencerah Gold',   'icon' => 'like_gold.jpg',   'description' => 'Like terbanyak 1000+'],
+            ['name' => 'like  Bronze', 'icon' => 'like_bronze.jpg', 'description' => 'Like terbanyak 100+'],
+            ['name' => 'like  Silver', 'icon' => 'like_silver.jpg', 'description' => 'Like terbanyak 500+'],
+            ['name' => 'like  Gold',   'icon' => 'like_gold.jpg',   'description' => 'Like terbanyak 1000+'],
 
             // responder badges (Penjawab)
             ['name' => 'Penjawab Bronze', 'icon' => 'responder_bronze.jpg', 'description' => 'Menjawab terbanyak 100+'],

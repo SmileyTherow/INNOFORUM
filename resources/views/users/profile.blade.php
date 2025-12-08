@@ -143,29 +143,28 @@
                                     <div class="bg-gradient-to-r from-yellow-500 to-yellow-300 h-2 rounded-full"
                                         style="width: {{ min(($user->points ?? 0) / 10, 100) }}%"></div>
                                 </div>
-                                <div class="flex justify-between text-xs text-gray-500 mt-1">
-                                    <span>Level 1</span>
-                                    <span>Level 10</span>
-                                </div>
                             </div>
 
                             <!-- Badge Display -->
+                            <!-- BADGE DISPLAY -->
                             <div class="w-full mb-6">
                                 <h3 class="text-sm font-semibold text-gray-300 mb-3 text-center">🏆 Pencapaian</h3>
-
                                 <div class="flex flex-wrap justify-center gap-3 mb-3">
-                                    @forelse ($user->badges as $badge)
-                                        <div class="badge-item group relative" title="{{ $badge->description }}">
+                                    @foreach ($user->badges as $badge)
+                                        <div class="badge-item group relative cursor-pointer"
+                                            data-badge-name="{{ $badge->name }}"
+                                            data-badge-desc="{{ $badge->description }}"
+                                            data-badge-icon="{{ $badge->icon }}"
+                                            data-badge-date="{{ $badge->pivot->awarded_at ? date('d F Y', strtotime($badge->pivot->awarded_at)) : '' }}"
+                                            title="Klik untuk detail">
                                             <div
-                                                class="bg-gradient-to-br from-yellow-500/30 to-amber-500/30 text-yellow-300 rounded-full p-3 cursor-pointer transform transition-all duration-300 hover:scale-110 hover:rotate-12 border border-yellow-500/30 shadow-lg">
+                                                class="flex items-center justify-center cursor-pointer hover:scale-110 transition-all">
                                                 @if (!empty($badge->icon))
                                                     <img src="{{ asset('images/badges/' . $badge->icon) }}"
-                                                        alt="{{ $badge->name }}" class="w-6 h-6">
-                                                @elseif (!empty($badge->image))
-                                                    <img src="{{ asset('images/badges/' . $badge->image) }}"
-                                                        alt="{{ $badge->name }}" class="w-6 h-6">
+                                                        alt="{{ $badge->name }}"
+                                                        class="w-20 h-20 md:w-24 md:h-24 object-contain" />
                                                 @else
-                                                    <i class="fas fa-trophy text-lg"></i>
+                                                    <i class="fas fa-trophy text-3xl md:text-4xl"></i>
                                                 @endif
                                             </div>
                                             <div
@@ -173,14 +172,42 @@
                                                 {{ $badge->name }}
                                             </div>
                                         </div>
-                                    @empty
-                                        <div class="text-center text-gray-500 text-sm py-2">
-                                            <i class="fas fa-trophy text-lg mb-1 block"></i>
-                                            Belum ada badge
-                                        </div>
-                                    @endforelse
+                                    @endforeach
                                 </div>
 
+                                <!-- MODAL BADGE BARU, PASANG DI LUAR LOOP BADGE -->
+                                <div id="badgeModal"
+                                    class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 hidden">
+                                    <div
+                                        class="bg-dark-800 rounded-2xl shadow-2xl w-full max-w-md mx-4 p-0 ring-1 ring-dark-700 border border-dark-600">
+                                        <div class="flex justify-between items-center px-6 py-5 border-b border-dark-700">
+                                            <h3 class="text-2xl font-bold text-white" id="badgeModalTitle">Detail Badge</h3>
+                                            <button id="closeBadgeModal" class="text-gray-400 hover:text-gray-200">
+                                                <i class="fas fa-times text-2xl"></i>
+                                            </button>
+                                        </div>
+                                        <div class="py-8 px-8 flex flex-col items-center">
+                                            <div class="flex items-center justify-center mb-4" style="min-height: 8rem;">
+                                                <span id="badgeModalIcon" class="block"></span>
+                                            </div>
+                                            <h4 id="badgeModalName"
+                                                class="text-xl font-semibold text-center text-white mb-3"></h4>
+                                            <p id="badgeModalDescription" class="text-base text-gray-300 text-center mb-4">
+                                            </p>
+                                            <div class="bg-dark-700/70 rounded-xl p-3 w-full flex flex-col items-center">
+                                                <span id="badgeModalDate" class="text-sm text-gray-400"></span>
+                                            </div>
+                                        </div>
+                                        <div class="flex justify-end px-7 pb-7 border-t border-dark-700 pt-5">
+                                            <button id="closeBadgeModalBtn"
+                                                class="px-6 py-2 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 transition-all duration-200">
+                                                Tutup
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- (Bagian badge tambahan & statistik lanjutkan di bawah ini...) -->
                                 <div class="flex justify-center gap-6 mt-3">
                                     @if (!empty($responderFile))
                                         <div class="text-center">
@@ -189,7 +216,6 @@
                                             <div class="text-xs text-gray-400 mt-2">Menjawab Terbanyak</div>
                                         </div>
                                     @endif
-
                                     @if (!empty($likeFile))
                                         <div class="text-center">
                                             <img src="{{ asset('images/badges/' . $likeFile) }}" alt="Pencerah Badge"
@@ -536,6 +562,93 @@
                 background: #64748b;
             }
         </style>
+
+        <script>
+            // Modal logic
+            const badgeModal = document.getElementById('badgeModal');
+            const closeBadgeModal = document.getElementById('closeBadgeModal');
+            const closeBadgeModalBtn = document.getElementById('closeBadgeModalBtn');
+
+            document.querySelectorAll('.badge-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const name = this.getAttribute('data-badge-name') || '';
+                    const desc = this.getAttribute('data-badge-desc') || '';
+                    const icon = this.getAttribute('data-badge-icon') || '';
+                    const date = this.getAttribute('data-badge-date') || '';
+
+                    document.getElementById('badgeModalTitle').textContent = 'Detail Badge';
+                    document.getElementById('badgeModalIcon').innerHTML =
+                        `<img src='/images/badges/${icon}' alt='' class='w-32 h-32 mx-auto rounded-full object-contain'>`;
+                    document.getElementById('badgeModalName').textContent = name;
+                    document.getElementById('badgeModalDescription').textContent = desc;
+                    document.getElementById('badgeModalDate').textContent = date ? `📅 Dicapai: ${date}` : '';
+
+                    badgeModal.classList.remove('hidden');
+                });
+            });
+
+            closeBadgeModal.addEventListener('click', function() {
+                badgeModal.classList.add('hidden');
+            });
+            closeBadgeModalBtn.addEventListener('click', function() {
+                badgeModal.classList.add('hidden');
+            });
+            badgeModal.addEventListener('click', function(e) {
+                if (e.target === badgeModal) badgeModal.classList.add('hidden');
+            });
+        </script>
+
+        <script>
+            setTimeout(() => {
+                if (document.getElementById('badgeModal')) {
+                    console.log('badgeModal OK!');
+                } else {
+                    console.log('badgeModal NOT FOUND!');
+                }
+                console.log('Jmlh badge found:', document.querySelectorAll('.badge-item').length);
+            }, 2000);
+        </script>
+
+        <script>
+            const badgeModal = document.getElementById('badgeModal');
+            const closeBadgeModal = document.getElementById('closeBadgeModal');
+            const closeBadgeModalBtn = document.getElementById('closeBadgeModalBtn');
+
+            document.querySelectorAll('.badge-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const name = this.getAttribute('data-badge-name') || '';
+                    const desc = this.getAttribute('data-badge-desc') || '';
+                    const icon = this.getAttribute('data-badge-icon') || '';
+                    const date = this.getAttribute('data-badge-date') || '';
+
+                    document.getElementById('badgeModalTitle').textContent = 'Detail Badge';
+                    if (icon) {
+                        document.getElementById('badgeModalIcon').innerHTML =
+                            `<img src='/images/badges/${icon}' alt='' class='w-16 h-16 mx-auto rounded-full'>`;
+                    } else {
+                        document.getElementById('badgeModalIcon').innerHTML =
+                            `<i class='fas fa-trophy text-5xl text-yellow-400'></i>`;
+                    }
+                    document.getElementById('badgeModalName').textContent = name;
+                    document.getElementById('badgeModalDescription').textContent = desc;
+                    document.getElementById('badgeModalDate').innerHTML = date ?
+                        `<i class="fas fa-calendar-alt mr-1 text-gray-400"></i> Dicapai: ${date}` :
+                        `<span class="text-red-400"><i class="fas fa-lock mr-1"></i> Belum dicapai</span>`;
+
+                    badgeModal.classList.remove('hidden');
+                });
+            });
+
+            closeBadgeModal.addEventListener('click', function() {
+                badgeModal.classList.add('hidden');
+            });
+            closeBadgeModalBtn.addEventListener('click', function() {
+                badgeModal.classList.add('hidden');
+            });
+            badgeModal.addEventListener('click', function(e) {
+                if (e.target === badgeModal) badgeModal.classList.add('hidden');
+            });
+        </script>
     </body>
 
     </html>
