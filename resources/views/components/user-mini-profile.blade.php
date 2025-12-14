@@ -52,11 +52,6 @@
         transform: translateX(0);
     }
 
-    /* HIDE USER INFO - bagian ini disembunyikan */
-    .relative.inline-block .flex.items-center.gap-3 {
-        display: none !important;
-    }
-
     .relative.inline-block .mt-3.flex.gap-2 {
         margin-top: 0; /* Margin top dihapus */
         display: flex;
@@ -121,6 +116,15 @@
         font-size: 10px;
     }
 
+    /* pastikan badge kecil tidak memecah layout */
+    .user-badge-inline img,
+    .user-badge-inline svg {
+        width: 34px;
+        height: 34px;
+        vertical-align: middle;
+        margin-left: 6px;
+    }
+
     [x-cloak] {
         display: none !important;
     }
@@ -129,7 +133,12 @@
 <div x-data="{ open: false }" class="relative inline-block">
     <button type="button" @click="open = !open" class="flex items-center gap-2">
         <div class="user-avatar-mini">{{ substr($user->name, 0, 2) }}</div>
-        <span class="font-medium text-sm">{{ $user->name }}</span>
+        <span class="font-medium text-sm">
+            {{ $user->name }}
+            <span class="user-badge-inline" aria-hidden="true">
+                @include('components.user-badge', ['user' => $user])
+            </span>
+        </span>
     </button>
 
     <div x-show="open" @click.away="open = false" x-cloak
