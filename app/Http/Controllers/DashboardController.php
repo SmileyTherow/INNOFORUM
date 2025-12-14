@@ -44,7 +44,8 @@ class DashboardController extends Controller
         }
 
         // Ambil filter atau search jika ada
-        $query = Question::with(['user', 'hashtags', 'category'])
+        // NOTE: tambahkan eager-load user.badges agar $q->user->badges sudah tersedia di view
+        $query = Question::with(['user.badges', 'hashtags', 'category'])
             ->withCount(['comments', 'likes']);
 
         // (Opsional) filter berdasarkan tab/filter jika ada (terbaru, terbanyak, dsb)
@@ -59,24 +60,25 @@ class DashboardController extends Controller
         }
 
         // Ambil top 5 user berdasarkan poin
-        $topUsers = User::withCount(['comments', 'questions'])
+        // NOTE: eager-load badges di sini juga untuk sidebar leaderboard
+        $topUsers = User::with(['badges', 'comments.likes'])
+            ->orderByDesc('points')
+            ->take(5)
             ->get()
             ->map(function ($user) {
-                // Hitung total like komentar user
+                // Hitung total like komentar user (jika masih ingin menampilkan/cek)
                 $user->like_count = $user->comments->sum(function ($c) {
                     return $c->likes->count();
                 });
                 return $user;
-            })
-            ->sortByDesc('points')
-            ->take(5);
+            });
 
         // search
         if ($request->has('search') && trim($request->search) !== '') {
             $search = $request->search;
-            $query->where(function($q) use ($search) {
+            $query->where(function ($q) use ($search) {
                 $q->where('title', 'like', "%$search%")
-                ->orWhere('content', 'like', "%$search%");
+                    ->orWhere('content', 'like', "%$search%");
             });
         }
 
@@ -85,10 +87,10 @@ class DashboardController extends Controller
         }
 
         // PAGINATE dan pertahankan query string
-        $questions = $query->paginate(10)->appends($request->only(['filter','search','category']));
+        $questions = $query->paginate(10)->appends($request->only(['filter', 'search', 'category']));
 
         // popular tags dummy
-        $popularTags = ['laravel','tailwind','php','javascript','react','vue','css','html','mysql','api','auth','livewire'];
+        $popularTags = ['laravel', 'tailwind', 'php', 'javascript', 'react', 'vue', 'css', 'html', 'mysql', 'api', 'auth', 'livewire'];
 
         // === Tambahkan: Ambil notifikasi terbaru (10) untuk user login ===
         if (Auth::check()) {

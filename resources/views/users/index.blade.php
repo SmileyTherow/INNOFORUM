@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,15 +10,21 @@
             width: 100%;
             border-collapse: collapse;
         }
-        table, th, td {
+
+        table,
+        th,
+        td {
             border: 1px solid black;
         }
-        th, td {
+
+        th,
+        td {
             padding: 10px;
             text-align: left;
         }
     </style>
 </head>
+
 <body>
     <h1>Halaman Daftar Pengguna</h1>
     <p>Selamat datang di halaman daftar pengguna!</p>
@@ -43,6 +50,7 @@
                     <td>
                         <a href="{{ route('users.show', $user->id) }}">
                             {{ $user->name }}
+                            @include('components.user-badge', ['user' => $user])
                         </a>
                     </td>
                     <td>{{ $user->email }}</td>
@@ -59,4 +67,5 @@
         </tbody>
     </table>
 </body>
+
 </html>
