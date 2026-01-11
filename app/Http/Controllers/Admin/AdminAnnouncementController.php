@@ -23,35 +23,31 @@ class AdminAnnouncementController extends Controller
 
     public function store(Request $request)
     {
-        // Validasi input dari form
         $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|string',
         ]);
-
-        // cek apakah model Announcement ada (antisipasi error sistem)
-        if (!class_exists(\App\Models\Announcement::class)) {
-            return back()->with('error', 'Model Announcement tidak ditemukan. Hubungi dev.');
-        }
-
-        // Simpan data pengumuman ke database
-        $announcement = \App\Models\Announcement::create([
+        // Simpan pengumuman ke DB
+        $announcement = Announcement::create([
             'title' => $request->title,
-            'content' => $request->input('content'),
-            'user_id' => Auth::id(),
+            'content' => $request->content,
+            // Kolom lain kalau ada
         ]);
-
-        // Mencatat aktivitas admin setelah membuat pengumuman
-        if (Auth::check() && Auth::user()->role === 'admin') {
-            AdminActivityLogger::log(
-                'create_announcement',
-                "Membuat pengumuman: \"" . \Illuminate\Support\Str::limit($request->title,150) . "\"",
-                ['type' => 'Announcement', 'id' => $announcement->id],
-                ['announcement_id' => $announcement->id]
-            );
+        // Kirim notif ke semua user (kecuali admin)
+        $users = \App\Models\User::where('role', '!=', 'admin')->get();
+        foreach ($users as $user) {
+            \App\Models\Notification::create([
+                'user_id' => $user->id,
+                'type' => 'announcement',
+                'data' => [
+                    'title' => $announcement->title,
+                    'content' => $announcement->content,
+                    'message' => $announcement->content,
+                ],
+                'is_read' => false,
+            ]);
         }
-
-        return redirect()->route('admin.announcements.index')->with('success', 'Pengumuman berhasil dibuat.');
+        return redirect()->route('admin.announcements.index')->with('success', 'Pengumuman & notifikasi berhasil dikirim!');
     }
 
     public function edit($id)
@@ -97,10 +93,10 @@ class AdminAnnouncementController extends Controller
 
     public function notifyAll(Request $request)
     {
-         // Validasi input notifikasi
+        // Validasi input notifikasi
         $request->validate([
             'title' => 'required|string|max:100',
-            'message' => 'required|string|max:500',
+            'content' => 'required|string|max:500',
         ]);
 
         // Kirim notifikasi ke semua user (kecuali admin)
@@ -111,8 +107,8 @@ class AdminAnnouncementController extends Controller
                 'type' => 'announcement',
                 'data' => [
                     'title' => $request->title,
-                    'content' => $request->message,
-                    'message' => $request->message,
+                    'content' => $request->content,
+                    'message' => $request->content,
                 ],
                 'is_read' => false,
             ]);
