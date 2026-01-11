@@ -11,7 +11,13 @@ class ConversationController extends Controller
 {
     public function index()
     {
+        /** @var \App\Models\User|null $user */
         $user = Auth::user();
+
+        // jika belum login, abort
+        if (!$user) {
+            abort(403);
+        }
 
         $conversations = $user->conversations()
             ->with(['users' => function ($q) use ($user) {
@@ -46,6 +52,10 @@ class ConversationController extends Controller
     public function messages(Request $request, Conversation $conversation)
     {
         $user = $request->user();
+
+        if (!$user) {
+            abort(403);
+        }
 
         if (!$conversation->users()->where('users.id', $user->id)->exists()) {
             abort(403);

@@ -32,7 +32,7 @@ class EventCreated extends Notification
             'color' => $this->event->color,
             'start_date' => $this->event->start_date?->toDateString(),
             'end_date' => $this->event->end_date?->toDateString(),
-            'url' => route('calendar.event.show', $this->event->id) // optional: create route to show event detail
+            'url' => route('calendar.event.show', $this->event->id)
         ];
     }
 }

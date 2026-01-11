@@ -19,7 +19,7 @@ class ForgotPasswordController extends Controller
         return view('auth.passwords.forgot');
     }
 
-    // proses kirim kode
+    // proses kirim kode reset
     public function send(Request $request)
     {
         $request->validate([

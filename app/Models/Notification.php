@@ -34,6 +34,7 @@ class Notification extends Model
 
     protected function decodedData(): array
     {
+        // Decode data notifikasi
         $data = $this->data;
 
         if (is_array($data)) {

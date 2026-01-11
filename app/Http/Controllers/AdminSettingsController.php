@@ -20,7 +20,6 @@ class AdminSettingsController extends Controller
         /** @var \App\Models\User $admin */
         $admin = Auth::user();
 
-        // Debugging - pastikan ini mengembalikan User model
         if (!($admin instanceof \App\Models\User)) {
             dd('Auth::user() is not User model', get_class($admin));
         }
@@ -35,10 +34,10 @@ class AdminSettingsController extends Controller
         if ($request->hasFile('photo')) {
             $file = $request->file('photo');
             $filename = 'admin_'.$admin->id.'_'.time().'.'.$file->getClientOriginalExtension();
-            
+
             // Simpan file baru
             $path = $file->storeAs('public/photos/admins', $filename);
-            
+
             // Hapus file lama jika ada
             if ($admin->photo) {
                 $oldPath = str_replace('storage/', '', $admin->photo);
@@ -46,14 +45,14 @@ class AdminSettingsController extends Controller
                     Storage::disk('public')->delete($oldPath);
                 }
             }
-            
+
             $admin->photo = 'storage/photos/admins/'.$filename;
         }
 
         $admin->name = $validated['name'];
         $admin->email = $validated['email'];
         $admin->bio = $validated['bio'];
-        
+
         if (!$admin->save()) {
             return back()->with('error', 'Gagal menyimpan perubahan profil');
         }
