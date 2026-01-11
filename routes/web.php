@@ -140,7 +140,6 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/comments', [AdminCommentController::class, 'index'])->name('comments.index');
     Route::delete('/comments/{id}', [AdminCommentController::class, 'destroy'])->name('comments.destroy');
     Route::post('/comments/notify', [AdminCommentController::class, 'notify'])->name('comments.notify');
-    Route::get('/threads/{id}', [AdminThreadController::class, 'show'])->name('threads.show');
     Route::post('/threads/notify', [AdminThreadController::class, 'notify'])->name('threads.notify');
     Route::get('/privacy-policy', [LegalController::class, 'adminPrivacyPolicy'])->name('privacy.policy');
     Route::get('/terms-conditions', [LegalController::class, 'adminTermsAndConditions'])->name('terms.conditions');
@@ -153,9 +152,6 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/messages/{id}', [\App\Http\Controllers\Admin\MessageController::class, 'show'])->name('messages.show');
     Route::post('/messages/{id}/reply', [\App\Http\Controllers\Admin\MessageController::class, 'reply'])->name('messages.reply');
     Route::delete('/messages/{id}', [\App\Http\Controllers\Admin\MessageController::class, 'destroy'])->name('messages.destroy');
-});
-Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
-    Route::resource('threads', App\Http\Controllers\Admin\AdminThreadController::class);
 });
 Route::patch('/admin/users/{id}/delete-fields', [AdminUserController::class, 'deleteFields'])->name('admin.users.deleteFields');
 Route::get('/admin/users/{id}/notify', [AdminUserController::class, 'notifyForm'])->name('admin.users.notify');
@@ -185,8 +181,6 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     });
     Route::middleware(['auth', 'admin'])->prefix('admin')->group(function() {
     });
-    Route::get('/admin/announcements/{id}', [AdminAnnouncementController::class, 'show'])->name('admin.announcements.show');
-    Route::resource('announcements', App\Http\Controllers\Admin\AdminAnnouncementController::class);
 
 
 // ===================== PROFIL PUBLIK USER ===================== //
@@ -210,10 +204,8 @@ Route::post('/contact', [ContactController::class, 'send'])->name('contact.send'
 Route::get('/debug-kernel', fn() => app()->make(\Illuminate\Contracts\Http\Kernel::class)::class);
 
 
-Route::post('/contact/send', [ContactController::class, 'send'])->name('contact.send');
 Route::post('/admin/users/add-username', [AdminUserController::class, 'addUsername'])->name('admin.users.addUsername');
 Route::post('/admin/announcements/notify-all', [AdminAnnouncementController::class, 'notifyAll'])->name('admin.announcements.notifyAll');
-Route::get('/admin/announcements/{id}', [AdminAnnouncementController::class, 'show'])->name('admin.announcements.show');
 
 Route::middleware(['auth'])->group(function() {
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
@@ -234,7 +226,6 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
 });
 
 Route::get('/admin/comments', [CommentController::class, 'index'])->name('admin.comments.index');
-Route::resource('admin/threads', AdminThreadController::class)->names('admin.threads');
 Route::post('admin/threads/notify', [AdminThreadController::class, 'notify'])->name('admin.threads.notify');
 
 // Leaderboard lengkap
