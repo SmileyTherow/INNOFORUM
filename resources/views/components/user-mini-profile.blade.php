@@ -143,7 +143,6 @@
 
     <div x-show="open" @click.away="open = false" x-cloak
         class="absolute z-50 right-0 mt-2 w-64 bg-white border rounded shadow-lg p-3">
-        <!-- Bagian info user dihapus dari sini -->
 
         <div class="flex gap-2 flex-col">
             <a href="{{ route('users.show', ['id' => $user->id]) }}"
