@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Notification;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 class NotificationController extends Controller
@@ -11,7 +12,14 @@ class NotificationController extends Controller
     public function index(Request $request)
     {
         $tab = $request->get('tab', 'unread');
-        $query = Auth::user()->notifications();
+
+        /** @var \App\Models\User|null $user */
+        $user = Auth::user();
+        if (!$user) {
+            abort(403);
+        }
+
+        $query = $user->notifications();
 
         if ($tab === 'read') {
             $query->where('is_read', true);
@@ -20,7 +28,7 @@ class NotificationController extends Controller
         }
 
         $notifications = $query->orderBy('created_at', 'desc')->paginate(10);
-        $count_unread = Auth::user()->notifications()->where('is_read', false)->count();
+        $count_unread = $user->notifications()->where('is_read', false)->count();
 
         return view('notifikasi.index', compact('notifications', 'tab', 'count_unread'));
     }

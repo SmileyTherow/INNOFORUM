@@ -30,6 +30,7 @@ class AcademicEvent extends Model
 
     public function scopeInMonth($query, int $year, int $month)
     {
+        // Hitung tanggal pertama dan terakhir bulan tersebut
         $first = Carbon::create($year, $month, 1)->startOfDay();
         $last = $first->copy()->endOfMonth()->endOfDay();
 
@@ -42,6 +43,7 @@ class AcademicEvent extends Model
 
     public function toCalendarArray(): array
     {
+        // Format tanggal untuk kalender
         $start = $this->start_date ? $this->start_date->toDateString() : null;
 
         if ($this->end_date) {

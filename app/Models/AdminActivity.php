@@ -30,6 +30,7 @@ class AdminActivity extends Model
 
     public function subject()
     {
+        // Polimorfik hubungan ke model subjek aktivitas
         if ($this->subject_type && $this->subject_id) {
             try {
                 $class = $this->subject_type;

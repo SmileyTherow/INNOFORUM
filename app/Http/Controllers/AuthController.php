@@ -27,14 +27,13 @@ class AuthController extends Controller
             'nim_or_nigm' => ['required', 'string', 'max:20'],
         ]);
 
-        // Shortcut admin username (tetap seperti sebelumnya)
+        // Shortcut admin username
         if ($request->nim_or_nigm == '404039582' || $request->nim_or_nigm == '285930404') {
             return redirect('/admin/login');
         }
 
         $nim = $request->nim_or_nigm;
 
-        // Bangun query secara defensif: tambahkan orWhere nim/nidn hanya jika kolom ada
         $query = User::where('username', $nim);
 
         if (Schema::hasColumn('users', 'nim')) {
@@ -48,7 +47,7 @@ class AuthController extends Controller
         $user = $query->first();
 
         if ($user) {
-            // Jika user dinonaktifkan -> kembalikan flag supaya view menampilkan popup
+            // Cek apakah akun di-nonaktifkan
             if (isset($user->is_active) && ! $user->is_active) {
                 return back()->with('account_disabled', true);
             }
@@ -78,7 +77,6 @@ class AuthController extends Controller
         if (!$username) {
             return redirect()->route('nim.form')->with('error', 'Silakan validasi NIM/NIGM terlebih dahulu.');
         }
-        // GANTI view ke login_register_mahasiswa agar sesuai dengan file kamu!
         return view('auth.login_register_mahasiswa', compact('username'));
     }
 
@@ -98,7 +96,6 @@ class AuthController extends Controller
         if (!session('validated_nim')) {
             return redirect()->route('nim.form')->with('error', 'Silakan validasi NIM/NIGM terlebih dahulu.');
         }
-        // GANTI view ke login_register_mahasiswa agar sesuai dengan file kamu!
         return view('auth.login_register_mahasiswa');
     }
 
@@ -241,7 +238,7 @@ class AuthController extends Controller
         ])->onlyInput('email');
     }
 
-    // 10. Halaman login admin (jika dibutuhkan)
+    // 10. Halaman login admin
     public function showAdminLoginPage()
     {
         return view('auth.login_admin');

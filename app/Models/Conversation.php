@@ -41,6 +41,7 @@ class Conversation extends Model
 
     public static function findOrCreateOneOnOne(int $a, int $b): self
     {
+        // Pastikan tidak membuat percakapan dengan diri sendiri
         if ($a === $b) {
             abort(400, 'Cannot create conversation with yourself.');
         }

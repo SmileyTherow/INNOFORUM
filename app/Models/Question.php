@@ -45,7 +45,7 @@ class Question extends Model
         return $this->belongsToMany(User::class, 'question_likes', 'question_id', 'user_id')->withTimestamps();
     }
 
-    // Relasi ke jawaban (jika model Answer ada)
+    // Relasi ke jawaban
     public function answers()
     {
         return $this->hasMany(Answer::class);

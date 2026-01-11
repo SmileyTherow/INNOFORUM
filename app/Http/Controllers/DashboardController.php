@@ -43,12 +43,11 @@ class DashboardController extends Controller
             }
         }
 
-        // Ambil filter atau search jika ada
-        // NOTE: tambahkan eager-load user.badges agar $q->user->badges sudah tersedia di view
+        // Ambil filter dan bangun query utama
         $query = Question::with(['user.badges', 'hashtags', 'category'])
             ->withCount(['comments', 'likes']);
 
-        // (Opsional) filter berdasarkan tab/filter jika ada (terbaru, terbanyak, dsb)
+        // Terapkan filter
         if ($request->filter === 'terbanyak') {
             $query->orderByDesc('comments_count');
         } elseif ($request->filter === 'baru-dijawab') {
@@ -60,13 +59,12 @@ class DashboardController extends Controller
         }
 
         // Ambil top 5 user berdasarkan poin
-        // NOTE: eager-load badges di sini juga untuk sidebar leaderboard
         $topUsers = User::with(['badges', 'comments.likes'])
             ->orderByDesc('points')
             ->take(5)
             ->get()
             ->map(function ($user) {
-                // Hitung total like komentar user (jika masih ingin menampilkan/cek)
+                // Hitung total like komentar user
                 $user->like_count = $user->comments->sum(function ($c) {
                     return $c->likes->count();
                 });
