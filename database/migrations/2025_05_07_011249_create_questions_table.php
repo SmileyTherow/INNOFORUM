@@ -13,7 +13,6 @@ return new class extends Migration {
             $table->text('content')->nullable();
             $table->unsignedBigInteger('category_id');
             $table->unsignedBigInteger('user_id')->nullable();
-            $table->text('images')->nullable();
             $table->timestamps();
 
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
