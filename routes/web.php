@@ -208,3 +208,15 @@ Route::get('/test-email', function () {
 
     return 'Email terkirim';
 });
+
+
+use Illuminate\Support\Facades\Artisan;
+
+Route::get('/__clear', function () {
+    Artisan::call('config:clear');
+    Artisan::call('route:clear');
+    Artisan::call('cache:clear');
+    Artisan::call('view:clear');
+
+    return 'CACHE CLEARED';
+});
