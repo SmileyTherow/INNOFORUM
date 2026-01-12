@@ -196,3 +196,15 @@ Route::get('/kalender', [AcademicEventController::class, 'index'])->name('calend
 Route::get('/kalender/event/{id}', [AcademicEventController::class, 'show'])->name('calendar.event.show');
 Route::get('/api/events', [AcademicEventController::class, 'apiIndex'])->middleware('throttle:60,1');
 Route::post('/guest/message', [ContactController::class, 'guestSend'])->name('guest.message.send')->middleware('throttle:6,1');
+
+
+use Illuminate\Support\Facades\Mail;
+
+Route::get('/test-email', function () {
+    Mail::raw('Tes email OTP berhasil', function ($message) {
+        $message->to('emailkamu@gmail.com')
+                ->subject('Tes Email INNOFORUM');
+    });
+
+    return 'Email terkirim';
+});
