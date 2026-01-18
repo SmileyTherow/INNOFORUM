@@ -10,5 +10,8 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(UsersTableSeeder::class);
         $this->call(BadgesTableSeeder::class);
+        $this->call(CategorySeeder::class);
+        $this->call(BadgeSeeder::class);
+        $this->call(HashtagSeeder::class);
     }
 }
