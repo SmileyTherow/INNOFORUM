@@ -861,12 +861,12 @@ Demo Video: [Live demo](Laporan%20proyek%20INNOFORUM//Demo.mp4)
 ## 📚 Academic Project Details
 
 **Course Information:**
-- **Subject**: PPW (Perancangan dan Pemrograman Web)
+- **Subject**: PPW (Perancangan dan Pemrograman Web) and PPWL (Perancangan dan Pemrograman Web Lanjut)
 - **Duration**: 1 Semester (15 weeks) 
 - **Academic Year**: 2025
 - **Institution**: STTI NIIT I TECH
 - **Faculty**: Tehnik Informatika
-- **Supervising Lecturer**: Anjeng Puspita Ningrum, S.Kom
+- **Supervising Lecturer**: Anjeng Puspita Ningrum, S.Kom and Desi Sihamita, S.Kom
 
 **Learning Outcomes Demonstrated:**
 - Advanced Laravel framework implementation
