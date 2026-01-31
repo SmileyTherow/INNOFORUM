@@ -782,61 +782,58 @@ Before Asking for Help
   ![Buat Pertanyaan](<Laporan proyek INNOFORUM/halaman user/(20) Halaman Buat pertanyaan.png>)
 
 - **Contact Us**  
-  ![Contact Us Asli](<Laporan proyek INNOFORUM/halaman user/(21) Halaman contac us.png>)
+  ![Contact Us ](<Laporan proyek INNOFORUM/halaman user/(21) Halaman contac us.png>)
 
 - **Diskusi**  
-  ![Diskusi Asli](<Laporan proyek INNOFORUM/halaman user/(47) Halaman komentar.png>)
+  ![Diskusi](<Laporan proyek INNOFORUM/halaman user/(47) Halaman komentar.png>)
 
 ---
 
 ### 🔹 User Profile Pages
 - **Profil Dosen**  
-  ![Profil Dosen Asli](Laporan%20proyek%20INNOFORUM/halaman%20proyek%20web%20forum/halaman%20profil%20dosen%20asli.png)
+  ![Profil Dosen](<Laporan proyek INNOFORUM/halaman user/(24) Halaman profil dosen.png>)
 
 - **Profil Mahasiswa**  
-  ![Profil Mahasiswa Asli](Laporan%20proyek%20INNOFORUM/halaman%20proyek%20web%20forum/halaman%20profil%20mahasiswa%20asli.png)
+  ![Profil Mahasiswa](<Laporan proyek INNOFORUM/halaman user/(22) Halaman Profil mahasiswa.png>)
   
 - **Edit Profil Dosen**  
-  ![Edit Profil Dosen Asli](Laporan%20proyek%20INNOFORUM/halaman%20proyek%20web%20forum/halaman%20edit%20profil%20dosen%20asli.png)
+  ![Edit Profil Dosen](<Laporan proyek INNOFORUM/halaman user/(25) Halaman edit profil dosen.png>)
 
 - **Edit Profil Mahasiswa**  
-  ![Edit Profil Mahasiswa Asli](Laporan%20proyek%20INNOFORUM/halaman%20proyek%20web%20forum/halaman%20edit%20profil%20mahasiswa%20asli.png)
+  ![Edit Profil Mahasiswa ](<Laporan proyek INNOFORUM/halaman user/(23) Halaman edit profil mahasiswa.png>)
 
 - **Lengkapi Profil Dosen**  
-  ![Lengkapi Profil Dosen Asli](Laporan%20proyek%20INNOFORUM/halaman%20proyek%20web%20forum/halaman%20lengkapi%20profil%20dosen%20asli.png)
+  ![Lengkapi Profil Dosen ](<Laporan proyek INNOFORUM/halaman user/(14) Halaman Lengkapi Profil dosen.png>)
 
 - **Lengkapi Profil Mahasiswa**  
-  ![Lengkapi Profil Mahasiswa Asli](Laporan%20proyek%20INNOFORUM/halaman%20proyek%20web%20forum/halaman%20lengkapi%20profil%20mahasiswa%20asli.png)
+  ![Lengkapi Profil Mahasiswa ](<Laporan proyek INNOFORUM/halaman user/(13) Halaman lengkapi Profil mahasiswa.png>)
 
 ---
 
 ### 🔹 Authentication Pages
 - **Login Admin**  
-  ![Login Admin](Laporan%20proyek%20INNOFORUM/halaman%20proyek%20web%20forum/login%20admin%20asli.png)
+  ![Login Admin](<Laporan proyek INNOFORUM/halaman admin/(2) Halaman login admin.png>)
 
 - **Login Dosen**  
-  ![Login Dosen](Laporan%20proyek%20INNOFORUM/halaman%20proyek%20web%20forum/login%20register%20dosen%201%20asli.png)
+  ![Login Dosen](<Laporan proyek INNOFORUM/halaman user/(5) Halaman login mahasiswa dan dosen.png>)
 
 - **Register Dosen**  
-  ![Login Dosen 2](Laporan%20proyek%20INNOFORUM/halaman%20proyek%20web%20forum/login%20register%20dosen%202%20asli.png)
-
-- **Login Mahasiswa**  
-  ![Login Mahasiswa](Laporan%20proyek%20INNOFORUM/halaman%20proyek%20web%20forum/login%20register%20mahasiswa%201%20asli.png)
+  ![register Dosen 2](<Laporan proyek INNOFORUM/halaman user/(9) Halaman register dosen.png>)
 
 - **Register Mahasiswa**  
-  ![Login Mahasiswa 2](Laporan%20proyek%20INNOFORUM/halaman%20proyek%20web%20forum/login%20register%20mahasiswa%202%20asli.png)
+  ![register Mahasiswa 2](<Laporan proyek INNOFORUM/halaman user/(10) Halaman Register mahasiswa.png>)
 
 ---
 
 ### 🔹 Validation & OTP Pages
-- **Validasi Awal**  
-  ![Validasi Awal Asli](Laporan%20proyek%20INNOFORUM/halaman%20proyek%20web%20forum/halaman%20validasi%20awal%20asli.png)
+- **Validasi NIM/NIDN**  
+  ![Validasi NIM/NIDN](<Laporan proyek INNOFORUM/halaman user/(1) Halaman Verivikasi NIM&NIDN.png>)
 
 - **Validasi OTP Admin**  
-  ![Validasi OTP Admin Asli](Laporan%20proyek%20INNOFORUM/halaman%20proyek%20web%20forum/halaman%20validasi%20otp%20admin%20asli.png)
+  ![Validasi OTP Admin](<Laporan proyek INNOFORUM/halaman admin/(1) Halaman verivikasi Kode otp admin.png>)
 
 - **Validasi OTP User**  
-  ![Validasi OTP User](Laporan%20proyek%20INNOFORUM/halaman%20proyek%20web%20forum/halaman%20validasi%20otp%20user%20asli.png)
+  ![Validasi OTP User](<Laporan proyek INNOFORUM/halaman user/(12) Halaman Verivikasi kode otp login.png>)
 
 ---
 
@@ -862,7 +859,7 @@ Demo Video: [Live demo](Laporan%20proyek%20INNOFORUM//Demo.mp4)
 
 **Course Information:**
 - **Subject**: PPW (Perancangan dan Pemrograman Web)
-- **Duration**: 1 Semester (15 weeks) 
+- **Duration**: 1 Semester (15 weeks) PPW and 1 Semester (15 weeks) PPWL
 - **Academic Year**: 2025
 - **Institution**: STTI NIIT I TECH
 - **Faculty**: Tehnik Informatika
