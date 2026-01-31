@@ -758,7 +758,7 @@ Before Asking for Help
 
 ### 🔹 Admin Pages
 - **Dashboard Admin**  
-  ![Dashboard Admin](Laporan%20proyek%20INNOFORUM/halaman%20admin/Tampilan%20dashboard%20admin.png)
+  ![Dashboard Admin](![alt text](<Laporan proyek INNOFORUM/halaman admin/(3) Halaman Dashboard admin.png>))
 
 - **Data User**  
   ![Data User](Laporan%20proyek%20INNOFORUM/halaman%20admin/Tampilan%20admin%20data%20user.png)
