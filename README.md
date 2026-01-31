@@ -758,34 +758,34 @@ Before Asking for Help
 
 ### 🔹 Admin Pages
 - **Dashboard Admin**  
-  ![Dashboard Admin](![alt text](<Laporan proyek INNOFORUM/halaman admin/(3) Halaman Dashboard admin.png>))
+  ![Dashboard Admin](<Laporan proyek INNOFORUM/halaman admin/(3) Halaman Dashboard admin.png>)
 
 - **Data User**  
-  ![Data User](Laporan%20proyek%20INNOFORUM/halaman%20admin/Tampilan%20admin%20data%20user.png)
+  ![Data User](<Laporan proyek INNOFORUM/halaman admin/(10) halaman manajemen pengguna.png>)
 
 - **Data Kategori Forum**  
-  ![Data Kategori Forum](Laporan%20proyek%20INNOFORUM/halaman%20admin/Tampilan%20admin%20daftar%20kategori%20forum.png)
+  ![Data Kategori Forum](<Laporan proyek INNOFORUM/halaman admin/(28) Halaman manajemen kategori.png>)
 
 - **Daftar Semua Komentar**  
-  ![Semua Komentar](Laporan%20proyek%20INNOFORUM/halaman%20admin/Tampilan%20admin%20daftar%20semua%20komentar.png)
+  ![Semua Komentar](<Laporan proyek INNOFORUM/halaman admin/(22) Halaman manajemen komentar.png>)
 
-- **Data Thread**  
-  ![Data Thread](Laporan%20proyek%20INNOFORUM/halaman%20admin/Tampilan%20admin%20data%20semat%20thread.png)
+- **Data Thread/Pertanyaan**  
+  ![Data Thread](<Laporan proyek INNOFORUM/halaman admin/(14) Halaman manajemen pertanyaan.png>)
 
 ---
 
 ### 🔹 Forum Pages
 - **Dashboard Forum**  
-  ![Dashboard Forum Asli](Laporan%20proyek%20INNOFORUM/halaman%20proyek%20web%20forum/dashboard%20forum%20asli.png)
+  ![Dashboard Forum](<Laporan proyek INNOFORUM/halaman user/(18) Halaman Utama forum 1.png>)
 
 - **Halaman Buat Pertanyaan**  
-  ![Buat Pertanyaan Asli](Laporan%20proyek%20INNOFORUM/halaman%20proyek%20web%20forum/halaman%20buat%20pertanyaan%20asli.png)
+  ![Buat Pertanyaan](<Laporan proyek INNOFORUM/halaman user/(20) Halaman Buat pertanyaan.png>)
 
 - **Contact Us**  
-  ![Contact Us Asli](Laporan%20proyek%20INNOFORUM/halaman%20proyek%20web%20forum/halaman%20contact%20us%20asli.png)
+  ![Contact Us Asli](<Laporan proyek INNOFORUM/halaman user/(21) Halaman contac us.png>)
 
 - **Diskusi**  
-  ![Diskusi Asli](Laporan%20proyek%20INNOFORUM/halaman%20proyek%20web%20forum/halaman%20diskusi%20asli.png)
+  ![Diskusi Asli](<Laporan proyek INNOFORUM/halaman user/(47) Halaman komentar.png>)
 
 ---
 
