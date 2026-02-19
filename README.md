@@ -4,9 +4,9 @@
 
 <h2 align="center">Ignite Innovation, Connect Minds, Shape the Future</h2>
 
-[![Last Commit](https://img.shields.io/github/last-commit/FrederiyPatria/INNOFORUM)](https://github.com/FrederiyPatria/INNOFORUM/commits/main)
-![Languages](https://img.shields.io/github/languages/count/FrederiyPatria/INNOFORUM)
-![Repo Size](https://img.shields.io/github/repo-size/FrederiyPatria/INNOFORUM)
+[![Last Commit](https://img.shields.io/github/last-commit/SmileyTherow/INNOFORUM)](https://github.com/SmileyTherow/INNOFORUM/commits/main)
+![Languages](https://img.shields.io/github/languages/count/SmileyTherow/INNOFORUM)
+![Repo Size](https://img.shields.io/github/repo-size/SmileyTherow/INNOFORUM)
 
 A comprehensive academic discussion forum built with Laravel, designed specifically for Indonesian educational institutions to foster community engagement between students and lecturers.
 
@@ -647,8 +647,8 @@ We welcome contributions from the community! Here's how different types of contr
 |------|---------|
 | **Primary Contact** | ahmadzidantammimy@gmail.com |
 | **Secondary Contact** | agnifatyakholila@gmail.com |
-| **GitHub Issues** | [Report bugs here](https://github.com/FrederiyPatria/INNOFORUM/issues) |
-| **GitHub Discussions** | [Community discussions](https://github.com/FrederiyPatria/INNOFORUM/discussions) |
+| **GitHub Issues** | [Report bugs here](https://github.com/SmileyTherow/INNOFORUM/issues) |
+| **GitHub Discussions** | [Community discussions](https://github.com/SmileyTherow/INNOFORUM/discussions) |
 | **Response Time** | Usually within 24-48 hours |
 
 ---
@@ -858,12 +858,12 @@ Demo Video: [Live demo](Laporan%20proyek%20INNOFORUM//Demo.mp4)
 ## 📚 Academic Project Details
 
 **Course Information:**
-- **Subject**: PPW (Perancangan dan Pemrograman Web)
+- **Subject**: PPW (Perancangan dan Pemrograman Web) and PPWL (Perancangan dan Pemrograman Web Lanjut)
 - **Duration**: 1 Semester (15 weeks) PPW and 1 Semester (15 weeks) PPWL
 - **Academic Year**: 2025
 - **Institution**: STTI NIIT I TECH
 - **Faculty**: Tehnik Informatika
-- **Supervising Lecturer**: Anjeng Puspita Ningrum, S.Kom
+- **Supervising Lecturer**: Anjeng Puspita Ningrum, S.Kom and DESI SIHAMITA, S.KOM
 
 **Learning Outcomes Demonstrated:**
 - Advanced Laravel framework implementation
