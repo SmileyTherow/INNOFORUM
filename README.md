@@ -864,7 +864,6 @@ Demo Video: [Live demo](Laporan%20proyek%20INNOFORUM//Demo.mp4)
 - **Institution**: STTI NIIT I TECH
 - **Faculty**: Tehnik Informatika
 - **Supervising Lecturer**: Anjeng Puspita Ningrum, S.Kom and DESI SIHAMITA, S.KOM
-=======
 
 **Learning Outcomes Demonstrated:**
 - Advanced Laravel framework implementation
