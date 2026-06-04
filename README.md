@@ -507,6 +507,32 @@ php artisan test
 
 # Run specific test suite
 vendor/bin/phpunit --testsuite=Feature
+
+
+### Maintenance Mode
+When deploying or performing maintenance, use the following commands:
+
+**Activate Maintenance Mode (Display 404 Error):**
+```bash
+php artisan down
+```
+
+**Deactivate Maintenance Mode (Resume Normal Operation):**
+```bash
+php artisan up
+```
+
+**Maintenance Mode with Custom Message:**
+```bash
+php artisan down --message="System Maintenance - Please try again later"
+```
+
+**Maintenance Mode with Custom Retry After (in seconds):**
+```bash
+php artisan down --retry=60
+```
+
+> **Note**: When the application is in maintenance mode, all users will see a maintenance message and the application will display a 404 error instead of normal responses.
 ```
 
 Common Artisan Commands
