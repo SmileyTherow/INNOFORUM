@@ -1,12 +1,52 @@
-<h1 align="center">🚀 INNOFORUM</h1>
+<div align="center">
 
-![Demo](Laporan%20proyek%20INNOFORUM/2025-08-2611-03-43-ezgif.com-video-to-gif-converter.gif)
+# 🚀 INNOFORUM
 
-<h2 align="center">Ignite Innovation, Connect Minds, Shape the Future</h2>
+### Ignite Innovation • Connect Minds • Shape the Future
 
-[![Last Commit](https://img.shields.io/github/last-commit/SmileyTherow/INNOFORUM)](https://github.com/SmileyTherow/INNOFORUM/commits/main)
-![Languages](https://img.shields.io/github/languages/count/SmileyTherow/INNOFORUM)
-![Repo Size](https://img.shields.io/github/repo-size/SmileyTherow/INNOFORUM)
+Modern Academic Discussion Platform built with Laravel.
+
+<img src="Laporan proyek INNOFORUM/2025-08-2611-03-43-ezgif.com-video-to-gif-converter.gif" width="900"/>
+
+</div>
+
+<div align="center">
+
+[🚀 Installation](#-installation)
+•
+[✨ Features](#-features)
+•
+[📸 Screenshots](#-screenshots)
+•
+[📊 System Design](#-system-design)
+•
+[👥 Team](#-team)
+
+</div>
+
+<div align="center">
+    
+![Platform](https://img.shields.io/badge/Platform-Web-0A66C2?logo=googlechrome&logoColor=white)
+![Laravel](https://img.shields.io/badge/Laravel-12-FF2D20?logo=laravel&logoColor=white)
+![PHP](https://img.shields.io/badge/PHP-8.2-777BB4?logo=php&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-Database-4479A1?logo=mysql&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-Build_Tool-646CFF?logo=vite&logoColor=white)
+![Composer](https://img.shields.io/badge/Composer-Dependency-885630?logo=composer&logoColor=white)
+![License](https://img.shields.io/badge/License-MIT-green)
+![Status](https://img.shields.io/badge/Status-Completed-success)
+
+</div>
+
+<div align="center">
+
+[![Last Commit](https://img.shields.io/github/last-commit/SmileyTherow/INNOFORUM?style=flat-square)](https://github.com/SmileyTherow/INNOFORUM/commits/main)
+![Repo Size](https://img.shields.io/github/repo-size/SmileyTherow/INNOFORUM?style=flat-square)
+![Top Language](https://img.shields.io/github/languages/top/SmileyTherow/INNOFORUM?style=flat-square)
+![Languages](https://img.shields.io/github/languages/count/SmileyTherow/INNOFORUM?style=flat-square)
+![Stars](https://img.shields.io/github/stars/SmileyTherow/INNOFORUM?style=flat-square)
+![Forks](https://img.shields.io/github/forks/SmileyTherow/INNOFORUM?style=flat-square)
+
+</div>
 
 A comprehensive academic discussion forum built with Laravel, designed specifically for Indonesian educational institutions to foster community engagement between students and lecturers.
 
@@ -21,6 +61,35 @@ Built with modern tools & technologies:
   <img src="https://img.shields.io/badge/Axios-5A29E4?style=for-the-badge&logo=axios&logoColor=white" />
   <img src="https://img.shields.io/badge/Excalidraw-000000?style=for-the-badge&logo=excalidraw&logoColor=white" />
 </p>
+
+## ✨ About INNOFORUM
+
+INNOFORUM is a modern academic discussion platform developed using Laravel,
+designed to facilitate communication between students, lecturers,
+and administrators through an interactive and secure discussion environment.
+
+### Key Highlights
+
+- 🎓 Academic Discussion Platform
+- 🔐 Multi-role Authentication
+- 📧 Email OTP Verification
+- 📝 Thread & Comment System
+- ❤️ Like & Notification System
+- 🛡 Admin Dashboard
+- 📱 Responsive UI
+- ⚡ Built with Laravel 12 + Tailwind CSS
+
+## 📈 Project Overview
+
+| Item | Value |
+|------|-------|
+| 🚀 Framework | Laravel 12 |
+| 💻 Language | PHP 8.2 |
+| 🎨 Frontend | Tailwind CSS + Vite |
+| 🗄 Database | SQLite / MySQL |
+| 📄 License | MIT |
+| 👨‍💻 Team | 2 Developers |
+| ⏱ Duration | 4 Months |
 
 ---
 
@@ -39,7 +108,7 @@ Built with modern tools & technologies:
     - [Clone Repository](#1-clone-repository)
     - [Install Dependencies](#2-install-dependencies)
     - [Environment Setup](#3-environment-setup)
-    - [EnviConfigure Environment](#4-enviconfigure-environment)
+    - [Configure Environment](#4-enviconfigure-environment)
     - [Database Migration](#5-database-migration)
     - [Build Assets](#6-build-assets)
     - [Start Development Server](#7-start-development-server)
@@ -83,17 +152,16 @@ Built with modern tools & technologies:
     - [Future Considerations](#future-considerations)
 - [Acknowledgments](#-acknowledgments)
 - [Security Features](#-security-features)
-- [Screenshots](#--screenshots)
-    - [Admin Pages](#-admin-pages)
-    - [Forum Pages](#-forum-pages)
-    - [User Profile Pages](#-user-profile-pages)
-    - [Authentication Pages](#-authentication-pages)
-    - [Validation & OTP Pages](#-validation--otp-pages)
+- [Screenshots](#-screenshots)
+    - [Admin Dashboard](#-admin-dashboard)
+    - [User Pages](#-user-pages)
+    - [Authentication Pages](#-authentication)
+    - [Verification](#-verification)
 - [Demo & Roadmap Visual](#-demo--roadmap-visual)
     - [Live Demo](#-live-demo)
     - [System Flow](#-system-flow)
     - [Roadmap Proyek](#-roadmap-proyek)
-    - [Data Base](#-data-base)
+    - [DataBase](#-database)
 - [Academic Project Details](#-academic-project-details)
 
 ---
@@ -158,15 +226,17 @@ This project was developed as a semester-long assignment for **PPW (Perancangan 
 ---
 
 ## ✨ Features
-- **Role-Based Access Control** - Secure and tailored user permissions for Students, Lecturers, and Admins
-- **Admin Dashboard & Analytics** - Insightful statistics to monitor platform activity & growth
-- **Thread Management System** - Create, edit, and categorize discussion threads with hashtag support
-- **Interactive Comment System** - Rich commenting with image uploads and user mentions
-- **Real-Time Notification System** - Stay updated on likes, comments, mentions, and announcements
-- **OTP Email Verification** - Secure registration process with email verification
-- **Content Moderation Tools** - Report system and admin moderation capabilities
-- **Comprehensive Search** - Advanced search functionality with filters
-- **Modern Frontend & Backend Integration** - Powered by Vite, Tailwind CSS, Alpine.js
+
+| Feature | Description | Status |
+|---------|-------------|:------:|
+| 🔐 Authentication | Login, Register & OTP Verification | ✅ |
+| 👤 Role Management | Student, Lecturer & Admin Roles | ✅ |
+| 💬 Discussion Forum | Create, Edit & Delete Threads | ✅ |
+| ❤️ Like & Comment | Interactive Discussion System | ✅ |
+| 🔔 Notifications | Real-time User Notifications | ✅ |
+| 📂 Categories | Manage Discussion Categories | ✅ |
+| 🛡️ Admin Dashboard | User & Content Management | ✅ |
+| 📱 Responsive UI | Desktop & Mobile Friendly | ✅ |
 
 ---
 
@@ -780,103 +850,70 @@ Before Asking for Help
 
 ---
 
-## 🖼  Screenshots
+## 📱 Responsive Preview
 
-### 🔹 Admin Pages
-- **Dashboard Admin**  
-  ![Dashboard Admin](<Laporan proyek INNOFORUM/halaman admin/(3) Halaman Dashboard admin.png>)
+INNOFORUM is fully responsive and optimized for Desktop, Tablet, and Mobile devices.
 
-- **Data User**  
-  ![Data User](<Laporan proyek INNOFORUM/halaman admin/(10) halaman manajemen pengguna.png>)
+## 🖼 Screenshots
 
-- **Data Kategori Forum**  
-  ![Data Kategori Forum](<Laporan proyek INNOFORUM/halaman admin/(28) Halaman manajemen kategori.png>)
+### 🛡 Admin Dashboard
 
-- **Daftar Semua Komentar**  
-  ![Semua Komentar](<Laporan proyek INNOFORUM/halaman admin/(22) Halaman manajemen komentar.png>)
+| Dashboard | User Management | Categories |
+|-----------|-----------------|------------|
+| ![](Laporan%20proyek%20INNOFORUM/halaman%20admin/(3)%20Halaman%20Dashboard%20admin.png) | ![](Laporan%20proyek%20INNOFORUM/halaman%20admin/(10)%20halaman%20manajemen%20pengguna.png) | ![](Laporan%20proyek%20INNOFORUM/halaman%20admin/(28)%20Halaman%20manajemen%20kategori.png) |
 
-- **Data Thread/Pertanyaan**  
-  ![Data Thread](<Laporan proyek INNOFORUM/halaman admin/(14) Halaman manajemen pertanyaan.png>)
+| Thread Management | Comment Management | Login Admin |
+|-------------------|-------------------|-------------|
+| ![](Laporan%20proyek%20INNOFORUM/halaman%20admin/(14)%20Halaman%20manajemen%20pertanyaan.png) | ![](Laporan%20proyek%20INNOFORUM/halaman%20admin/(22)%20Halaman%20manajemen%20komentar.png) | ![](Laporan%20proyek%20INNOFORUM/halaman%20admin/(2)%20Halaman%20login%20admin.png) |
 
 ---
 
-### 🔹 Forum Pages
-- **Dashboard Forum**  
-  ![Dashboard Forum](<Laporan proyek INNOFORUM/halaman user/(18) Halaman Utama forum 1.png>)
+### 👨‍🎓 User Pages
 
-- **Halaman Buat Pertanyaan**  
-  ![Buat Pertanyaan](<Laporan proyek INNOFORUM/halaman user/(20) Halaman Buat pertanyaan.png>)
+| Forum | Create Thread | Discussion |
+|--------|---------------|------------|
+| ![](Laporan%20proyek%20INNOFORUM/halaman%20user/(18)%20Halaman%20Utama%20forum%201.png) | ![](Laporan%20proyek%20INNOFORUM/halaman%20user/(20)%20Halaman%20Buat%20pertanyaan.png) | ![](Laporan%20proyek%20INNOFORUM/halaman%20user/(47)%20Halaman%20komentar.png) |
 
-- **Contact Us**  
-  ![Contact Us ](<Laporan proyek INNOFORUM/halaman user/(21) Halaman contac us.png>)
+| Contact | Student Profile | Lecturer Profile |
+|---------|-----------------|------------------|
+| ![](Laporan%20proyek%20INNOFORUM/halaman%20user/(21)%20Halaman%20contac%20us.png) | ![](Laporan%20proyek%20INNOFORUM/halaman%20user/(22)%20Halaman%20Profil%20mahasiswa.png) | ![](Laporan%20proyek%20INNOFORUM/halaman%20user/(24)%20Halaman%20profil%20dosen.png) |
 
-- **Diskusi**  
-  ![Diskusi](<Laporan proyek INNOFORUM/halaman user/(47) Halaman komentar.png>)
-
----
-
-### 🔹 User Profile Pages
-- **Profil Dosen**  
-  ![Profil Dosen](<Laporan proyek INNOFORUM/halaman user/(24) Halaman profil dosen.png>)
-
-- **Profil Mahasiswa**  
-  ![Profil Mahasiswa](<Laporan proyek INNOFORUM/halaman user/(22) Halaman Profil mahasiswa.png>)
-  
-- **Edit Profil Dosen**  
-  ![Edit Profil Dosen](<Laporan proyek INNOFORUM/halaman user/(25) Halaman edit profil dosen.png>)
-
-- **Edit Profil Mahasiswa**  
-  ![Edit Profil Mahasiswa ](<Laporan proyek INNOFORUM/halaman user/(23) Halaman edit profil mahasiswa.png>)
-
-- **Lengkapi Profil Dosen**  
-  ![Lengkapi Profil Dosen ](<Laporan proyek INNOFORUM/halaman user/(14) Halaman Lengkapi Profil dosen.png>)
-
-- **Lengkapi Profil Mahasiswa**  
-  ![Lengkapi Profil Mahasiswa ](<Laporan proyek INNOFORUM/halaman user/(13) Halaman lengkapi Profil mahasiswa.png>)
+| Edit Student | Edit Lecturer | Complete Profile |
+|--------------|---------------|------------------|
+| ![](Laporan%20proyek%20INNOFORUM/halaman%20user/(23)%20Halaman%20edit%20profil%20mahasiswa.png) | ![](Laporan%20proyek%20INNOFORUM/halaman%20user/(25)%20Halaman%20edit%20profil%20dosen.png) | ![](Laporan%20proyek%20INNOFORUM/halaman%20user/(13)%20Halaman%20lengkapi%20Profil%20mahasiswa.png) |
 
 ---
 
-### 🔹 Authentication Pages
-- **Login Admin**  
-  ![Login Admin](<Laporan proyek INNOFORUM/halaman admin/(2) Halaman login admin.png>)
+### 🔐 Authentication
 
-- **Login Dosen**  
-  ![Login Dosen](<Laporan proyek INNOFORUM/halaman user/(5) Halaman login mahasiswa dan dosen.png>)
-
-- **Register Dosen**  
-  ![register Dosen 2](<Laporan proyek INNOFORUM/halaman user/(9) Halaman register dosen.png>)
-
-- **Register Mahasiswa**  
-  ![register Mahasiswa 2](<Laporan proyek INNOFORUM/halaman user/(10) Halaman Register mahasiswa.png>)
+| Login | Register Student | Register Lecturer |
+|-------|------------------|-------------------|
+| ![](Laporan%20proyek%20INNOFORUM/halaman%20user/(5)%20Halaman%20login%20mahasiswa%20dan%20dosen.png) | ![](Laporan%20proyek%20INNOFORUM/halaman%20user/(10)%20Halaman%20Register%20mahasiswa.png) | ![](Laporan%20proyek%20INNOFORUM/halaman%20user/(9)%20Halaman%20register%20dosen.png) |
 
 ---
 
-### 🔹 Validation & OTP Pages
-- **Validasi NIM/NIDN**  
-  ![Validasi NIM/NIDN](<Laporan proyek INNOFORUM/halaman user/(1) Halaman Verivikasi NIM&NIDN.png>)
+### 🔑 Verification
 
-- **Validasi OTP Admin**  
-  ![Validasi OTP Admin](<Laporan proyek INNOFORUM/halaman admin/(1) Halaman verivikasi Kode otp admin.png>)
-
-- **Validasi OTP User**  
-  ![Validasi OTP User](<Laporan proyek INNOFORUM/halaman user/(12) Halaman Verivikasi kode otp login.png>)
+| NIM / NIDN Validation | OTP User | OTP Admin |
+|-----------------------|----------|-----------|
+| ![](Laporan%20proyek%20INNOFORUM/halaman%20user/(1)%20Halaman%20Verivikasi%20NIM&NIDN.png) | ![](Laporan%20proyek%20INNOFORUM/halaman%20user/(12)%20Halaman%20Verivikasi%20kode%20otp%20login.png) | ![](Laporan%20proyek%20INNOFORUM/halaman%20admin/(1)%20Halaman%20verivikasi%20Kode%20otp%20admin.png) |
 
 ---
 
 ## 📽 Demo & Roadmap Visual
 
-Berikut adalah  Live Demo, gambaran visual alur sistem, roadmap proyek & Data Base **INNOFORUM**:
+Berikut adalah  Live Demo, System Workflow, Project Roadmap, and Database Design., roadmap proyek & DataBase **INNOFORUM**:
 
-### 🔹 Live Demo
+###  🎬 Live Demo
 Demo Video: [Live demo](Laporan%20proyek%20INNOFORUM//Demo.mp4)
 
-### 🔹 System Flow
+###  🔄 System Flow
 ![System Flow](Laporan%20proyek%20INNOFORUM/alur%20logik%20forum.png)
 
-### 🔹 Roadmap Proyek
+###  🗺 Roadmap Proyek
 ![Roadmap INNOFORUM](Laporan%20proyek%20INNOFORUM/Roadmap%20Visual%20Proyek%20Forum%20Diskusi%20Kampus%20(INNOFORUM).png)
 
-### 🔹 Data Base
+###  🗄 DataBase
 ![Roadmap INNOFORUM](Laporan%20proyek%20INNOFORUM/Data%20Base%20Innoforum.png)
 
 ---
@@ -888,7 +925,7 @@ Demo Video: [Live demo](Laporan%20proyek%20INNOFORUM//Demo.mp4)
 - **Duration**: 1 Semester (15 weeks) PPW and 1 Semester (15 weeks) PPWL
 - **Academic Year**: 2025
 - **Institution**: STTI NIIT I TECH
-- **Faculty**: Tehnik Informatika
+- **Faculty**: Teknik  Informatika
 - **Supervising Lecturer**: Anjeng Puspita Ningrum, S.Kom and DESI SIHAMITA, S.KOM
 
 **Learning Outcomes Demonstrated:**
@@ -906,4 +943,16 @@ Successfully implemented a complete forum system using Laravel framework, exceed
 
 ---
 
-*Built with ❤️ for Indonesian academic communities as a PPW course final project*
+<div align="center">
+
+# ⭐ Support This Project
+
+If this repository helped you, please consider giving it a ⭐ on GitHub.
+
+Made with ❤️ by **Ahmad Zidan Tamimy** & **Agni Fatya Kholila**
+
+Built using **Laravel 12**, **PHP 8.2**, **Tailwind CSS**, **Vite**, and **MySQL**
+
+© 2025 All Rights Reserved.
+
+</div>
