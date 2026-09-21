@@ -405,6 +405,18 @@ System functionality is organized around three main user roles:
 - **Mahasiswa (Student)**: Forum participation, profile management, notifications
 - **Dosen (Lecturer)**: Enhanced forum access, student interaction, content creation
 
+![System Architecture](Laporan%20proyek%20INNOFORUM/System%20Architecture.png)
+
+**Architecture Overview:**
+- Blade UI sebagai presentation layer
+- Laravel Routing (web.php)
+- Authentication & Authorization
+- Forum Discussion Module
+- Private Messaging Module
+- Notification & Badge System
+- Admin Management Console
+- MySQL/SQLite Database Layer
+
 ---
 
 ## 🎮 Usage Guide
